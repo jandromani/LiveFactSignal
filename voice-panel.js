@@ -124,8 +124,8 @@ function normalizedSpans(result,chunkStart,chunkEnd){
  const duration=chunkEnd-chunkStart,reported=Number(result.speaker_count)||0,raw=Array.isArray(result.voice_spans)?result.voice_spans:[];
  if(reported===1)return [{speaker_key:'única',start_rel_ms:0,end_rel_ms:duration,start_ms:chunkStart,end_ms:chunkEnd,duration_ms:duration}];
  const spans=raw.map(x=>{
-  const relA=Number.isFinite(Number(x.start_rel_ms))?Number(x.start_rel_ms):Number(x.start_ms)-chunkStart;
-  const relB=Number.isFinite(Number(x.end_rel_ms))?Number(x.end_rel_ms):Number(x.end_ms)-chunkStart;
+  const relA=x.start_rel_ms!=null&&Number.isFinite(Number(x.start_rel_ms))?Number(x.start_rel_ms):Number(x.start_ms)-chunkStart;
+  const relB=x.end_rel_ms!=null&&Number.isFinite(Number(x.end_rel_ms))?Number(x.end_rel_ms):Number(x.end_ms)-chunkStart;
   const a=Math.max(0,Math.min(duration,Math.round(relA))),b=Math.max(0,Math.min(duration,Math.round(relB)));
   return {speaker_key:String(x.speaker_key||''),start_rel_ms:a,end_rel_ms:b,start_ms:chunkStart+a,end_ms:chunkStart+b,duration_ms:b-a};
  }).filter(x=>x.speaker_key&&x.speaker_key!=='desconocido'&&Number.isFinite(x.start_rel_ms)&&Number.isFinite(x.end_rel_ms)&&x.duration_ms>0)
