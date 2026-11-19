@@ -38,7 +38,7 @@ async function agenda(){
   fetch('/api/catalog?action=list',{cache:'no-store'}).then(r=>r.json()),
   fetch('/api/reset',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
  ]);
- allEvents=catalog.events||[];const select=$('#event');
+ allEvents=(catalog.events||[]).filter(x=>!String(x.slug||'').includes('-run-'));const select=$('#event');
  const url=new URL(location.href),archive=url.searchParams.get('archive')==='1';
  if(!archive&&(!url.searchParams.has('debate')||session===FIRST)&&reset?.current_id)session=reset.current_id;
  select.innerHTML=allEvents.map(x=>'<option value="'+esc(x.debate_id)+'">'+esc(new Date(x.scheduled_at).toLocaleDateString('es-ES',{day:'2-digit',month:'short'}))+' · '+esc(x.title)+'</option>').join('')+'<option value="'+AUDIT+'">Archivo · Debate a cinco (2019, experimental)</option>';
