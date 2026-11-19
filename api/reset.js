@@ -46,7 +46,7 @@ export default async function handler(req,res){
     RETURNING id
    ), pointer AS (
     INSERT INTO debate_reset_state (root_id,current_id,reset_count,changed_at)
-    SELECT $1::uuid,id,1,now() FROM new_debate
+    SELECT $1::uuid,id,1,now() FROM new_debate WHERE TRUE
     ON CONFLICT (root_id) DO UPDATE SET current_id=EXCLUDED.current_id,reset_count=debate_reset_state.reset_count+1,changed_at=now()
     RETURNING current_id,reset_count
    )
