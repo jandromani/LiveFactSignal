@@ -31,7 +31,7 @@ export default async function handler(req,res){
    WITH new_debate AS (
     INSERT INTO debates (youtube_id,title,event_date,mode,status,clip_start_ms,clip_end_ms,source_type,source_url,source_description,identity_enabled,verification_enabled,voice_embedding_enabled)
     SELECT d.youtube_id, d.title || ' · Nueva captura',d.event_date,'live','ready',0,NULL,'live',d.source_url,
-           'Nueva sesión independiente; los datos de la captura anterior permanecen archivados',false,true,false
+           'Nueva sesión independiente; los datos de la captura anterior permanecen archivados',true,true,true
     FROM debates d WHERE d.id=$1
     RETURNING id
    ), calendar_copy AS (
@@ -44,6 +44,16 @@ export default async function handler(req,res){
     SELECT n.id,r.name,r.party,r.role,r.aliases,r.confirmed
     FROM debate_roster r CROSS JOIN new_debate n WHERE r.debate_id=$1
     RETURNING id
+   ), voice_reference_copy AS (
+    INSERT INTO voice_profiles (debate_id,person_name,party,model_id,embedding,duration_ms,source_type,source_reference,verified_by,quality_status)
+    SELECT n.id,v.person_name,r.party,v.model_id,v.embedding,v.duration_ms,
+           'public-reference',v.source_url||'#t='||coalesce(v.source_segment_start_s::text,'0'),
+           'public-source-metadata',v.quality_status
+    FROM voice_reference_library v
+    CROSS JOIN new_debate n
+    JOIN debate_roster r ON r.debate_id=$1 AND r.name=v.person_name
+    WHERE v.quality_status='source-labeled'
+    RETURNING id
    ), pointer AS (
     INSERT INTO debate_reset_state (root_id,current_id,reset_count,changed_at)
     SELECT $1::uuid,id,1,now() FROM new_debate WHERE TRUE
@@ -51,10 +61,11 @@ export default async function handler(req,res){
     RETURNING current_id,reset_count
    )
    SELECT p.current_id,p.reset_count,(SELECT count(*) FROM roster_copy)::integer AS copied_people,
-          (SELECT count(*) FROM calendar_copy)::integer AS copied_events
+          (SELECT count(*) FROM calendar_copy)::integer AS copied_events,
+          (SELECT count(*) FROM voice_reference_copy)::integer AS copied_voices
    FROM pointer p`,[ROOT]);
   if(!rows.length)return ret(res,404,{error:'Debate original no encontrado'});
   if(rows[0].copied_events!==1)return ret(res,500,{error:'No se ha encontrado el calendario original'});
-  return ret(res,201,{ok:true,root_id:ROOT,current_id:rows[0].current_id,reset_count:rows[0].reset_count,copied_people:rows[0].copied_people,previous_preserved:true,identity_automatic:false,message:'Nueva sesión vacía creada; sesión anterior conservada en Neon'});
+  return ret(res,201,{ok:true,root_id:ROOT,current_id:rows[0].current_id,reset_count:rows[0].reset_count,copied_people:rows[0].copied_people,copied_voices:rows[0].copied_voices,previous_preserved:true,identity_automatic:true,message:'Nueva captura sin afirmaciones; referencias etiquetadas restauradas. No se han copiado huellas aprendidas durante debates.'});
  }catch(e){return ret(res,500,{error:'No se pudo crear la nueva captura',detail:String(e?.message||'').slice(0,230)})}
 }
