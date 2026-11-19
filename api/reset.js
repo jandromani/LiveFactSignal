@@ -43,6 +43,7 @@ export default async function handler(req,res){
     INSERT INTO debate_roster (debate_id,name,party,role,aliases,confirmed)
     SELECT n.id,r.name,r.party,r.role,r.aliases,r.confirmed
     FROM debate_roster r CROSS JOIN new_debate n WHERE r.debate_id=$1
+    ON CONFLICT (debate_id,name) DO NOTHING
     RETURNING id
    ), voice_reference_copy AS (
     INSERT INTO voice_profiles (debate_id,person_name,party,model_id,embedding,duration_ms,source_type,source_reference,verified_by,quality_status)
@@ -52,7 +53,8 @@ export default async function handler(req,res){
     FROM voice_reference_library v
     CROSS JOIN new_debate n
     JOIN debate_roster r ON r.debate_id=$1 AND r.name=v.person_name
-    WHERE v.quality_status='source-labeled'
+    WHERE v.quality_status='source-labeled' AND r.role='candidate'
+    ON CONFLICT DO NOTHING
     RETURNING id
    ), pointer AS (
     INSERT INTO debate_reset_state (root_id,current_id,reset_count,changed_at)
