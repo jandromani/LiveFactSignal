@@ -24,29 +24,54 @@ function check(id,message,ready){
  el.textContent=message;el.classList.toggle('ok',Boolean(ready));el.classList.toggle('warn',!ready);
 }
 let authReady=false,voiceWarm=false,voiceLoading=false,activeCapture=false,wakeLock=null,routerVerified=false;
+const voiceSeedLastAttempt=new Map(),voiceInitialized=new Set();
 async function preflight(){
+ let selected='';
  try{
-  const selected=localStorage.getItem('debate_live_id')||'f3c2fd9b-5fa1-4818-a407-453f5cac4a34';
-  const [auth,health,profiles]=await Promise.all([
-   nativeFetch('/api/operator-auth?action=status',{cache:'no-store'}).then(r=>r.json()),
+  selected=window.LiveFactSignal?.snapshot?.().id||localStorage.getItem('debate_live_id')||'f3c2fd9b-5fa1-4818-a407-453f5cac4a34';
+  const [auth,health,voiceResponse]=await Promise.all([
+   nativeFetch('/api/operator-auth?action=status',{cache:'no-store',credentials:'same-origin'}).then(r=>r.json()),
    nativeFetch('/api/live?action=health',{cache:'no-store'}).then(r=>r.json()),
-   nativeFetch('/api/voice?action=list&id='+encodeURIComponent(selected),{cache:'no-store'}).then(r=>r.json())
+   nativeFetch('/api/voice?action=list&id='+encodeURIComponent(selected),{cache:'no-store'})
   ]);
   authReady=auth.authorized===true;
   check('opCheckAuth',authReady?'✓ Operador autorizado':'! Falta activar operador',authReady);
   check('opCheckDb',health.database?'✓ Neon conectado':'! Neon no disponible',Boolean(health.database));
-  const n=Array.isArray(profiles.profiles)?profiles.profiles.length:0;
-  const recognizable=new Set((profiles.profiles||[]).filter(x=>x.source_type==='public-reference'||x.quality_status==='source-labeled').map(x=>x.person_name));
-  const voicesReady=recognizable.size>=2;
-  check('opCheckVoice',voicesReady?'✓ Voces de referencia: '+recognizable.size+' candidatos ('+n+' huellas)':'! Faltan referencias acústicas ('+n+' huellas)',voicesReady);
-  if($('#voiceAuto')){
-   $('#voiceAuto').checked=voicesReady;
-   if($('#voiceAutoStats')&&voicesReady)$('#voiceAutoStats').textContent='Comparación acústica activada con referencias etiquetadas. Aprendizaje por turnos desactivado. Atribuciones provisionales.';
+  if(!voiceResponse.ok)throw Error('API de voces HTTP '+voiceResponse.status);
+  let profiles=await voiceResponse.json();
+  if(!Array.isArray(profiles.profiles))throw Error(profiles.error||'Respuesta inválida del listado de voces');
+  const needsSeed=profiles.profiles.length===0&&authReady;
+  const since=Date.now()-(voiceSeedLastAttempt.get(selected)||0);
+  if(needsSeed&&since>45000){
+   voiceSeedLastAttempt.set(selected,Date.now());
+   check('opCheckVoice','◌ Restaurando voces etiquetadas para sesión '+selected.slice(0,8)+'…',false);
+   const response=await nativeFetch('/api/voice-seed',{
+    method:'POST',credentials:'same-origin',cache:'no-store',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify({id:selected})
+   });
+   const result=await response.json().catch(()=>({}));
+   if(!response.ok)throw Error(result.error||'No se pudo restaurar voz: HTTP '+response.status);
+   const refreshed=await nativeFetch('/api/voice?action=list&id='+encodeURIComponent(selected),{cache:'no-store'});
+   if(!refreshed.ok)throw Error('Error al releer voces HTTP '+refreshed.status);
+   profiles=await refreshed.json();
+   await window.debateVoice?.refresh?.().catch(()=>{});
+  }
+  const n=profiles.profiles.length;
+  const recognizable=new Set(profiles.profiles.filter(x=>x.source_type==='public-reference'&&x.quality_status==='source-labeled').map(x=>x.person_name));
+  const ready=recognizable.has('Pedro Sánchez')&&recognizable.has('Alberto Núñez Feijóo');
+  check('opCheckVoice',ready?'✓ '+recognizable.size+' candidatos · '+n+' huellas · sesión '+selected.slice(0,8):'! Sin referencias verificables · sesión '+selected.slice(0,8)+' ('+n+' huellas)',ready);
+  const voice=$('#voiceAuto');
+  if(voice&&(!voiceInitialized.has(selected)||!ready)){
+   voice.checked=ready;
+   voiceInitialized.add(selected);
+   if($('#voiceAutoStats'))$('#voiceAutoStats').textContent=ready?'Reconocimiento CAM++ habilitado con referencias etiquetadas. Aprendizaje por turnos desactivado. Coincidencias provisionales.':'Reconocimiento en espera: no hay referencias de ambos candidatos.';
   }
   const key=$('#routerKey')?.value.trim()||'';
   check('opCheckRouter',routerVerified?'✓ OpenRouter probado':key.startsWith('sk-or-')?'◌ Verifica OpenRouter':'! Introduce OpenRouter',routerVerified);
   if(!voiceWarm&&!voiceLoading)check('opCheckModel','◌ CAM++ pendiente',false);
- }catch(e){check('opCheckDb','! Estado no disponible',false)}
+ }catch(e){
+  check('opCheckVoice','! Error al consultar voces · '+String(e.message||e).slice(0,90)+(selected?' · '+selected.slice(0,8):''),false);
+ }
 }
 async function warmupVoice(){
  if(voiceWarm||voiceLoading||!window.debateVoice?.warmup)return;
