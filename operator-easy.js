@@ -29,7 +29,8 @@ async function authStatus(){
   const el=$('#opAuth');el.textContent=j.authorized?'✓ Operador autorizado · 30 días':'○ Activación privada pendiente';
   el.style.color=j.authorized?'#8fe8ca':'#ffd29c';
   $('#opHelp').textContent=j.authorized?'La contraseña ya está protegida en Vercel. Solo necesitas OpenRouter y compartir el audio.':'Para operar, abre tu enlace privado de activación. No hay contraseña dentro del JavaScript público.';
-  if(!j.authorized){$('#startCapture').disabled=true;$('#opLaunch').disabled=true}
+  if($('#startCapture'))$('#startCapture').disabled=!j.authorized;
+  if($('#opLaunch'))$('#opLaunch').disabled=!j.authorized;
  }catch{$('#opAuth').textContent='Sin respuesta de autenticación'}
 }
 function init(){
@@ -49,7 +50,7 @@ function init(){
  if($('#modeLive'))$('#modeLive').click();
  $('#opPresets').innerHTML=preset.map(x=>'<button type="button" class="opPreset '+(x.id===id?'on':'')+'" data-id="'+x.id+'"><small>'+x.date+'</small><strong>'+x.name+'</strong></button>').join('');
  $('#opPresets').addEventListener('click',e=>{const b=e.target.closest('[data-id]');if(!b)return;localStorage.setItem('debate_live_id',b.dataset.id);location.reload()});
- $('#opLaunch').addEventListener('click',()=>$('#startCapture')?.click());
+ $('#opLaunch')?.addEventListener('click',()=>$('#startCapture')?.click());
  $('#opDetails').addEventListener('click',()=>{const enabled=document.body.classList.toggle('opAdvanced');$('#opDetails').textContent=enabled?'Ocultar herramientas avanzadas':'Mostrar herramientas avanzadas'});
  router?.addEventListener('input',()=>{$('#opKeyStatus').textContent=router.value.trim().startsWith('sk-or-')?'✓ OpenRouter introducida · lista para procesar':'Clave OpenRouter pendiente'});
  $('#opCurrent').textContent=preset.find(x=>x.id===id)?.name||'Sesión de prueba';
