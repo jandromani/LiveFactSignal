@@ -110,9 +110,11 @@ async function processChunk(blob,result,start_ms,end_ms,seq,id){
  if(id!==debate()||profileCount<1)return;
  // Chunk-level embeddings are only meaningful for monophonic segments.
  // Never assign every word in a mixed-speaker chunk to one candidate.
+ const monophonic=Number(result.speaker_count)===1;
+ if(!monophonic){status('Varias voces en un mismo bloque: identificación aplazada para evitar atribución incorrecta.');return}
  const spans=Array.isArray(result.voice_spans)&&result.voice_spans.length?
-   result.voice_spans.filter(s=>Number(s.duration_ms)>=2600&&s.speaker_key!=='desconocido'):
-   Number(result.speaker_count)===1?[{start_rel_ms:0,end_rel_ms:end_ms-start_ms,start_ms,end_ms,duration_ms:end_ms-start_ms,speaker_key:'single'}]:[];
+   result.voice_spans.filter(s=>Number(s.duration_ms)>=6500&&s.speaker_key!=='desconocido'):
+   [{start_rel_ms:0,end_rel_ms:end_ms-start_ms,start_ms,end_ms,duration_ms:end_ms-start_ms,speaker_key:'single'}].filter(s=>s.duration_ms>=6500);
  for(const span of spans){
   if(queue.length>=12){status('Cola de huellas llena: espera al procesamiento para evitar atrasos',true);break;}
   queue.push({blob,start_ms:span.start_ms,end_ms:span.end_ms,seq,id,span});
