@@ -146,7 +146,7 @@ $('#voiceRemoveGo').onclick=remove;
 $('#voiceSearch').onclick=findSample;
 $('#voiceRefresh').onclick=refresh;
 $('#voiceAuto').onchange=()=>status($('#voiceAuto').checked?'Comparación vocal activada':'Comparación vocal en pausa');
-window.debateVoice={processChunk,refresh,embed:embedding};
+window.debateVoice={processChunk,refresh,embed:embedding,warmup:async()=>{const r=await rpc('warmup');status('Motor acústico CAM++ listo: 192 dimensiones.');return r}};
 window.addEventListener('debate-voice-result',()=>setTimeout(refresh,800));
 setInterval(()=>{if(debate()!==sessionId)refresh()},5000);
 refresh();
