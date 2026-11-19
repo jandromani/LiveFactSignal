@@ -45,9 +45,10 @@ async function reset(){
   const r=await fetch('/api/reset',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'new-run',root_id:ROOT,confirm:'CREAR_SESION_NUEVA'})});
   const j=await r.json().catch(()=>({}));
   if(!r.ok||!j.ok||!j.current_id)throw Error(j.error||'No se pudo crear la nueva sesión');
+  const oldSession=current();
   localStorage.setItem('lfs_current_live',j.current_id);
   localStorage.setItem('debate_live_id',j.current_id);
-  localStorage.setItem('lfs_previous_live',current());
+  localStorage.setItem('lfs_previous_live',oldSession);
   note('✓ Nueva captura '+j.current_id.slice(0,8)+' creada. Recargando consola.');
   location.reload();
  }catch(e){note(String(e.message||e),true)}
