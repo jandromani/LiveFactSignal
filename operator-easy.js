@@ -44,6 +44,8 @@ function init(){
  if($('#concurrency'))$('#concurrency').value='20';
  if($('#autoVerify'))$('#autoVerify').checked=true;
  const id=localStorage.getItem('debate_live_id')||preset[0].id;
+ if(!localStorage.getItem('debate_live_id'))localStorage.setItem('debate_live_id',id);
+ if($('#modeLive'))$('#modeLive').click();
  $('#opPresets').innerHTML=preset.map(x=>'<button type="button" class="opPreset '+(x.id===id?'on':'')+'" data-id="'+x.id+'"><small>'+x.date+'</small><strong>'+x.name+'</strong></button>').join('');
  $('#opPresets').addEventListener('click',e=>{const b=e.target.closest('[data-id]');if(!b)return;localStorage.setItem('debate_live_id',b.dataset.id);location.reload()});
  $('#opLaunch').addEventListener('click',()=>$('#startCapture')?.click());
