@@ -24,7 +24,7 @@ async function tick(){
  if(!cookie.authorized)return log('Activa el acceso privado de operador.');
  busy=true;
  try{
-  if(lastId!==debate){lastId=debate;attempts.clear();used=0;}
+  if(lastId!==debate){lastId=debate;attempts.clear();used=Number(sessionStorage.getItem('lfs_rounds_used_'+debate)||0);}
   const [live,history]=await Promise.all([
    fetch('/api/public?debate='+encodeURIComponent(debate)+'&roundsTick='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null),
    fetch('/api/rounds?debate='+encodeURIComponent(debate),{cache:'no-store'}).then(r=>r.ok?r.json():{rounds:[]})
@@ -38,7 +38,7 @@ async function tick(){
    if(quote.length<45||quote.length>850)return false;
    const runs=saved.get(c.id)||[];
    if(runs.some(r=>['supported','contradicted','mixed'].includes(r.verdict)&&Number(r.confidence)>=.85))return false;
-   if(runs.length>=4||attempts.get(c.id)==='no-evidence')return false;
+   if(runs.length>=4||attempts.has(c.id))return false;
    return c.state==='needs_review'||c.state==='provisional'&&c.verdict==='falsa';
   });
   queue.sort((a,b)=>(a.state==='provisional'?-1:0)-(b.state==='provisional'?-1:0)||(b.start_ms||0)-(a.start_ms||0));
@@ -48,7 +48,7 @@ async function tick(){
   const d=await resp.json().catch(()=>({}));
   if(!resp.ok){log('Error en ronda: '+(d.error||resp.status));attempts.set(c.id,'error');return}
   if(d.status==='evidence_missing'){attempts.set(c.id,'no-evidence');log('Sin texto de fuentes oficiales para «'+c.quote.slice(0,55)+'…». Queda sin resolver y sin gasto de IA.');return}
-  used++;$('#roundsState').textContent='Revisión '+used+'/'+MAX_CALLS+' · ronda '+d.round;
+  used++;sessionStorage.setItem('lfs_rounds_used_'+debate,String(used));$('#roundsState').textContent='Revisión '+used+'/'+MAX_CALLS+' · ronda '+d.round;
   log('Ronda '+d.round+' · '+d.verdict+' · '+Math.round(d.confidence*100)+'% · '+c.quote.slice(0,85));
  }catch(e){log('Revisión: '+String(e.message||e).slice(0,130))}
  finally{busy=false}
