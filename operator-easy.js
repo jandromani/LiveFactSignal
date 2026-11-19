@@ -87,6 +87,7 @@ function init(){
  if($('#concurrency'))$('#concurrency').value='20';
  if($('#autoVerify'))$('#autoVerify').checked=true;
  if($('#voiceAuto')){$('#voiceAuto').checked=false;$('#voiceAutoStats').textContent='⚠ Identificación automática en pausa: vuelve a calibrar antes de activarla.';}
+ preset[0].id=localStorage.getItem('lfs_current_live')||preset[0].id;
  const id=localStorage.getItem('debate_live_id')||preset[0].id;
  if(!localStorage.getItem('debate_live_id'))localStorage.setItem('debate_live_id',id);
  if($('#modeLive'))$('#modeLive').click();
