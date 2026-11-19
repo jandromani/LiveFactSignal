@@ -38,6 +38,7 @@ export default async function handler(req,res){
     INSERT INTO debate_calendar (debate_id,slug,scheduled_at,timezone,format,organizer,moderator,headcount,confirmation,topics,official_sources,watch_url,watch_platform,display_order,notes,video_youtube_id,stream_verified_at)
     SELECT n.id,c.slug||'-run-'||substring(replace(n.id::text,'-','') from 1 for 10),c.scheduled_at,c.timezone,c.format,c.organizer,c.moderator,c.headcount,c.confirmation,c.topics,c.official_sources,c.watch_url,c.watch_platform,c.display_order-1,'Nueva sesión de análisis independiente; el original permanece archivado',c.video_youtube_id,c.stream_verified_at
     FROM debate_calendar c CROSS JOIN new_debate n WHERE c.debate_id=$1
+    ON CONFLICT (debate_id) DO NOTHING
     RETURNING debate_id
    ), roster_copy AS (
     INSERT INTO debate_roster (debate_id,name,party,role,aliases,confirmed)
@@ -67,7 +68,9 @@ export default async function handler(req,res){
           (SELECT count(*) FROM voice_reference_copy)::integer AS copied_voices
    FROM pointer p`,[ROOT]);
   if(!rows.length)return ret(res,404,{error:'Debate original no encontrado'});
-  if(rows[0].copied_events!==1)return ret(res,500,{error:'No se ha encontrado el calendario original'});
-  return ret(res,201,{ok:true,root_id:ROOT,current_id:rows[0].current_id,reset_count:rows[0].reset_count,copied_people:rows[0].copied_people,copied_voices:rows[0].copied_voices,previous_preserved:true,identity_automatic:true,message:'Nueva captura sin afirmaciones; referencias etiquetadas restauradas. No se han copiado huellas aprendidas durante debates.'});
+  const calendar=await sql.query('SELECT 1 FROM debate_calendar WHERE debate_id=$1',[rows[0].current_id]);
+  if(!calendar.length)return ret(res,500,{error:'Se creó la sesión, pero no fue registrada en el calendario público'});
+  const references=await sql.query("SELECT count(*)::int AS n FROM voice_profiles WHERE debate_id=$1 AND source_type='public-reference'",[rows[0].current_id]);
+  return ret(res,201,{ok:true,root_id:ROOT,current_id:rows[0].current_id,reset_count:rows[0].reset_count,copied_people:rows[0].copied_people,copied_voices:references[0]?.n||0,previous_preserved:true,identity_automatic:true,message:'Nueva captura sin afirmaciones; referencias etiquetadas restauradas. No se han copiado huellas aprendidas durante debates.'});
  }catch(e){return ret(res,500,{error:'No se pudo crear la nueva captura',detail:String(e?.message||'').slice(0,230)})}
 }
