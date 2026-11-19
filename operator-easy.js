@@ -82,10 +82,11 @@ function init(){
  const source=$('#liveConnectWizard');if(source){source.open=true;$('#opSource').appendChild(source)}
  const test=$('#testKey');if(test){test.textContent='⚡ Comprobar OpenRouter';test.classList.add('button');test.style.marginTop='11px';$('#opRouter').appendChild(test)}
  const start=$('#startCapture');if(start){const bar=start.closest('.toolbar');$('#opAction').appendChild(bar)}
- if($('#chunkSeconds'))$('#chunkSeconds').value='36';
+ if($('#chunkSeconds')){$('#chunkSeconds').value='10';$('#chunkSeconds').max='10';$('#chunkSeconds').min='6';}
  if($('#sttModel'))$('#sttModel').value='scribe';
  if($('#concurrency'))$('#concurrency').value='20';
  if($('#autoVerify'))$('#autoVerify').checked=true;
+ if($('#voiceAuto')){$('#voiceAuto').checked=false;$('#voiceAutoStats').textContent='⚠ Identificación automática en pausa: vuelve a calibrar antes de activarla.';}
  const id=localStorage.getItem('debate_live_id')||preset[0].id;
  if(!localStorage.getItem('debate_live_id'))localStorage.setItem('debate_live_id',id);
  if($('#modeLive'))$('#modeLive').click();
