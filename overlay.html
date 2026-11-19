@@ -30,13 +30,16 @@ async function refresh(){
     const total=d.claims.filter(x=>x.speaker===p.name).length,initials=p.name.split(' ').slice(0,2).map(s=>s[0]).join('').toUpperCase();
     return '<div class="person"><div class="avatar">'+esc(initials)+'</div><div><div class="name">'+esc(p.name)+'</div><div class="meta">'+esc(p.party)+' · Afirmaciones detectadas</div></div><div class="number">'+total+'</div></div>';
   }).join('')||'<div class="mini">Sin participantes registrados</div>';
-  const pool=d.claims.filter(x=>x.quote&&x.state!=='excluded').slice(0,18);
+  const pool=d.claims.filter(x=>x.quote&&x.state!=='excluded').sort((a,b)=>{
+   const rank=x=>x.state==='provisional'?(x.verdict==='falsa'?0:x.verdict==='confirmada'?1:2):x.state==='needs_review'?3:4;
+   return rank(a)-rank(b)||Number(b.completed_at?new Date(b.completed_at).getTime():b.start_ms||0)-Number(a.completed_at?new Date(a.completed_at).getTime():a.start_ms||0);
+  }).slice(0,18);
   if(pool.length){
    const x=pool[rotate%pool.length];$('#quote').textContent='“'+x.quote+'”';
    $('#speaker').textContent=/^voz \d+|^sin identificar/i.test(x.speaker)?'Hablante sin identificar':x.speaker;
    $('#meta').textContent='· '+clock(x.start_ms)+' · '+x.topic;
-   const verdict=x.state==='provisional'?'IA PROVISIONAL · '+(x.verdict==='confirmada'?'COINCIDE CON FUENTES':x.verdict==='falsa'?'EVIDENCIAS CONTRADICTORIAS':'SIN CONCLUSIÓN'):'EN INVESTIGACIÓN';
-   $('#verdict').textContent=verdict;$('#sources').textContent=x.sources.length+' fuentes citadas';
+   const verdict=x.state==='provisional'?'EVALUACIÓN IA PROVISIONAL · '+(x.verdict==='confirmada'?'RESPALDADA POR FUENTES':x.verdict==='falsa'?'CONTRADICHA POR FUENTES':'SIN CONCLUSIÓN'):(x.state==='needs_review'?'EVIDENCIA INSUFICIENTE · EN REVISIÓN':'EN INVESTIGACIÓN');
+   $('#verdict').textContent=verdict;$('#sources').textContent=x.sources.length+' fuentes enlazadas · contraste provisional';
    $('#progress').style.width=Math.min(100,100*((rotate%pool.length)+1)/pool.length)+'%';
   }else{
    $('#quote').textContent='Esperando las primeras afirmaciones de la retransmisión…';$('#speaker').textContent='Fuente: '+(d.debate.source_url?.includes('rtve')?'RTVE Play':'Señal seleccionada');$('#meta').textContent=' · Captura pendiente';$('#verdict').textContent='◉ EN ESPERA DE AUDIO';$('#sources').textContent='';
