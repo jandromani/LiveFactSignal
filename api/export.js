@@ -23,12 +23,13 @@ export default async function handler(req,res){
   const rows=await sql.query('SELECT id,title,event_date,mode,status,source_type,source_url,created_at,updated_at FROM debates WHERE id=$1',[id]);
   if(!rows.length)return res.status(404).json({error:'La sesión no existe'});
   const debate=rows[0];
-  const [roster,segments,claims,turns,matches]=await Promise.all([
+  const [roster,segments,claims,turns,matches,rounds]=await Promise.all([
    sql.query('SELECT name,party,role,confirmed FROM debate_roster WHERE debate_id=$1 ORDER BY role,name',[id]),
    sql.query('SELECT seq,start_ms,end_ms,transcript,status,stt_model,claim_count,latency_ms,cost_usd,speaker,party,created_at FROM audio_segments WHERE debate_id=$1 ORDER BY seq,id LIMIT 2500',[id]),
    sql.query('SELECT id,start_ms,end_ms,speaker,party,quote,normalized,topic,priority,state,verdict,rationale,sources,confidence,model,latency_ms,attempts,created_at,started_at,completed_at,speaker_origin,speaker_confidence,checkability_status,voice_similarity FROM claims WHERE debate_id=$1 ORDER BY start_ms,created_at LIMIT 7000',[id]),
    sql.query('SELECT start_ms,end_ms,event_type,person_name,party,cue,confidence,created_at FROM speaker_events WHERE debate_id=$1 ORDER BY start_ms LIMIT 4000',[id]),
-   sql.query('SELECT seq,start_ms,end_ms,person_name,party,score,second_score,threshold,method,decision,created_at FROM voice_match_events WHERE debate_id=$1 ORDER BY seq,start_ms LIMIT 4500',[id])
+   sql.query('SELECT seq,start_ms,end_ms,person_name,party,score,second_score,threshold,method,decision,created_at FROM voice_match_events WHERE debate_id=$1 ORDER BY seq,start_ms LIMIT 4500',[id]),
+   sql.query('SELECT claim_id,round,verdict,confidence,rationale,citations,model,created_at FROM evidence_rounds WHERE debate_id=$1 ORDER BY created_at,round LIMIT 10000',[id]).catch(()=>[])
   ]);
   const date=new Date().toISOString().slice(0,19).replace(/[-:T]/g,'');
   const slug=String(debate.title||'debate').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,50).replace(/-$/,'');
@@ -46,7 +47,7 @@ export default async function handler(req,res){
   const data={
    schema:'LiveFactSignal.session-export.v1',exported_at:new Date().toISOString(),
    notice:'Se exportan transcripciones, etiquetas de atribución y evaluaciones automatizadas, no grabaciones originales ni huellas biométricas. Los dictámenes IA son provisionales.',
-   debate,roster,stats:{audio_segments:segments.length,claims:claims.length,turn_cues:turns.length,voice_matches:matches.length,provisional_claims:claims.filter(c=>c.state==='provisional').length},audio_segments:segments,claims,speaker_events:turns,voice_match_events:matches
+   debate,roster,stats:{audio_segments:segments.length,claims:claims.length,turn_cues:turns.length,voice_matches:matches.length,review_rounds:rounds.length,provisional_claims:claims.filter(c=>c.state==='provisional').length},audio_segments:segments,claims,speaker_events:turns,voice_match_events:matches,evidence_rounds:rounds
   };
   res.setHeader('Content-Type','application/json; charset=utf-8');
   return res.status(200).send(JSON.stringify(data,null,2));
