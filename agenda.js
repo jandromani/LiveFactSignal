@@ -54,7 +54,7 @@ function render(){
  $('#agendaHint').textContent=cur?'Sesión activa: '+cur.title:'Selecciona una tarjeta y después comparte el audio de RTVE.';
 }
 async function refresh(){
- try{const r=await api('list');list=r.events||[];render();}
+ try{const r=await api('list');list=(r.events||[]).filter(x=>!String(x.slug||'').includes('-run-'));render();}
  catch(e){$('#agendaCards').innerHTML='<div class="agenda-loading">No se puede cargar la agenda: '+esc(e.message)+'</div>'}
 }
 async function choose(id){
