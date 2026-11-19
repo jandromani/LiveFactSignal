@@ -24,7 +24,7 @@ function check(id,message,ready){
  el.textContent=message;el.classList.toggle('ok',Boolean(ready));el.classList.toggle('warn',!ready);
 }
 let authReady=false,voiceWarm=false,voiceLoading=false,activeCapture=false,wakeLock=null,routerVerified=false;
-const voiceSeedLastAttempt=new Map(),voiceInitialized=new Set();
+const voiceSeedLastAttempt=new Map(),voiceInitialized=new Set(),voiceReconciledSignatures=new Map();
 async function preflight(){
  const selected=window.LiveFactSignal?.snapshot?.().id||localStorage.getItem('debate_live_id')||'';
  if(!selected)return;
@@ -56,6 +56,21 @@ async function preflight(){
    if(!r.ok)throw Error('Sincronización: '+(v.error||r.status));
    info=await health();
    try{await Promise.resolve(window.debateVoice?.refresh?.())}catch{}
+  }
+  // Apply persisted acoustic spans to late-arriving, still-unknown claims.
+  if(info.voice_v2?.total>0&&info.claims?.unknown>0){
+   const signature=String(info.voice_v2.total)+':'+String(info.claims.total);
+   if(voiceReconciledSignatures.get(selected)!==signature){
+    try{
+     const resp=await nativeFetch('/api/voice-reconcile',{method:'POST',credentials:'same-origin',cache:'no-store',
+      headers:{'Content-Type':'application/json'},body:JSON.stringify({id:selected})});
+     const output=await resp.json().catch(()=>({}));
+     if(resp.ok){
+      voiceReconciledSignatures.set(selected,signature);
+      if(output.updated>0){info=await health();try{await Promise.resolve(window.debateVoice?.refresh?.())}catch{}}
+     }else console.warn('[VOICE reconcile]',output.error||resp.status);
+    }catch(e){console.warn('[VOICE reconcile]',e.message)}
+   }
   }
   const allReady=info.total_candidates>0&&info.ready_candidates===info.total_candidates;
   const refs=info.roster?.filter(x=>x.role==='candidate').reduce((n,x)=>n+Number(x.reference_count||0),0)||0;
@@ -141,7 +156,7 @@ function init(){
   diag.textContent='Esperando diagnóstico de reconocimiento vocal…';
   preflightRoot.appendChild(diag);
  }
- authStatus();preflight();setInterval(preflight,20000);let preloadAttempts=0;const preload=setInterval(()=>{if(window.debateVoice?.warmup){clearInterval(preload);warmupVoice()}else if(++preloadAttempts>100)clearInterval(preload)},500);setInterval(update,2000);update();
+ authStatus();preflight();setInterval(preflight,20000);window.addEventListener('livefact-session-changed',()=>{voiceReconciledSignatures.clear();voiceInitialized.clear();preflight().catch(()=>{})});let preloadAttempts=0;const preload=setInterval(()=>{if(window.debateVoice?.warmup){clearInterval(preload);warmupVoice()}else if(++preloadAttempts>100)clearInterval(preload)},500);setInterval(update,2000);update();
 }
 function update(){
  const capture=$('#captureLabel')?.textContent||'DETENIDO',audio=$('#audioSignalStatus')?.textContent||'';
