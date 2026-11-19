@@ -257,6 +257,43 @@ setInterval(async()=>{
  }catch(e){trace('SUPERVISOR',e.message)}
  finally{supervisorBusy=false}
 },4800);
+// Two-button console launcher: switch debate sessions without page reload or losing the OpenRouter input.
+// Wait for existing demo STT to finish before changing state.id to prevent cross-session claims.
+const LIVEFACT_DEMO='8ee348bb-acac-4934-8358-e183d0a57712';
+const LIVEFACT_TODAY='f3c2fd9b-5fa1-4818-a407-453f5cac4a34';
+async function liveFactSelect(id){
+ const allowed=new Set([LIVEFACT_DEMO,LIVEFACT_TODAY,'21e5098f-0f04-4571-92a4-9b1d52f4d48c','f45fc70e-fcb6-4e01-b40b-81143627e030']);
+ if(!allowed.has(id))throw Error('Preset de debate no reconocido');
+ if(state.id===id&&state.debate)return {ok:true,id,unchanged:true};
+ if(state.capturing)stopCapture();
+ // Recorder stop queues its final chunk asynchronously. Allow that callback to flush.
+ await new Promise(resolve=>setTimeout(resolve,350));
+ const deadline=Date.now()+75000;
+ while(state.sttBusy>0||state.sttTasks.length>0||state.running){
+  if(Date.now()>deadline)throw Error('La sesión anterior aún procesa audio. No se cambia el debate para evitar mezclar afirmaciones. Espera a que acabe y pulsa de nuevo.');
+  await new Promise(resolve=>setTimeout(resolve,380));
+ }
+ state.id=id;state.debate=null;state.claims=[];state.segments=[];state.seq=0;
+ localStorage.setItem('debate_live_id',id);
+ await refresh();
+ if(!state.debate)throw Error('No se ha recuperado la sesión del debate seleccionado.');
+ state.seq=state.segments.reduce((n,x)=>Math.max(n,Number(x.seq)+1),0);
+ setMode('live');
+ $('#debateTitle').value=state.debate.title;
+ $('#eventDate').value=String(state.debate.event_date||'').slice(0,10)||'2026-11-19';
+ $('#youtubeUrl').value=id===LIVEFACT_DEMO?'https://www.youtube.com/watch?v=Sx5E5nLJpAE':(state.debate.source_url||'https://www.rtve.es/play/videos/directo/la-1/');
+ $('#captureStart').value='0';
+ updateClip();render();
+ trace('MODE',id===LIVEFACT_DEMO?'Demo del 10 julio 2023, en sesión QA aislada':'Debate oficial seleccionado. Esperando permiso para capturar RTVE.');
+ window.dispatchEvent(new CustomEvent('livefact-session-changed',{detail:{id,mode:id===LIVEFACT_DEMO?'demo':'live'}}));
+ return {ok:true,id,title:state.debate.title};
+}
+window.LiveFactSignal={
+ selectSession:liveFactSelect,
+ startCapture:()=>startCapture(),
+ stopCapture:()=>stopCapture(),
+ snapshot:()=>({id:state.id,capturing:state.capturing,pending:state.sttTasks.length+state.sttBusy,verifying:state.running,claims:state.claims.filter(x=>x.state!=='excluded').length,verified:state.claims.filter(x=>x.state==='provisional').length,segments:state.segments.filter(x=>x.status==='processed').length})
+};
 async function boot(){
 try{const h=await api('health');state.aiEnv=h.ai;$('#health').textContent='Neon conectado';$('#healthBadge').textContent=h.ai?'OPENROUTER · CONFIGURADO EN VERCEL':'OPENROUTER · BYOK EN EL PANEL';$('#healthBadge').className='badge '+(h.ai?'green':'warn');trace('HEALTH','Neon OK; STT '+h.stt+'; Luna '+(h.ai?'configurado':'requiere clave en la sesión'));}catch(e){$('#health').textContent='API desconectada';notify('Backend no disponible: '+e.message,'error');}
 renderPlayer();const id=localStorage.getItem('debate_live_id');if(id&&/^[a-f0-9-]{36}$/i.test(id)){state.id=id;await refresh();if(state.debate){state.seq=state.segments.reduce((a,b)=>Math.max(a,b.seq+1),0);state.mode=state.debate.source_type==='live'?'live':'youtube';if(state.mode==='youtube'&&state.debate.youtube_id){$('#youtubeUrl').value='https://www.youtube.com/watch?v='+state.debate.youtube_id;$('#debateTitle').value=state.debate.title;$('#clipStart').value=clock(state.debate.clip_start_ms/1000);$('#clipEnd').value=clock((state.debate.clip_end_ms||0)/1000);$('#captureStart').value=String(Math.round(state.debate.clip_start_ms/1000));renderPlayer();}else if(state.mode==='live'){setMode('live');$('#debateTitle').value=state.debate.title;$('#eventDate').value=String(state.debate.event_date||'').slice(0,10)||new Date().toISOString().slice(0,10);$('#youtubeUrl').value=state.debate.source_url||'https://www.rtve.es/play/videos/directo/la-1/';$('#captureStart').value='0';}updateClip();}}render();trace('READY','Panel listo; captura tras permiso del usuario.');
