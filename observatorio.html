@@ -23,6 +23,7 @@
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Detalle de afirmación"><div class="drawer"><button class="close" id="close">✕ Cerrar</button><div id="detail"></div></div></div>
 <script>
 const $=s=>document.querySelector(s),AUDIT='5cd33d45-32a0-4116-a9ed-92b8312757c2',FIRST='f3c2fd9b-5fa1-4818-a407-453f5cac4a34';
+const followCurrent=!new URLSearchParams(location.search).has('archive')&&(!new URLSearchParams(location.search).get('debate')||new URLSearchParams(location.search).get('debate')===FIRST);
 let session=new URLSearchParams(location.search).get('debate')||FIRST,identity='',filter='contradicted',term='',topic='',last=null,fetching=false,allEvents=[],lastSignature='',lastChangedAt=Date.now();
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
 const fmt=t=>{const n=Math.max(0,Math.floor(Number(t||0)/1000));return [Math.floor(n/3600),Math.floor(n/60)%60,n%60].map(x=>String(x).padStart(2,'0')).join(':')};
@@ -50,6 +51,7 @@ async function agenda(){
 async function load(){
  if(fetching)return;fetching=true;
  try{
+  if(followCurrent){try{const active=await fetch('/api/reset',{cache:'no-store'}).then(r=>r.ok?r.json():null);if(active?.current_id&&session!==active.current_id){session=active.current_id;const selector=$('#event');if(![...selector.options].some(o=>o.value===session)){const opt=document.createElement('option');opt.value=session;opt.textContent='Captura nueva · En directo';selector.prepend(opt)}selector.value=session;const url=new URL(location.href);url.searchParams.set('debate',session);history.replaceState({},'',url.pathname+url.search+url.hash);last=null;lastSignature=''}}catch{}}
   const r=await fetch('/api/public?debate='+encodeURIComponent(session)+'&ts='+Math.floor(Date.now()/5000),{cache:'no-store'});
   if(!r.ok)throw Error('Servidor '+r.status);
   const j=await r.json();
