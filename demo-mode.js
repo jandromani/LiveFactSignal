@@ -116,6 +116,19 @@ async function refreshDemo(){
   setText('lfDemoClaims',String(claims.length));
   setText('lfDemoVoices',String(voice));
   setText('lfDemoVerified',String(provisional));
+  const examples=$('#lfDemoExamples');
+  if(examples){
+   examples.replaceChildren();
+   const recent=[...claims].sort((a,b)=>Number(b.start_ms||0)-Number(a.start_ms||0)).slice(0,4);
+   if(!recent.length){const n=document.createElement('div');n.textContent='Aún no hay afirmaciones evaluables. Se mostrarán aquí, sin inventar resultados.';examples.appendChild(n);}
+   for(const item of recent){
+    const card=document.createElement('div'),speaker=document.createElement('b'),quote=document.createElement('div'),meta=document.createElement('span');
+    speaker.textContent=item.speaker||'Sin identificar';
+    quote.textContent='“'+String(item.quote||'').slice(0,350)+'”';
+    meta.textContent=(item.speaker_origin==='voice_embedding'?'Coincidencia acústica · ':'Identificación pendiente · ')+(item.state==='provisional'?'Análisis IA provisional':item.state==='needs_review'?'Revisión necesaria':'En investigación');
+    card.append(speaker,quote,meta);examples.appendChild(card);
+   }
+  }
   const status=$('#lfDemoConclusion');if(!status)return;
   status.classList.remove('good','warn');
   if(processed>=2&&claims.length>0&&voice>0&&provisional>0){
@@ -131,6 +144,7 @@ async function refreshDemo(){
 }
 function captureStart(){
  if(mode==='demo'){
+  setText('lfDemoAudioBadge','● Compartiendo pestaña: comprobando niveles de audio');
   demoStarted=true;
   play();
   stopDemoTimer();
@@ -138,7 +152,7 @@ function captureStart(){
   report('● DEMO CAPTURANDO. Reproduciendo YouTube. Si se queda en pausa, pulsa ▶ en el vídeo.','success');
  }else report('● RTVE CAPTURANDO. La señal se está enviando para transcripción.','success');
 }
-function captureStop(){if(mode==='demo'){stopDemoTimer();pause();setTimeout(refreshDemo,500)}}
+function captureStop(){if(mode==='demo'){stopDemoTimer();pause();setText('lfDemoAudioBadge','■ Captura detenida');setTimeout(refreshDemo,500)}}
 function handlePlayerEvent(event){
  if(mode!=='demo'||!videoLoaded||event.source!==$('#lfDemoVideo')?.contentWindow||!/^https:\/\/(www\.)?youtube(-nocookie)?\.com$/.test(event.origin))return;
  try{
@@ -161,7 +175,7 @@ function init(){
  window.addEventListener('debate-capture-stop',captureStop);
  window.addEventListener('message',handlePlayerEvent);
  ui();
- setInterval(()=>{if(mode==='demo'&&!document.hidden)refreshDemo()},4500);
+ setInterval(()=>{if(mode==='demo'&&!document.hidden)refreshDemo();if(mode==='demo'&&$('#audioSignalStatus'))setText('lfDemoAudioBadge',$('#audioSignalStatus').textContent)},2400);
  if(mode==='demo')refreshDemo();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
