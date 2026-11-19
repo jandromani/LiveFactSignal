@@ -54,7 +54,7 @@ async function preflight(){
    const refreshed=await nativeFetch('/api/voice?action=list&id='+encodeURIComponent(selected),{cache:'no-store'});
    if(!refreshed.ok)throw Error('Error al releer voces HTTP '+refreshed.status);
    profiles=await refreshed.json();
-   await window.debateVoice?.refresh?.().catch(()=>{});
+   try{await Promise.resolve(window.debateVoice?.refresh?.())}catch{}
   }
   const n=profiles.profiles.length;
   const recognizable=new Set(profiles.profiles.filter(x=>x.source_type==='public-reference'&&x.quality_status==='source-labeled').map(x=>x.person_name));
