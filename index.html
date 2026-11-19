@@ -211,8 +211,23 @@ if(!$('#adminKey').value.trim())return notify('Introduzca la clave de administra
 sessionStorage.setItem('debate_admin',$('#adminKey').value.trim());
 const id=youtubeId($('#youtubeUrl').value),start=seconds($('#clipStart').value),end=seconds($('#clipEnd').value);
 if(state.mode==='youtube'&&!id)return notify('URL de YouTube inválida.','error');
-try{const r=await api('create',{source_type:state.mode,youtubeId:id,title:$('#debateTitle').value,eventDate:$('#eventDate').value,clip_start_ms:start*1000,clip_end_ms:end>start?end*1000:null,source_url:$('#youtubeUrl').value});
-state.id=r.debate.id;state.debate=r.debate;state.seq=0;state.claims=[];state.segments=[];localStorage.setItem('debate_live_id',state.id);$('#captureStart').value=String(start);notify('Sesión '+state.id.slice(0,8)+' creada en PostgreSQL. Ya puedes capturar audio de una pestaña.','success');trace('SESSION','Creada '+state.id.slice(0,8));window.dispatchEvent(new CustomEvent('livefact-session-changed',{detail:{id:state.id,mode:state.mode}}));render();if(state.mode==='youtube')renderPlayer();
+try{
+const templateId=state.id;
+const enteredTitle=$('#debateTitle').value.trim();
+const title=enteredTitle==='Nuevo debate en directo'&&state.debate?.title?state.debate.title+' · Captura nueva':enteredTitle;
+const r=await api('create',{source_type:state.mode,youtubeId:id,title,eventDate:$('#eventDate').value,clip_start_ms:start*1000,clip_end_ms:end>start?end*1000:null,source_url:$('#youtubeUrl').value});
+let voiceStatus='';
+try{
+ const response=await fetch('/api/voice-seed',{method:'POST',credentials:'same-origin',
+  headers:{'Content-Type':'application/json'},body:JSON.stringify({id:r.debate.id,template_id:templateId})});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok)throw Error(data.error||'HTTP '+response.status);
+ voiceStatus=' · '+(data.ready_candidates||0)+'/'+(data.total_candidates||0)+' participantes con referencias vocales';
+}catch(e){voiceStatus=' · AVISO: no se precargaron las voces ('+e.message+'). Comprueba el diagnóstico antes de capturar';}
+state.id=r.debate.id;state.debate=r.debate;state.seq=0;state.claims=[];state.segments=[];localStorage.setItem('debate_live_id',state.id);$('#captureStart').value=String(start);
+notify('Sesión '+state.id.slice(0,8)+' creada en PostgreSQL'+voiceStatus,voiceStatus.includes('AVISO')?'error':'success');
+trace('SESSION','Creada '+state.id.slice(0,8)+voiceStatus);
+window.dispatchEvent(new CustomEvent('livefact-session-changed',{detail:{id:state.id,mode:state.mode}}));render();if(state.mode==='youtube')renderPlayer();
 return true;}catch(e){notify('No se pudo crear la sesión: '+e.message,'error');return false;}
 }
 async function ensureSession(){if(state.id)return true;return await createSession();}
