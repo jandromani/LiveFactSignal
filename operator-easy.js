@@ -37,7 +37,8 @@ function init(){
  if(!$('#opRoot'))return;
  const router=$('#routerKey');
  if(router){router.autocomplete='off';router.placeholder='sk-or-v1-…';const outer=router.closest('.field');outer.querySelector('label').textContent='Introduce únicamente OpenRouter';$('#opRouter').appendChild(outer)}
- const source=$('#liveConnectWizard');if(source){source.open=false;$('#opSource').appendChild(source)}
+ const source=$('#liveConnectWizard');if(source){source.open=true;$('#opSource').appendChild(source)}
+ const test=$('#testKey');if(test){test.textContent='⚡ Comprobar OpenRouter';test.classList.add('button');test.style.marginTop='11px';$('#opRouter').appendChild(test)}
  const start=$('#startCapture');if(start){const bar=start.closest('.toolbar');$('#opAction').appendChild(bar)}
  if($('#chunkSeconds'))$('#chunkSeconds').value='12';
  if($('#sttModel'))$('#sttModel').value='scribe';
