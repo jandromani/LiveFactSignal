@@ -105,8 +105,8 @@
 <div class="toolbar" style="margin:9px 0"><button class="button ghost" id="voiceSearch">↗ Buscar entrevista en YouTube</button><button class="button ghost" id="voiceTabSend">🎙 Registrar 12 s de otra pestaña</button></div>
 <div class="field"><label>O seleccionar una muestra de audio autorizada</label><input type="file" id="voiceFile" accept="audio/*,.wav,.mp3,.m4a,.ogg,.webm"></div>
 <div class="toolbar" style="margin:10px 0"><button class="button primary" id="voiceFileSend">＋ Guardar voz de referencia</button><button class="button ghost" id="voiceRefresh">⟳ Actualizar galería</button></div>
-<label class="check"><input type="checkbox" id="voiceAuto" checked><b>Aprender voces por cesiones de turno e identificar las futuras intervenciones automáticamente</b></label>
-<p class="micro">Umbral conservador: coseno ≥ 0,68 y ventaja ≥ 0,08 frente a otros candidatos. Son parámetros iniciales sin calibración de precisión: una coincidencia es provisional. Si Scribe detecta dos voces, se analizan sus tramos por separado; las intervenciones demasiado cortas quedan sin identificar.</p>
+<label class="check"><input type="checkbox" id="voiceAuto" checked><b>Comparar cada tramo de voz con las referencias acústicas conocidas (sin aprender por anuncios del moderador)</b></label>
+<p class="micro">Motor CAM++ v2: compara cada tramo de voz separado por Scribe, utiliza dos referencias por candidato y exige similitud y margen suficientes. No infiere identidades por palabras o por el moderador. Las coincidencias son provisionales y las voces ambiguas permanecen sin identificar.</p>
 <div class="hint" id="voiceAutoStats" style="margin:10px 0">Calibración automática preparada…</div><div id="voiceProfiles" style="padding:9px 0">Sin referencias</div>
 <div class="fieldrow"><div class="field"><label>Eliminar perfil biométrico</label><select id="voiceRemove"><option value="">Seleccionar muestra…</option></select></div><div style="align-self:end"><button class="button ghost" id="voiceRemoveGo">Eliminar muestra</button></div></div>
 <div id="voiceStatus" class="micro" aria-live="polite">Preparando galería…</div>
@@ -212,7 +212,7 @@ sessionStorage.setItem('debate_admin',$('#adminKey').value.trim());
 const id=youtubeId($('#youtubeUrl').value),start=seconds($('#clipStart').value),end=seconds($('#clipEnd').value);
 if(state.mode==='youtube'&&!id)return notify('URL de YouTube inválida.','error');
 try{const r=await api('create',{source_type:state.mode,youtubeId:id,title:$('#debateTitle').value,eventDate:$('#eventDate').value,clip_start_ms:start*1000,clip_end_ms:end>start?end*1000:null,source_url:$('#youtubeUrl').value});
-state.id=r.debate.id;state.debate=r.debate;state.seq=0;state.claims=[];state.segments=[];localStorage.setItem('debate_live_id',state.id);$('#captureStart').value=String(start);notify('Sesión '+state.id.slice(0,8)+' creada en PostgreSQL. Ya puedes capturar audio de una pestaña.','success');trace('SESSION','Creada '+state.id.slice(0,8));render();if(state.mode==='youtube')renderPlayer();
+state.id=r.debate.id;state.debate=r.debate;state.seq=0;state.claims=[];state.segments=[];localStorage.setItem('debate_live_id',state.id);$('#captureStart').value=String(start);notify('Sesión '+state.id.slice(0,8)+' creada en PostgreSQL. Ya puedes capturar audio de una pestaña.','success');trace('SESSION','Creada '+state.id.slice(0,8));window.dispatchEvent(new CustomEvent('livefact-session-changed',{detail:{id:state.id,mode:state.mode}}));render();if(state.mode==='youtube')renderPlayer();
 return true;}catch(e){notify('No se pudo crear la sesión: '+e.message,'error');return false;}
 }
 async function ensureSession(){if(state.id)return true;return await createSession();}
