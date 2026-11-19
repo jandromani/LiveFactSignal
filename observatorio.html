@@ -33,11 +33,18 @@ const isAttributed=x=>!unknown(x.speaker)&&candidates().some(p=>p.name===x.speak
 function setStatus(ok){$('#liveStatus').textContent=ok?'DATOS CONECTADOS':'REINTENTANDO CONEXIÓN';$('#liveStatus').parentElement.style.opacity=ok?'1':'.65'}
 async function agenda(){
  try{
- const r=await fetch('/api/catalog?action=list');const j=await r.json();
- allEvents=j.events||[];const select=$('#event');
+ const [catalog,reset]=await Promise.all([
+  fetch('/api/catalog?action=list',{cache:'no-store'}).then(r=>r.json()),
+  fetch('/api/reset',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
+ ]);
+ allEvents=catalog.events||[];const select=$('#event');
+ const url=new URL(location.href),archive=url.searchParams.get('archive')==='1';
+ if(!archive&&(!url.searchParams.has('debate')||session===FIRST)&&reset?.current_id)session=reset.current_id;
  select.innerHTML=allEvents.map(x=>'<option value="'+esc(x.debate_id)+'">'+esc(new Date(x.scheduled_at).toLocaleDateString('es-ES',{day:'2-digit',month:'short'}))+' · '+esc(x.title)+'</option>').join('')+'<option value="'+AUDIT+'">Archivo · Debate a cinco (2019, experimental)</option>';
- if(![...select.options].some(x=>x.value===session))session=FIRST;
- select.value=session;await load();
+ if(![...select.options].some(x=>x.value===session)){
+  const option=document.createElement('option');option.value=session;option.textContent=reset?.current_id===session?'Captura nueva · Sesión activa':'Sesión archivada';select.prepend(option);
+ }
+ select.value=session;url.searchParams.set('debate',session);history.replaceState({},'',url.pathname+url.search+url.hash);await load();
  }catch(e){$('#event').innerHTML='<option>Error de carga</option>';setStatus(false)}
 }
 async function load(){
@@ -125,7 +132,7 @@ $('#spotlightFeed').addEventListener('click',e=>{const b=e.target.closest('[data
 $('#topics').addEventListener('click',e=>{const b=e.target.closest('[data-topic]');if(!b)return;topic=b.dataset.topic;drawTopics();drawClaims()});
 $('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;filter=b.dataset.filter;for(const x of $('#filters').querySelectorAll('[data-filter]'))x.classList.toggle('active',x.dataset.filter===filter);drawClaims()});
 $('#search').addEventListener('input',e=>{term=e.target.value.trim().toLocaleLowerCase('es');drawClaims()});
-$('#event').addEventListener('change',e=>{session=e.target.value;identity='';filter='contradicted';topic='';term='';$('#search').value='';for(const b of $('#filters').querySelectorAll('[data-filter]'))b.classList.toggle('active',b.dataset.filter==='all');history.replaceState({},'',location.pathname+'?debate='+encodeURIComponent(session));last=null;load()});
+$('#event').addEventListener('change',e=>{session=e.target.value;identity='';filter='contradicted';topic='';term='';$('#search').value='';for(const b of $('#filters').querySelectorAll('[data-filter]'))b.classList.toggle('active',b.dataset.filter==='contradicted');history.replaceState({},'',location.pathname+'?debate='+encodeURIComponent(session));last=null;load()});
 $('#close').addEventListener('click',closeDetail);$('#overlay').addEventListener('click',e=>{if(e.target===$('#overlay'))closeDetail()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDetail()});
 agenda();setInterval(load,5000);
