@@ -224,7 +224,7 @@ function nextSeq(){return state.seq++;}
 async function drainStt(){
 while(state.sttBusy<2&&state.sttTasks.length){
 const item=state.sttTasks.shift();state.sttBusy++;render();
-(async()=>{try{const b64=arrayToBase64(await item.blob.arrayBuffer());const res=await api('transcribe',{id:state.id,seq:item.seq,start_ms:item.start_ms,end_ms:item.end_ms,speaker:item.speaker,party:item.party,format:item.format,audioBase64:b64});if(!res.duplicate&&window.debateVoice?.processChunk&&$('#sttModel')?.value==='scribe')window.debateVoice.processChunk(item.blob,res,item.start_ms,item.end_ms,item.seq,state.id).catch(e=>trace('VOICE',e.message));if(!res.duplicate)trace('STT','#'+item.seq+' '+(res.transcript||'').slice(0,65)+'… | '+res.added+' claims'+(res.speaker_count?' · '+res.speaker_count+' voces':''));await refresh();}
+(async()=>{try{if(item.blob.size>500000)throw Error('Fragmento excesivo ('+Math.round(item.blob.size/1024)+' KB). Reduce duración o bitrate; no se enviará un Base64 inválido.');const b64=arrayToBase64(await item.blob.arrayBuffer());const res=await api('transcribe',{id:state.id,seq:item.seq,start_ms:item.start_ms,end_ms:item.end_ms,speaker:item.speaker,party:item.party,format:item.format,audioBase64:b64});if(!res.duplicate&&window.debateVoice?.processChunk&&$('#sttModel')?.value==='scribe')window.debateVoice.processChunk(item.blob,res,item.start_ms,item.end_ms,item.seq,state.id).catch(e=>trace('VOICE',e.message));if(!res.duplicate)trace('STT','#'+item.seq+' '+(res.transcript||'').slice(0,65)+'… | '+res.added+' claims'+(res.speaker_count?' · '+res.speaker_count+' voces':''));await refresh();}
 catch(e){trace('STT FAIL','#'+item.seq+' '+e.message);notify('Falló un fragmento de audio: '+e.message,'error');}
 finally{state.sttBusy--;render();drainStt();}})();
 }
@@ -232,8 +232,8 @@ finally{state.sttBusy--;render();drainStt();}})();
 function spinRecorder(audio){
 if(!state.capturing)return;const mime=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus'].find(t=>MediaRecorder.isTypeSupported(t));
 if(!mime){stopCapture();return notify('Este navegador no permite grabar fragmentos de audio compatibles. Prueba Chrome/Edge actualizado.','error');}
-let rec;try{rec=new MediaRecorder(audio,{mimeType:mime,audioBitsPerSecond:64000})}catch(e){stopCapture();return notify(e.message,'error')}
-state.recorder=rec;const started=Date.now();const startms=Math.round(currentPosition()*1000),s=chooseSpeaker(),chunks=[];
+let rec;try{rec=new MediaRecorder(audio,{mimeType:mime,audioBitsPerSecond:32000})}catch(e){stopCapture();return notify(e.message,'error')}
+state.recorder=rec;const started=Date.now();const startms=Math.round(currentPosition()*1000),s={speaker:'Sin identificar',party:'—'},chunks=[];
 rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
 rec.onstop=()=>{
 if(state.timer){clearTimeout(state.timer);state.timer=null}
@@ -242,7 +242,7 @@ if(chunks.length){const blob=new Blob(chunks,{type:mime});state.sttTasks.push({s
 if(state.capturing)spinRecorder(audio);
 };
 rec.start();
-state.timer=setTimeout(()=>{if(rec.state==='recording')rec.stop();},Number($('#chunkSeconds').value)*1000);
+state.timer=setTimeout(()=>{if(rec.state==='recording')rec.stop();},Math.max(6,Math.min(10,Number($('#chunkSeconds').value)||10))*1000);
 }
 async function startCapture(){
 if(state.capturing)return;
@@ -264,7 +264,7 @@ if(latestEnd>requestedBase){
  notify('Captura reanudada tras el último bloque, sin superponer tiempos. Para otro vídeo utiliza una sesión distinta.','success');
 }
 $('#startCapture').disabled=true;$('#stopCapture').disabled=false;$('#captureLabel').textContent='● CAPTURANDO';$('#captureLabel').className='badge green';
-stream.getAudioTracks()[0].onended=()=>stopCapture();
+stream.getAudioTracks()[0].onended=()=>{trace('CAPTURE','La pista de audio compartida terminó o el navegador revocó el permiso.');notify('La pestaña dejó de compartir audio. Selecciona una pestaña con sonido y mantén su reproducción.','error');stopCapture()};
 const audioOnly=new MediaStream(stream.getAudioTracks());spinRecorder(audioOnly);notify('Audio compartido. Los fragmentos se transcriben en OpenRouter y sus afirmaciones se encolan.','success');trace('CAPTURE','Inicio de audio compartido. Corte de '+$('#chunkSeconds').value+'s.');
 }catch(e){notify('Captura no iniciada: '+e.message,'error');}
 }
@@ -306,22 +306,17 @@ $('#claimsView').onclick=e=>{const x=e.target.closest('[data-jump]');if(!x)retur
 $('#adminKey').onchange=()=>{if($('#adminKey').value.trim())sessionStorage.setItem('debate_admin',$('#adminKey').value.trim())};
 setInterval(()=>{const t=currentPosition();$('#clockLabel').textContent=clock(t);if(state.capturing&&state.mode==='youtube'){const end=seconds($('#clipEnd').value);if(end&&t>=end)stopCapture();}},700);
 setInterval(refresh,4500);
-let supervisorBusy=false;
+let workerBusy=false;
 setInterval(async()=>{
- if(!$('#autoVerify').checked||!state.id||state.running||supervisorBusy)return;
- if(!($('#adminKey').value.trim()||sessionStorage.getItem('debate_admin')))return;
- supervisorBusy=true;
- try{
-  const token=$('#adminKey').value.trim()||sessionStorage.getItem('debate_admin')||'';
-  const result=await fetch('/api/supervisor?action=reconcile',{method:'POST',headers:{'Content-Type':'application/json','x-admin-token':token},body:JSON.stringify({id:state.id})});
-  const info=await result.json().catch(()=>({}));
-  if(!result.ok)throw Error(info.error||'Supervisor HTTP '+result.status);
-  if(info.turn_cues||info.excluded||info.assigned)trace('SUPERVISOR','Cambios de turno: '+info.turn_cues+' · protocolo filtrado: '+info.excluded+' · atribuciones: '+info.assigned);
-  await refresh();
-  if(state.claims.some(c=>c.state==='queued')&&(state.aiEnv||$('#routerKey').value.trim()))await work();
- }catch(e){trace('SUPERVISOR',e.message)}
- finally{supervisorBusy=false}
-},4800);
+ if(!$('#autoVerify').checked||!state.id||state.running||workerBusy)return;
+ if(!(state.aiEnv||$('#routerKey').value.trim()))return;
+ if(!state.claims.some(c=>c.state==='queued'))return;
+ workerBusy=true;
+ try{await work()}catch(e){trace('VERIFY AUTO',e.message)}
+ finally{workerBusy=false}
+},7500);
+// Attribution reconciliation is MANUAL via #identityRescan while profiles are being recalibrated.
+// It must not run every 4.8 s: turn hints can override acoustic uncertainty.
 // Two-button console launcher: switch debate sessions without page reload or losing the OpenRouter input.
 // Wait for existing demo STT to finish before changing state.id to prevent cross-session claims.
 const LIVEFACT_DEMO='8ee348bb-acac-4934-8358-e183d0a57712';
