@@ -10,13 +10,54 @@ window.fetch=function(input,opts){
   if(method!=='POST'||parsed.origin!==location.origin||!routes.has(route))return nativeFetch(input,opts);
   const to=new URL('/api/operator-proxy',location.origin);to.search=parsed.search;to.searchParams.set('route',route);
   const headers=new Headers(opts?.headers||{});headers.delete('x-admin-token');
-  return nativeFetch(to.pathname+to.search,{...opts,method:'POST',headers,credentials:'same-origin'});
+  const promise=nativeFetch(to.pathname+to.search,{...opts,method:'POST',headers,credentials:'same-origin'});
+  if(route==='live'&&parsed.searchParams.get('action')==='probe')promise.then(async r=>{routerVerified=r.ok;check('opCheckRouter',r.ok?'✓ OpenRouter probado':'! Clave OpenRouter inválida',r.ok)}).catch(()=>{routerVerified=false;check('opCheckRouter','! Sin conexión a OpenRouter',false)});
+  return promise;
  }catch{return nativeFetch(input,opts)}
 };
 // The value is deliberately NOT the admin secret; the server-side proxy injects that
 // secret only after validating a signed HttpOnly session cookie.
 sessionStorage.setItem('debate_admin','operator-session-managed');
 const $=s=>document.querySelector(s);
+function check(id,message,ready){
+ const el=$('#'+id);if(!el)return;
+ el.textContent=message;el.classList.toggle('ok',Boolean(ready));el.classList.toggle('warn',!ready);
+}
+let authReady=false,voiceWarm=false,voiceLoading=false,activeCapture=false,wakeLock=null,routerVerified=false;
+async function preflight(){
+ try{
+  const selected=localStorage.getItem('debate_live_id')||'f3c2fd9b-5fa1-4818-a407-453f5cac4a34';
+  const [auth,health,profiles]=await Promise.all([
+   nativeFetch('/api/operator-auth?action=status',{cache:'no-store'}).then(r=>r.json()),
+   nativeFetch('/api/live?action=health',{cache:'no-store'}).then(r=>r.json()),
+   nativeFetch('/api/voice?action=list&id='+encodeURIComponent(selected),{cache:'no-store'}).then(r=>r.json())
+  ]);
+  authReady=auth.authorized===true;
+  check('opCheckAuth',authReady?'✓ Operador autorizado':'! Falta activar operador',authReady);
+  check('opCheckDb',health.database?'✓ Neon conectado':'! Neon no disponible',Boolean(health.database));
+  const n=Array.isArray(profiles.profiles)?profiles.profiles.length:0;
+  check('opCheckVoice',n?'✓ '+n+' muestras vocales':'! Voces no disponibles',n>0);
+  const key=$('#routerKey')?.value.trim()||'';
+  check('opCheckRouter',routerVerified?'✓ OpenRouter probado':key.startsWith('sk-or-')?'◌ Verifica OpenRouter':'! Introduce OpenRouter',routerVerified);
+  if(!voiceWarm&&!voiceLoading)check('opCheckModel','◌ CAM++ pendiente',false);
+ }catch(e){check('opCheckDb','! Estado no disponible',false)}
+}
+async function warmupVoice(){
+ if(voiceWarm||voiceLoading||!window.debateVoice?.warmup)return;
+ voiceLoading=true;check('opCheckModel','◌ Cargando CAM++ (28 MB)',false);
+ try{await window.debateVoice.warmup();voiceWarm=true;check('opCheckModel','✓ CAM++ precargado',true)}
+ catch(e){check('opCheckModel','! CAM++ sin precargar',false);const el=$('#opCheckModel');if(el)el.title=String(e.message||e)}
+ finally{voiceLoading=false}
+}
+async function acquireWake(){
+ if(!activeCapture||!navigator.wakeLock?.request||document.visibilityState==='hidden')return;
+ try{wakeLock=await navigator.wakeLock.request('screen')}catch{}
+}
+window.addEventListener('debate-capture-start',()=>{activeCapture=true;acquireWake()});
+window.addEventListener('debate-capture-stop',()=>{activeCapture=false;wakeLock?.release?.().catch(()=>{});wakeLock=null});
+document.addEventListener('visibilitychange',()=>{if(activeCapture)acquireWake()});
+window.addEventListener('beforeunload',e=>{if(activeCapture){e.preventDefault();e.returnValue=''}});
+
 const preset=[
  {date:'19 NOV · 22:00',name:'Sánchez vs. Feijóo',id:'f3c2fd9b-5fa1-4818-a407-453f5cac4a34'},
  {date:'23 NOV · 22:00',name:'Ocho portavoces',id:'21e5098f-0f04-4571-92a4-9b1d52f4d48c'},
@@ -52,9 +93,9 @@ function init(){
  $('#opPresets').addEventListener('click',e=>{const b=e.target.closest('[data-id]');if(!b)return;localStorage.setItem('debate_live_id',b.dataset.id);location.reload()});
  $('#opLaunch')?.addEventListener('click',()=>$('#startCapture')?.click());
  $('#opDetails').addEventListener('click',()=>{const enabled=document.body.classList.toggle('opAdvanced');$('#opDetails').textContent=enabled?'Ocultar herramientas avanzadas':'Mostrar herramientas avanzadas'});
- router?.addEventListener('input',()=>{$('#opKeyStatus').textContent=router.value.trim().startsWith('sk-or-')?'✓ OpenRouter introducida · lista para procesar':'Clave OpenRouter pendiente'});
+ router?.addEventListener('input',()=>{routerVerified=false;const typed=router.value.trim().startsWith('sk-or-');$('#opKeyStatus').textContent=typed?'Clave introducida · pulsa Comprobar OpenRouter':'Clave OpenRouter pendiente';check('opCheckRouter',typed?'◌ Pendiente de comprobación':'! Introduce OpenRouter',false)});
  $('#opCurrent').textContent=preset.find(x=>x.id===id)?.name||'Sesión de prueba';
- authStatus();setInterval(update,2000);update();
+ authStatus();preflight();setInterval(preflight,60000);let preloadAttempts=0;const preload=setInterval(()=>{if(window.debateVoice?.warmup){clearInterval(preload);warmupVoice()}else if(++preloadAttempts>100)clearInterval(preload)},500);setInterval(update,2000);update();
 }
 function update(){
  const capture=$('#captureLabel')?.textContent||'DETENIDO',audio=$('#audioSignalStatus')?.textContent||'';
