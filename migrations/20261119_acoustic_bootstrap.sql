@@ -46,6 +46,14 @@ BEGIN
  SELECT NEW.id,r.name,r.party,r.role,r.aliases,r.confirmed
  FROM public.debate_roster r WHERE r.debate_id=root_id
  ON CONFLICT (debate_id,name) DO NOTHING;
+ INSERT INTO public.debate_calendar
+ (debate_id,slug,scheduled_at,timezone,format,organizer,moderator,headcount,confirmation,topics,
+  official_sources,watch_url,watch_platform,display_order,notes,video_youtube_id,stream_verified_at)
+ SELECT NEW.id,c.slug||'-run-'||replace(NEW.id::text,'-',''),c.scheduled_at,c.timezone,c.format,c.organizer,c.moderator,
+        c.headcount,c.confirmation,c.topics,c.official_sources,c.watch_url,c.watch_platform,500,
+        'Captura independiente de seguimiento público',c.video_youtube_id,c.stream_verified_at
+ FROM public.debate_calendar c WHERE c.debate_id=root_id
+ ON CONFLICT (debate_id) DO NOTHING;
  RETURN NEW;
 END
 $fn$;
