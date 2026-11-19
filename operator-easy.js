@@ -36,7 +36,13 @@ async function preflight(){
   check('opCheckAuth',authReady?'✓ Operador autorizado':'! Falta activar operador',authReady);
   check('opCheckDb',health.database?'✓ Neon conectado':'! Neon no disponible',Boolean(health.database));
   const n=Array.isArray(profiles.profiles)?profiles.profiles.length:0;
-  check('opCheckVoice',n?'✓ '+n+' muestras vocales':'! Voces no disponibles',n>0);
+  const recognizable=new Set((profiles.profiles||[]).filter(x=>x.source_type==='public-reference'||x.quality_status==='source-labeled').map(x=>x.person_name));
+  const voicesReady=recognizable.size>=2;
+  check('opCheckVoice',voicesReady?'✓ Voces de referencia: '+recognizable.size+' candidatos ('+n+' huellas)':'! Faltan referencias acústicas ('+n+' huellas)',voicesReady);
+  if($('#voiceAuto')){
+   $('#voiceAuto').checked=voicesReady;
+   if($('#voiceAutoStats')&&voicesReady)$('#voiceAutoStats').textContent='Comparación acústica activada con referencias etiquetadas. Aprendizaje por turnos desactivado. Atribuciones provisionales.';
+  }
   const key=$('#routerKey')?.value.trim()||'';
   check('opCheckRouter',routerVerified?'✓ OpenRouter probado':key.startsWith('sk-or-')?'◌ Verifica OpenRouter':'! Introduce OpenRouter',routerVerified);
   if(!voiceWarm&&!voiceLoading)check('opCheckModel','◌ CAM++ pendiente',false);
@@ -86,7 +92,7 @@ function init(){
  if($('#sttModel'))$('#sttModel').value='scribe';
  if($('#concurrency'))$('#concurrency').value='20';
  if($('#autoVerify'))$('#autoVerify').checked=true;
- if($('#voiceAuto')){$('#voiceAuto').checked=false;$('#voiceAutoStats').textContent='⚠ Identificación automática en pausa: vuelve a calibrar antes de activarla.';}
+ if($('#voiceAuto')){$('#voiceAuto').checked=false;$('#voiceAutoStats').textContent='Consultando referencias acústicas de los participantes…';}
  preset[0].id=localStorage.getItem('lfs_current_live')||preset[0].id;
  const id=localStorage.getItem('debate_live_id')||preset[0].id;
  if(!localStorage.getItem('debate_live_id'))localStorage.setItem('debate_live_id',id);
