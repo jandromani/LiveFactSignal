@@ -1,0 +1,10 @@
+{
+  "name": "live-fact-signal",
+  "private": true,
+  "version": "0.10.0",
+  "type": "module",
+  "dependencies": {
+    "@neondatabase/serverless": "^1.2.1",
+    "sharp": "^0.34.5"
+  }
+}
