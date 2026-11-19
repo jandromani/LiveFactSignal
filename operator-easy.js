@@ -26,51 +26,57 @@ function check(id,message,ready){
 let authReady=false,voiceWarm=false,voiceLoading=false,activeCapture=false,wakeLock=null,routerVerified=false;
 const voiceSeedLastAttempt=new Map(),voiceInitialized=new Set();
 async function preflight(){
- let selected='';
+ const selected=window.LiveFactSignal?.snapshot?.().id||localStorage.getItem('debate_live_id')||'';
+ if(!selected)return;
  try{
-  selected=window.LiveFactSignal?.snapshot?.().id||localStorage.getItem('debate_live_id')||'f3c2fd9b-5fa1-4818-a407-453f5cac4a34';
-  const [auth,health,voiceResponse]=await Promise.all([
-   nativeFetch('/api/operator-auth?action=status',{cache:'no-store',credentials:'same-origin'}).then(r=>r.json()),
-   nativeFetch('/api/live?action=health',{cache:'no-store'}).then(r=>r.json()),
-   nativeFetch('/api/voice?action=list&id='+encodeURIComponent(selected),{cache:'no-store'})
-  ]);
+  const authResult=await nativeFetch('/api/operator-auth?action=status',{credentials:'same-origin',cache:'no-store'});
+  const auth=await authResult.json();
   authReady=auth.authorized===true;
   check('opCheckAuth',authReady?'✓ Operador autorizado':'! Falta activar operador',authReady);
-  check('opCheckDb',health.database?'✓ Neon conectado':'! Neon no disponible',Boolean(health.database));
-  if(!voiceResponse.ok)throw Error('API de voces HTTP '+voiceResponse.status);
-  let profiles=await voiceResponse.json();
-  if(!Array.isArray(profiles.profiles))throw Error(profiles.error||'Respuesta inválida del listado de voces');
-  const needsSeed=profiles.profiles.length===0&&authReady;
+  try{
+   const r=await nativeFetch('/api/live?action=health',{cache:'no-store'});
+   const j=await r.json();check('opCheckDb',r.ok&&j.database?'✓ Neon conectado':'! Neon no disponible',r.ok&&Boolean(j.database));
+  }catch{check('opCheckDb','! Sin lectura de Neon',false)}
+  if(!authReady){check('opCheckVoice','◌ Huellas protegidas: activa tu acceso',false);return}
+  async function health(){
+   const r=await nativeFetch('/api/voice-health?id='+encodeURIComponent(selected),{credentials:'same-origin',cache:'no-store'});
+   const v=await r.json().catch(()=>({}));
+   if(!r.ok)throw Error(v.error||'API vocal HTTP '+r.status);
+   return v;
+  }
+  let info=await health();
+  const needsSeed=info.total_candidates===0||info.ready_candidates<info.total_candidates;
   const since=Date.now()-(voiceSeedLastAttempt.get(selected)||0);
   if(needsSeed&&since>45000){
    voiceSeedLastAttempt.set(selected,Date.now());
-   check('opCheckVoice','◌ Restaurando voces etiquetadas para sesión '+selected.slice(0,8)+'…',false);
-   const response=await nativeFetch('/api/voice-seed',{
-    method:'POST',credentials:'same-origin',cache:'no-store',
-    headers:{'Content-Type':'application/json'},body:JSON.stringify({id:selected})
-   });
-   const result=await response.json().catch(()=>({}));
-   if(!response.ok)throw Error(result.error||'No se pudo restaurar voz: HTTP '+response.status);
-   const refreshed=await nativeFetch('/api/voice?action=list&id='+encodeURIComponent(selected),{cache:'no-store'});
-   if(!refreshed.ok)throw Error('Error al releer voces HTTP '+refreshed.status);
-   profiles=await refreshed.json();
+   check('opCheckVoice','◌ Sincronizando huellas con Neon · '+selected.slice(0,8),false);
+   const r=await nativeFetch('/api/voice-seed',{method:'POST',credentials:'same-origin',cache:'no-store',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify({id:selected})});
+   const v=await r.json().catch(()=>({}));
+   if(!r.ok)throw Error('Sincronización: '+(v.error||r.status));
+   info=await health();
    try{await Promise.resolve(window.debateVoice?.refresh?.())}catch{}
   }
-  const n=profiles.profiles.length;
-  const recognizable=new Set(profiles.profiles.filter(x=>x.source_type==='public-reference'&&x.quality_status==='source-labeled').map(x=>x.person_name));
-  const ready=recognizable.has('Pedro Sánchez')&&recognizable.has('Alberto Núñez Feijóo');
-  check('opCheckVoice',ready?'✓ '+recognizable.size+' candidatos · '+n+' huellas · sesión '+selected.slice(0,8):'! Sin referencias verificables · sesión '+selected.slice(0,8)+' ('+n+' huellas)',ready);
+  const allReady=info.total_candidates>0&&info.ready_candidates===info.total_candidates;
+  const refs=info.roster?.filter(x=>x.role==='candidate').reduce((n,x)=>n+Number(x.reference_count||0),0)||0;
+  const detail=(info.ready_candidates||0)+'/'+(info.total_candidates||0)+' candidatos · '+refs+' huellas';
+  check('opCheckVoice',(allReady?'✓ ':'! ')+detail+' · sesión '+selected.slice(0,8),allReady);
+  const stats=$('#opVoiceDiagnostics');
+  if(stats){
+   stats.textContent='CAM++ · '+(info.voice_v2?.matched||0)+' tramos reconocidos / '+(info.voice_v2?.total||0)+' comparados · '+(info.claims?.voice_attributed||0)+' afirmaciones atribuidas por voz / '+(info.claims?.total||0)+' totales · '+(info.claims?.unknown||0)+' sin identificar';
+  }
   const voice=$('#voiceAuto');
-  if(voice&&(!voiceInitialized.has(selected)||!ready)){
-   voice.checked=ready;
-   voiceInitialized.add(selected);
-   if($('#voiceAutoStats'))$('#voiceAutoStats').textContent=ready?'Reconocimiento CAM++ habilitado con referencias etiquetadas. Aprendizaje por turnos desactivado. Coincidencias provisionales.':'Reconocimiento en espera: no hay referencias de ambos candidatos.';
+  if(voice&&(!voiceInitialized.has(selected)||!allReady)){
+   voice.checked=allReady;voiceInitialized.add(selected);
+   if($('#voiceAutoStats'))$('#voiceAutoStats').textContent=allReady?
+    'Comparación acústica habilitada: cada tramo se identifica por separado; no se aprenden identidades por el moderador. Resultados provisionales.':
+    'Comparación en pausa hasta tener las referencias de todos los participantes.';
   }
   const key=$('#routerKey')?.value.trim()||'';
   check('opCheckRouter',routerVerified?'✓ OpenRouter probado':key.startsWith('sk-or-')?'◌ Verifica OpenRouter':'! Introduce OpenRouter',routerVerified);
   if(!voiceWarm&&!voiceLoading)check('opCheckModel','◌ CAM++ pendiente',false);
  }catch(e){
-  check('opCheckVoice','! Error al consultar voces · '+String(e.message||e).slice(0,90)+(selected?' · '+selected.slice(0,8):''),false);
+  check('opCheckVoice','! Diagnóstico vocal: '+String(e.message||e).slice(0,85)+' · '+selected.slice(0,8),false);
  }
 }
 async function warmupVoice(){
@@ -128,7 +134,14 @@ function init(){
  $('#opDetails').addEventListener('click',()=>{const enabled=document.body.classList.toggle('opAdvanced');$('#opDetails').textContent=enabled?'Ocultar herramientas avanzadas':'Mostrar herramientas avanzadas'});
  router?.addEventListener('input',()=>{routerVerified=false;const typed=router.value.trim().startsWith('sk-or-');$('#opKeyStatus').textContent=typed?'Clave introducida · pulsa Comprobar OpenRouter':'Clave OpenRouter pendiente';check('opCheckRouter',typed?'◌ Pendiente de comprobación':'! Introduce OpenRouter',false)});
  $('#opCurrent').textContent=preset.find(x=>x.id===id)?.name||'Sesión de prueba';
- authStatus();preflight();setInterval(preflight,60000);let preloadAttempts=0;const preload=setInterval(()=>{if(window.debateVoice?.warmup){clearInterval(preload);warmupVoice()}else if(++preloadAttempts>100)clearInterval(preload)},500);setInterval(update,2000);update();
+ const preflightRoot=$('#opCheckVoice')?.parentElement;
+ if(preflightRoot&&!$('#opVoiceDiagnostics')){
+  const diag=document.createElement('div');diag.id='opVoiceDiagnostics';diag.setAttribute('role','status');
+  diag.style.cssText='font-size:12px;color:#a7ded1;padding:9px 0;line-height:1.55;max-width:720px';
+  diag.textContent='Esperando diagnóstico de reconocimiento vocal…';
+  preflightRoot.appendChild(diag);
+ }
+ authStatus();preflight();setInterval(preflight,20000);let preloadAttempts=0;const preload=setInterval(()=>{if(window.debateVoice?.warmup){clearInterval(preload);warmupVoice()}else if(++preloadAttempts>100)clearInterval(preload)},500);setInterval(update,2000);update();
 }
 function update(){
  const capture=$('#captureLabel')?.textContent||'DETENIDO',audio=$('#audioSignalStatus')?.textContent||'';
