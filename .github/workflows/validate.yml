@@ -1,0 +1,56 @@
+name: Source safety checks
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Check JavaScript syntax
+        run: |
+          set -euo pipefail
+          while IFS= read -r path; do
+            node --check "$path"
+          done < <(git ls-files '*.js')
+      - name: Verify safety-critical UI controls
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          html=Path('index.html').read_text()
+          operator=Path('operator-easy.js').read_text()
+          observer=Path('observatorio.html').read_text()
+          for marker in ('id="opRoot"','id="opPreflight"','id="opPresets"','id="routerKey"','id="startCapture"','id="liveConnectWizard"'):
+              assert marker in html,marker
+          for marker in ("#opLaunch')?.", "preflight()", "warmupVoice()", "beforeunload", "routerVerified"):
+              assert marker in operator,marker
+          for marker in ("api/history?claim", "api/share?claim", "api/share?debate", "og:image"):
+              assert marker in observer,marker
+          print('Required operator/viewer interfaces present')
+          PY
+      - name: Scan committed text for accidental secrets
+        run: |
+          python3 - <<'PY'
+          import subprocess,re
+          files=subprocess.check_output(['git','ls-files'],text=True).splitlines()
+          patterns=[
+              re.compile(r'sk-or-v1-[A-Za-z0-9_-]{20,}'),
+              re.compile(r'gh[pousr]_[A-Za-z0-9]{20,}'),
+              re.compile(r'postgres(?:ql)?://(?!user:password@)[^\s"\x27<>]{20,}',re.I),
+          ]
+          for path in files:
+              try: text=open(path,encoding='utf-8').read()
+              except (UnicodeError,OSError):continue
+              for pat in patterns:
+                  assert not pat.search(text),f'Potential credential in {path}'
+          print('Basic secret patterns absent')
+          PY
+# This workflow deliberately does not deploy: legacy backend files have not yet been migrated.
