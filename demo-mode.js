@@ -3,6 +3,7 @@
 'use strict';
 const DEMO_ID='8ee348bb-acac-4934-8358-e183d0a57712';
 const TODAY_ID='f3c2fd9b-5fa1-4818-a407-453f5cac4a34';
+const currentToday=()=>localStorage.getItem('lfs_current_live')||TODAY_ID;
 const YOUTUBE_ID='Sx5E5nLJpAE';
 const YT_URL='https://www.youtube.com/watch?v='+YOUTUBE_ID;
 const RTVE_URL='https://www.rtve.es/play/videos/directo/la-1/';
@@ -44,7 +45,7 @@ function ui(){
  if(!demo)pause();
  const presets=$('#opPresets');
  if(presets){
-  for(const b of presets.querySelectorAll('[data-id]'))b.classList.toggle('on',b.dataset.id===(demo?DEMO_ID:TODAY_ID));
+  for(const b of presets.querySelectorAll('[data-id]'))b.classList.toggle('on',b.dataset.id===(demo?DEMO_ID:currentToday()));
  }
  setText('opCurrent',demo?'DEMO · 2023 · QA aislada':'Hoy · 19/11 · Sánchez vs. Feijóo');
  const wizard=$('#liveConnectWizard');
@@ -53,7 +54,7 @@ function ui(){
 async function select(next){
  if(switching)return;
  const requested=next==='demo'?'demo':'today';
- const id=requested==='demo'?DEMO_ID:TODAY_ID;
+ const id=requested==='demo'?DEMO_ID:currentToday();
  switching=true;
  $('#lfDemoBtn').disabled=true;$('#lfTodayBtn').disabled=true;$('#lfGoToday').disabled=true;
  report(requested==='demo'?'Cargando debate de demostración y voces precargadas…':'Finalizando el audio de la demo antes de preparar el directo de hoy…');
