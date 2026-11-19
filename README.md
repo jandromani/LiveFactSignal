@@ -7,6 +7,13 @@ Observatorio de debates electorales con transcripción, identificación acústic
 **Observatorio:** https://debate-monitor-live.vercel.app/observatorio.html  
 **Realización OBS:** https://debate-monitor-live.vercel.app/overlay.html
 
+## Prueba inmediata: dos botones
+
+- **DEMO:** un vídeo real de YouTube (mejores momentos Sánchez–Feijóo, 10/07/2023) precargado en la consola. Sesión QA separada de Neon y cuatro huellas de voz listas. Pulsar «Reproducir y escuchar», conceder audio y validar datos reales.
+- **HOY · 22:00:** conmuta a la sesión oficial sin perder la clave OpenRouter en memoria ni mezclar los fragmentos de la demo. Abre RTVE Play y comparte su audio cuando comience el debate.
+
+El permiso de captura de pantalla/audio de Chrome o Edge requiere una acción explícita; ningún navegador seguro permite concederlo silenciosamente.
+
 ## Arquitectura
 
 - **Vercel:** frontend, captura del navegador y endpoints de servidor.
