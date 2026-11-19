@@ -224,6 +224,17 @@ try{
  if(!response.ok)throw Error(data.error||'HTTP '+response.status);
  voiceStatus=' · '+(data.ready_candidates||0)+'/'+(data.total_candidates||0)+' participantes con referencias vocales';
 }catch(e){voiceStatus=' · AVISO: no se precargaron las voces ('+e.message+'). Comprueba el diagnóstico antes de capturar';}
+if(state.mode==='live'){
+ try{
+  const active=await fetch('/api/session-activate',{method:'POST',credentials:'same-origin',
+   headers:{'Content-Type':'application/json'},body:JSON.stringify({id:r.debate.id})});
+  if(active.ok){
+   localStorage.setItem('lfs_current_live',r.debate.id);
+   const card=$('#opPresets .opPreset');if(card)card.dataset.id=r.debate.id;
+   trace('LIVE','Esta captura ya es la visible en el observatorio público.');
+  }
+ }catch(e){trace('LIVE','La captura existe, pero no se sincronizó la selección pública: '+e.message)}
+}
 state.id=r.debate.id;state.debate=r.debate;state.seq=0;state.claims=[];state.segments=[];localStorage.setItem('debate_live_id',state.id);$('#captureStart').value=String(start);
 notify('Sesión '+state.id.slice(0,8)+' creada en PostgreSQL'+voiceStatus,voiceStatus.includes('AVISO')?'error':'success');
 trace('SESSION','Creada '+state.id.slice(0,8)+voiceStatus);
