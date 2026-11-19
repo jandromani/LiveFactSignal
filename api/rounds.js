@@ -6,8 +6,8 @@ const rounds=['','', 'Comprobar literalmente sujeto, periodo, unidad y cifra; ci
 const min=(s,n=500)=>String(s||'').slice(0,n);
 const trusted=['ine.es','boe.es','bde.es','europa.eu','eurostat.ec.europa.eu','ec.europa.eu','oecd.org','imf.org','worldbank.org','seg-social.es','hacienda.gob.es','congreso.es','senado.es','ai-ref.es','airef.es','funcas.es','datos.gob.es'];
 function allowed(raw){try{const u=new URL(raw);return u.protocol==='https:'&&!u.username&&!u.password&&trusted.some(d=>u.hostname===d||u.hostname.endsWith('.'+d))?u:null}catch{return null}}
-function clean(html){return min(String(html).replace(/<script[\\s\\S]*?<\\/script>/gi,' ').replace(/<style[\\s\\S]*?<\\/style>/gi,' ').replace(/<[^>]+>/g,' ').replace(/&nbsp;|&#160;/gi,' ').replace(/&amp;/gi,'&').replace(/\\s+/g,' '),4800)}
-async function evidence(s){const u=allowed(s.url);if(!u)return null;try{const r=await fetch(u,{redirect:'error',signal:AbortSignal.timeout(6000),headers:{accept:'text/html, text/plain'}});const type=r.headers.get('content-type')||'';if(!r.ok||!/text\\/(html|plain)/i.test(type))return null;const body=await r.text();return {url:u.href,title:min(s.title,130),text:clean(body)}}catch{return null}}
+function clean(html){return min(String(html).replace(/<script[\s\S]*?<\/script>/gi,' ').replace(/<style[\s\S]*?<\/style>/gi,' ').replace(/<[^>]+>/g,' ').replace(/&nbsp;|&#160;/gi,' ').replace(/&amp;/gi,'&').replace(/\s+/g,' '),4800)}
+async function evidence(s){const u=allowed(s.url);if(!u)return null;try{const r=await fetch(u,{redirect:'error',signal:AbortSignal.timeout(6000),headers:{accept:'text/html, text/plain'}});const type=r.headers.get('content-type')||'';if(!r.ok||!/text\/(html|plain)/i.test(type))return null;const body=await r.text();return {url:u.href,title:min(s.title,130),text:clean(body)}}catch{return null}}
 async function ensure(sql){await sql.query(`CREATE TABLE IF NOT EXISTS evidence_rounds (
  claim_id uuid NOT NULL, debate_id uuid NOT NULL, round smallint NOT NULL,
  verdict text NOT NULL, confidence numeric NOT NULL DEFAULT 0, rationale text NOT NULL,
