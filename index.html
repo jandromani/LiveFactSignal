@@ -321,8 +321,9 @@ setInterval(async()=>{
 // Wait for existing demo STT to finish before changing state.id to prevent cross-session claims.
 const LIVEFACT_DEMO='8ee348bb-acac-4934-8358-e183d0a57712';
 const LIVEFACT_TODAY='f3c2fd9b-5fa1-4818-a407-453f5cac4a34';
+const ACTIVE_LIVE=()=>localStorage.getItem('lfs_current_live')||LIVEFACT_TODAY;
 async function liveFactSelect(id){
- const allowed=new Set([LIVEFACT_DEMO,LIVEFACT_TODAY,'21e5098f-0f04-4571-92a4-9b1d52f4d48c','f45fc70e-fcb6-4e01-b40b-81143627e030']);
+ const allowed=new Set([LIVEFACT_DEMO,LIVEFACT_TODAY,ACTIVE_LIVE(),'21e5098f-0f04-4571-92a4-9b1d52f4d48c','f45fc70e-fcb6-4e01-b40b-81143627e030']);
  if(!allowed.has(id))throw Error('Preset de debate no reconocido');
  if(state.id===id&&state.debate){setMode('live');$('#debateTitle').value=state.debate.title;$('#youtubeUrl').value=id===LIVEFACT_DEMO?'https://www.youtube.com/watch?v=Sx5E5nLJpAE':(state.debate.source_url||'https://www.rtve.es/play/videos/directo/la-1/');return {ok:true,id,unchanged:true};}
  if(state.capturing)stopCapture();
@@ -360,4 +361,4 @@ renderPlayer();const id=localStorage.getItem('debate_live_id');if(id&&/^[a-f0-9-
 }
 boot();
 })();
-</script><script src="/rounds-autopilot.js" defer></script><script src="/identity-panel.js"></script><script type="module" src="/voice-panel.js"></script><script src="/voice-autopilot.js" defer></script><script src="/agenda.js" defer></script><script src="/capture-assist.js" defer></script></body></html>
+</script><script src="/reset-ui.js" defer></script><script src="/rounds-autopilot.js" defer></script><script src="/identity-panel.js"></script><script type="module" src="/voice-panel.js"></script><script src="/voice-autopilot.js" defer></script><script src="/agenda.js" defer></script><script src="/capture-assist.js" defer></script></body></html>
