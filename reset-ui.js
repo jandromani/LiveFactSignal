@@ -10,13 +10,13 @@ function download(blob,filename){
  link.href=url;link.download=filename;document.body.appendChild(link);link.click();link.remove();
  setTimeout(()=>URL.revokeObjectURL(url),60000);
 }
-async function archive(){
- const response=await fetch('/api/export?debate='+encodeURIComponent(current())+'&format=json',{credentials:'same-origin',cache:'no-store'});
+async function archive(id=current()){
+ const response=await fetch('/api/export?debate='+encodeURIComponent(id)+'&format=json',{credentials:'same-origin',cache:'no-store'});
  if(!response.ok){const error=await response.json().catch(()=>({}));throw Error(error.error||'No se pudo generar el archivo (HTTP '+response.status+')')}
  const blob=await response.blob();
  if(blob.size<100||!String(blob.type).includes('json'))throw Error('La exportación no parece un JSON válido.');
  const data=JSON.parse(await blob.text());
- if(!data?.debate?.id||data.debate.id!==current()||!Array.isArray(data.claims)||!Array.isArray(data.audio_segments))throw Error('Respaldo incompleto o de otro debate.');
+ if(!data?.debate?.id||data.debate.id!==id||!Array.isArray(data.claims)||!Array.isArray(data.audio_segments))throw Error('Respaldo incompleto o de otro debate.');
  const name='LiveFactSignal-ARCHIVO-'+data.debate.id.slice(0,8)+'-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';
  download(blob,name);
  note('✓ Descarga solicitada: '+name+' · '+data.claims.length+' afirmaciones. Los datos originales permanecen en Neon.');
@@ -71,7 +71,7 @@ function init(){
  card.innerHTML=`<h3>↻ CAPTURA LIMPIA / ARCHIVAR SESIÓN</h3>
  <p>¿Se han mezclado voces o dos vídeos? Crea otra sesión sin perder los datos anteriores. La exportación incluye transcripciones, afirmaciones y enlaces, <b>no grabaciones originales</b>.</p>
  <button type="button" id="resetOpen" class="reset-danger">↻ Archivar y empezar de cero</button>
- <button type="button" data-reset-action="download">↓ Descargar sesión JSON</button>
+ <button type="button" data-reset-action="download">↓ Descargar sesión JSON</button><div id="resetArchiveLinks" style="margin-top:8px"></div>
  <div id="resetModal" hidden><p><b>Elige cómo continuar:</b></p>
  <label style="display:block;margin:7px 0"><input type="radio" name="resetChoice" value="download-reset" checked> <b>Descargar JSON y crear nueva sesión</b> (recomendado)</label>
  <label style="display:block;margin:7px 0"><input type="radio" name="resetChoice" value="reset-only"> Crear nueva sesión sin descargar (la antigua queda en Neon)</label>
@@ -83,9 +83,16 @@ function init(){
  root.prepend(card);
  $('#resetOpen').onclick=()=>modal(!$('#resetModal').hidden);
  for(const el of document.querySelectorAll('input[name="resetChoice"]'))el.addEventListener('change',e=>{lastMode=e.target.value});
- $('[data-reset-action="download"]').onclick=async()=>{if(busy)return;busy=true;updateButtons(true);try{await archive()}catch(e){modal(true);note(String(e.message||e),true)}finally{busy=false;updateButtons(false)}};
+ $('[data-reset-action="download"]').onclick=async()=>{if(busy)return;modal(true);busy=true;updateButtons(true);try{await archive()}catch(e){note(String(e.message||e),true)}finally{busy=false;updateButtons(false)}};
  $('[data-reset-action="confirm"]').onclick=reset;
  $('[data-reset-action="cancel"]').onclick=()=>modal(false);
+ const prev=localStorage.getItem('lfs_previous_live');
+ if(prev&&/^[a-f0-9-]{36}$/i.test(prev)){
+  const wrap=$('#resetArchiveLinks'),a=document.createElement('a'),b=document.createElement('button');
+  a.href='/observatorio.html?debate='+encodeURIComponent(prev)+'&archive=1';a.textContent='↗ Ver sesión anterior';a.target='_blank';a.rel='noopener noreferrer';a.style.cssText='color:#b9fbe8;margin-right:10px';
+  b.type='button';b.textContent='↓ Descargar sesión anterior';b.onclick=async()=>{if(busy)return;modal(true);busy=true;updateButtons(true);try{await archive(prev)}catch(e){note(String(e.message||e),true)}finally{busy=false;updateButtons(false)}};
+  wrap.append(a,b);
+ }
  fetch('/api/reset',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(s=>{if(!s?.current_id)return;const now=current();if(now===ROOT&&s.current_id!==ROOT&&!window.LiveFactSignal?.snapshot?.().capturing){localStorage.setItem('lfs_current_live',s.current_id);localStorage.setItem('debate_live_id',s.current_id);location.reload()}}).catch(()=>{});
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
