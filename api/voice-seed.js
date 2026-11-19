@@ -39,6 +39,21 @@ export default async function handler(req,res){
     ON CONFLICT (debate_id,name) DO NOTHING RETURNING id`,[id,template]);
    copiedPeople=c.length;
   }
+  if(template&&UUID.test(template)&&template!==id){
+   // A template event may have its own calendar registration; publish the child as an archive-capable capture.
+   await sql.query(`
+    INSERT INTO debate_calendar
+    (debate_id,slug,scheduled_at,timezone,format,organizer,moderator,headcount,confirmation,topics,
+      official_sources,watch_url,watch_platform,display_order,notes,video_youtube_id,stream_verified_at)
+    SELECT target.id,c.slug||'-run-'||replace(target.id::text,'-',''),c.scheduled_at,c.timezone,c.format,
+      c.organizer,c.moderator,c.headcount,c.confirmation,c.topics,c.official_sources,c.watch_url,
+      c.watch_platform,500,'Captura derivada del debate seleccionado; archivo independiente',c.video_youtube_id,c.stream_verified_at
+    FROM debates target JOIN debates source ON source.id=$2::uuid
+      AND target.event_date IS NOT DISTINCT FROM source.event_date AND target.source_type=source.source_type
+    JOIN debate_calendar c ON c.debate_id=source.id
+    WHERE target.id=$1::uuid AND target.created_at>now()-interval '30 minutes'
+    ON CONFLICT (debate_id) DO NOTHING`,[id,template]);
+  }
   const rows=await sql.query(`
    WITH candidate_roster AS (
     SELECT r.name,r.party FROM debate_roster r
