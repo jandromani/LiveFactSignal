@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "functions": {
+    "api/monitor.js": {
+      "maxDuration": 300
+    }
+  }
+}
