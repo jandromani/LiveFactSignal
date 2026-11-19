@@ -233,7 +233,7 @@ function spinRecorder(audio){
 if(!state.capturing)return;const mime=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus'].find(t=>MediaRecorder.isTypeSupported(t));
 if(!mime){stopCapture();return notify('Este navegador no permite grabar fragmentos de audio compatibles. Prueba Chrome/Edge actualizado.','error');}
 let rec;try{rec=new MediaRecorder(audio,{mimeType:mime,audioBitsPerSecond:32000})}catch(e){stopCapture();return notify(e.message,'error')}
-state.recorder=rec;const started=Date.now();const startms=Math.round(currentPosition()*1000),s={speaker:'Sin identificar',party:'—'},chunks=[];
+state.recorder=rec;const started=Date.now();const startms=Math.round(currentPosition()*1000),s=chooseSpeaker(),chunks=[];
 rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
 rec.onstop=()=>{
 if(state.timer){clearTimeout(state.timer);state.timer=null}
