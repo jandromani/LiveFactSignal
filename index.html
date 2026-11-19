@@ -252,7 +252,17 @@ if(!navigator.mediaDevices?.getDisplayMedia)return notify('Este navegador no adm
 try{
 const stream=await navigator.mediaDevices.getDisplayMedia({video:{displaySurface:'browser'},audio:{echoCancellation:false,noiseSuppression:false},preferCurrentTab:true,systemAudio:'include',surfaceSwitching:'include'});
 if(!stream.getAudioTracks().length){stream.getTracks().forEach(t=>t.stop());return notify('No has compartido audio. Selecciona «Pestaña de Chrome» y activa «Compartir audio».','error')}
-state.stream=stream;state.capturing=true;window.dispatchEvent(new CustomEvent("debate-capture-start",{detail:{stream}}));state.elapsedStart=Date.now();state.captureBase=Number($('#captureStart').value)||0;
+state.stream=stream;state.capturing=true;window.dispatchEvent(new CustomEvent("debate-capture-start",{detail:{stream}}));state.elapsedStart=Date.now();
+const requestedBase=Math.max(0,Number($('#captureStart').value)||0);
+const latestEnd=state.segments.reduce((m,x)=>Math.max(m,Number(x.end_ms||0)),0)/1000;
+const latestSeq=state.segments.reduce((m,x)=>Math.max(m,Number(x.seq||0)+1),0);
+state.seq=Math.max(state.seq,latestSeq);
+state.captureBase=latestEnd>requestedBase?Math.ceil(latestEnd+1):requestedBase;
+if(latestEnd>requestedBase){
+ $('#captureStart').value=String(state.captureBase);
+ trace('CAPTURE','Reanudación protegida: inicio '+state.captureBase+' s, después del último bloque '+Math.round(latestEnd)+' s. Si reproduces otro vídeo, crea una sesión independiente.');
+ notify('Captura reanudada tras el último bloque, sin superponer tiempos. Para otro vídeo utiliza una sesión distinta.','success');
+}
 $('#startCapture').disabled=true;$('#stopCapture').disabled=false;$('#captureLabel').textContent='● CAPTURANDO';$('#captureLabel').className='badge green';
 stream.getAudioTracks()[0].onended=()=>stopCapture();
 const audioOnly=new MediaStream(stream.getAudioTracks());spinRecorder(audioOnly);notify('Audio compartido. Los fragmentos se transcriben en OpenRouter y sus afirmaciones se encolan.','success');trace('CAPTURE','Inicio de audio compartido. Corte de '+$('#chunkSeconds').value+'s.');
