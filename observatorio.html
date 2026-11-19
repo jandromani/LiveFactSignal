@@ -10,7 +10,7 @@
 <section class="hero"><div><div class="eyebrow">POLÍTICA EN TIEMPO REAL · EVIDENCIAS, NO ESLOGANES</div><h1>El debate.<br><span>Bajo la lupa.</span></h1><p class="sub">Cada afirmación en su contexto. Pulsa sobre un candidato, examina sus intervenciones y consulta las fuentes. Las conclusiones automáticas están identificadas como provisionales.</p></div><div><label class="micro" for="event">DEBATE SELECCIONADO</label><div style="height:6px"></div><select id="event" class="choose"><option>Cargando agenda…</option></select></div></section>
 <div class="intro"><div><strong id="debateTitle">Preparando observatorio…</strong><div class="micro" id="debateSub">Consultando Neon</div></div><div class="micro">Actualización cada 5 segundos · <span id="updated">—</span></div></div>
 <div class="counters"><div class="metric"><b id="countDetected">—</b><span>Afirmaciones detectadas (incluye pendientes)</span></div><div class="metric"><b id="countPrelim">—</b><span>Dictámenes preliminares de IA</span></div><div class="metric"><b id="countReview">—</b><span>Necesitan revisión o investigación</span></div><div class="metric"><b id="countExcluded">—</b><span>Descartadas por el filtro editorial</span></div></div>
-<div class="sectiontitle"><h2>Candidatos <span class="micro">· seleccionar para explorar</span></h2><small id="speakerInfo">Solo las afirmaciones atribuidas</small></div>
+<div class="sectiontitle"><h2>Candidatos <span class="micro">· seleccionar para explorar</span></h2><div style="display:flex;align-items:center;gap:11px;flex-wrap:wrap"><small id="speakerInfo">Solo las afirmaciones atribuidas</small><button id="shareCandidate" class="linkbutton" hidden>↗ Compartir candidato</button></div></div>
 <div class="candidates" id="candidates"><div class="empty">Cargando participantes…</div></div>
 <div class="columns"><section class="surface"><div class="surfacehead"><h2 id="feedTitle">Afirmaciones en directo</h2><p>Toca una afirmación para ver el contexto y las fuentes. Los veredictos de la IA nunca se presentan como verificación editorial.</p></div>
 <div class="filters" id="filters"><button class="pill active" data-filter="all">Todas</button><button class="pill" data-filter="prelim">Resultado IA</button><button class="pill" data-filter="pending">En investigación</button><button class="pill" data-filter="unknown">Sin identificar</button></div>
@@ -67,6 +67,7 @@ function render(){
 function drawCandidates(){
  const people=candidates(),c=last.claims;
  $('#speakerInfo').textContent=c.filter(isAttributed).length+' afirmaciones con candidato atribuido · no equivale a identificación confirmada';
+ $('#shareCandidate').hidden=!identity;$('#shareCandidate').textContent=identity?'↗ Compartir '+identity:'↗ Compartir candidato';
  $('#candidates').innerHTML=people.map(p=>{
   const a=c.filter(x=>x.speaker===p.name),pre=a.filter(x=>x.state==='provisional'&&x.sources.length>=2).length,waiting=a.filter(x=>x.state!=='provisional').length;
   const parts=p.name.split(' ').filter(Boolean),initials=parts.slice(0,2).map(x=>x[0]).join('').toUpperCase();
@@ -112,6 +113,7 @@ function showDetail(id){
 }
 function closeDetail(){$('#overlay').classList.remove('visible');history.replaceState({},'',location.pathname+'?debate='+encodeURIComponent(session))}
 $('#candidates').addEventListener('click',e=>{const b=e.target.closest('[data-person]');if(!b)return;identity=identity===b.dataset.person?'':b.dataset.person;drawCandidates();drawTopics();drawClaims()});
+$('#shareCandidate').addEventListener('click',async()=>{if(!identity)return;const uri=location.origin+'/api/share?debate='+encodeURIComponent(session)+'&person='+encodeURIComponent(identity);try{if(navigator.share)await navigator.share({title:'DEBATE / SIGNAL · '+identity,url:uri});else{await navigator.clipboard.writeText(uri);$('#shareCandidate').textContent='✓ Enlace copiado'}}catch{prompt('Comparte este enlace',uri)}});
 $('#claims').addEventListener('click',e=>{const b=e.target.closest('[data-claim]');if(b)showDetail(b.dataset.claim)});
 $('#topics').addEventListener('click',e=>{const b=e.target.closest('[data-topic]');if(!b)return;topic=b.dataset.topic;drawTopics();drawClaims()});
 $('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;filter=b.dataset.filter;for(const x of $('#filters').querySelectorAll('[data-filter]'))x.classList.toggle('active',x.dataset.filter===filter);drawClaims()});
