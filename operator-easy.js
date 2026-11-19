@@ -82,7 +82,7 @@ function init(){
  const source=$('#liveConnectWizard');if(source){source.open=true;$('#opSource').appendChild(source)}
  const test=$('#testKey');if(test){test.textContent='⚡ Comprobar OpenRouter';test.classList.add('button');test.style.marginTop='11px';$('#opRouter').appendChild(test)}
  const start=$('#startCapture');if(start){const bar=start.closest('.toolbar');$('#opAction').appendChild(bar)}
- if($('#chunkSeconds'))$('#chunkSeconds').value='12';
+ if($('#chunkSeconds'))$('#chunkSeconds').value='36';
  if($('#sttModel'))$('#sttModel').value='scribe';
  if($('#concurrency'))$('#concurrency').value='20';
  if($('#autoVerify'))$('#autoVerify').checked=true;
