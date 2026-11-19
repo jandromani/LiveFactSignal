@@ -23,6 +23,22 @@ export default async function handler(req,res){
   const matches=await sql.query("SELECT id,title,event_date,source_type FROM debates WHERE id=$1 LIMIT 1",[id]);
   if(!matches.length)return response(res,404,{error:'Sesión no encontrada'});
   const d=matches[0];
+  const template=String(req.body?.template_id||'');
+  let copiedPeople=0;
+  if(template&&UUID.test(template)&&template!==id){
+   // New generic sessions created by the operator inherit the selected event roster.
+   // A different date or source type cannot be used as the identity source.
+   const c=await sql.query(`
+    INSERT INTO debate_roster (debate_id,name,party,role,aliases,confirmed)
+    SELECT target.id,r.name,r.party,r.role,r.aliases,r.confirmed
+    FROM debates target JOIN debates source ON source.id=$2::uuid
+     AND source.event_date IS NOT DISTINCT FROM target.event_date
+     AND source.source_type=target.source_type
+    JOIN debate_roster r ON r.debate_id=source.id
+    WHERE target.id=$1::uuid AND target.created_at>now()-interval '30 minutes'
+    ON CONFLICT (debate_id,name) DO NOTHING RETURNING id`,[id,template]);
+   copiedPeople=c.length;
+  }
   const rows=await sql.query(`
    WITH candidate_roster AS (
     SELECT r.name,r.party FROM debate_roster r
@@ -44,7 +60,7 @@ export default async function handler(req,res){
     WHERE r.debate_id=$1::uuid AND r.role='candidate'
     GROUP BY r.name ORDER BY r.name`,[id]);
   return response(res,200,{ok:true,id,added_voices:rows[0]?.added_voices||0,
-    profiles:counts,total_candidates:counts.length,ready_candidates:counts.filter(x=>x.samples>=2).length,
+    profiles:counts,copied_people:copiedPeople,total_candidates:counts.length,ready_candidates:counts.filter(x=>x.samples>=2).length,
     automatic_learning:false,
     notice:'Solo se importan referencias de candidatos registrados y etiquetadas por la fuente. No se importan huellas aprendidas durante el debate.'});
  }catch(e){return response(res,500,{error:'No se pudieron sincronizar las referencias acústicas',detail:String(e.message||e).slice(0,200)})}
