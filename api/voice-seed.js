@@ -18,41 +18,34 @@ export default async function handler(req,res){
  if(!process.env.DATABASE_URL)return response(res,503,{error:'Neon no configurado'});
  try{
   const sql=neon(process.env.DATABASE_URL);
-  // Only same-date, same-event derivative sessions of the Sánchez–Feijóo debate.
-  // Import source-labeled reference voices; never import speculative self-learned debate_auto profiles.
-  const r=await sql.query(`
-   WITH eligible AS (
-    SELECT d.id
-    FROM debates d JOIN debates root ON root.id=$1::uuid
-    WHERE d.id=$2::uuid
-      AND d.event_date=root.event_date
-      AND d.source_type='live'
-      AND (d.id=root.id OR d.title LIKE root.title || '%')
-   ), people AS (
-    INSERT INTO debate_roster (debate_id,name,party,role,aliases,confirmed)
-    SELECT e.id,r.name,r.party,r.role,r.aliases,r.confirmed
-    FROM eligible e CROSS JOIN debate_roster r
-    WHERE r.debate_id=$1::uuid
-    ON CONFLICT (debate_id,name) DO NOTHING
-    RETURNING id
+  // Legitimate roster membership controls the import. No party inferred from speech.
+  // The database triggers handle new sessions automatically; this is an idempotent repair.
+  const matches=await sql.query("SELECT id,title,event_date,source_type FROM debates WHERE id=$1 LIMIT 1",[id]);
+  if(!matches.length)return response(res,404,{error:'Sesión no encontrada'});
+  const d=matches[0];
+  const rows=await sql.query(`
+   WITH candidate_roster AS (
+    SELECT r.name,r.party FROM debate_roster r
+    WHERE r.debate_id=$1::uuid AND r.role='candidate'
    ), seeded AS (
     INSERT INTO voice_profiles (debate_id,person_name,party,model_id,embedding,duration_ms,source_type,source_reference,verified_by,quality_status)
-    SELECT e.id,v.person_name,r.party,v.model_id,v.embedding,v.duration_ms,
-           'public-reference',v.source_url || '#t=' || coalesce(v.source_segment_start_s::text,'0'),
+    SELECT $1::uuid,v.person_name,r.party,v.model_id,v.embedding,v.duration_ms,
+           'public-reference',v.source_url||'#t='||coalesce(v.source_segment_start_s::text,'0'),
            'public-source-metadata',v.quality_status
-    FROM eligible e
-    JOIN debate_roster r ON r.debate_id=$1::uuid
-    JOIN voice_reference_library v ON v.person_name=r.name
-    WHERE r.role='candidate' AND v.quality_status='source-labeled'
-    ON CONFLICT DO NOTHING
-    RETURNING person_name
+    FROM candidate_roster r JOIN voice_reference_library v ON v.person_name=r.name
+    WHERE v.quality_status='source-labeled'
+    ON CONFLICT DO NOTHING RETURNING person_name
    )
-   SELECT (SELECT count(*) FROM eligible)::int AS eligible,
-          (SELECT count(*) FROM people)::int AS copied_people,
-          (SELECT count(*) FROM seeded)::int AS copied_voices`,[ROOT,id]);
-  const row=r[0];
-  if(!row?.eligible)return response(res,422,{error:'La sesión no pertenece a este debate; no se importarán voces incorrectas'});
-  const result=await sql.query("SELECT person_name,count(*)::int AS samples FROM voice_profiles WHERE debate_id=$1 AND source_type='public-reference' AND quality_status='source-labeled' GROUP BY person_name ORDER BY person_name",[id]);
-  return response(res,200,{ok:true,id,added_voices:row.copied_voices,copied_people:row.copied_people,profiles:result,automatic_learning:false,notice:'Las voces proceden de fuentes etiquetadas, no de una verificación manual de identidad.'});
+   SELECT count(*)::integer AS added_voices FROM seeded`,[id]);
+  const counts=await sql.query(`
+    SELECT r.name AS person_name,
+       count(vp.id) FILTER (WHERE vp.source_type='public-reference' AND vp.quality_status='source-labeled')::integer AS samples
+    FROM debate_roster r LEFT JOIN voice_profiles vp ON vp.debate_id=r.debate_id AND vp.person_name=r.name
+    WHERE r.debate_id=$1::uuid AND r.role='candidate'
+    GROUP BY r.name ORDER BY r.name`,[id]);
+  return response(res,200,{ok:true,id,added_voices:rows[0]?.added_voices||0,
+    profiles:counts,total_candidates:counts.length,ready_candidates:counts.filter(x=>x.samples>=2).length,
+    automatic_learning:false,
+    notice:'Solo se importan referencias de candidatos registrados y etiquetadas por la fuente. No se importan huellas aprendidas durante el debate.'});
  }catch(e){return response(res,500,{error:'No se pudieron sincronizar las referencias acústicas',detail:String(e.message||e).slice(0,200)})}
 }
