@@ -15,6 +15,8 @@ Recorrido completo: alta de debate en Neon → registro de participantes → her
 7. **Carreras al cambiar de sesión.** El antiguo cliente enviaba algunos resultados pendientes al ID leído en `localStorage` al finalizar, en lugar del ID original. **Solución:** cada trabajo lleva un identificador inmutable y se abandona si la sesión cambió.
 8. **Observatorio y consola podían señalar sesiones distintas.** El apuntador `debate_reset_state.current_id` solo cambiaba al pulsar Reset, no con Crear sesión. **Solución:** `api/session-activate` y actualización explícita del apuntador al crear una nueva captura oficial.
 
+9. **Sesiones genéricas no publicadas.** `api/public` exigía que la sesión estuviera en `debate_calendar`, pero `api/live?action=create` no copiaba ese registro. Resultado observado: sesión con 4 huellas y 36 afirmaciones, pero HTTP 404 en su API pública. **Solución:** el trigger de alta clona también el calendario del evento original; `api/voice-seed` copia el calendario del debate plantilla para nuevos eventos y `api/reset` admite esta clonación idempotente. Sesiones anteriores reparadas.
+
 ## Datos reales auditados
 - Captura original: 267 bloques; 12 perfiles (4 referencias de biblioteca + perfiles provisionales de autocalibración); 340 afirmaciones.
 - Capturas posteriores: 17/31/31 bloques, inicialmente sin roster/huellas según la ruta; fueron reparadas con el roster correcto y 4 referencias cada una.
@@ -34,10 +36,12 @@ Recorrido completo: alta de debate en Neon → registro de participantes → her
 - La reconciliación solo aplica eventos `campplus-v2-span` ya guardados.
 
 ## Pruebas realizadas
-- Neon: alta de captura derivada → 3 participantes y 4 referencias, prueba transaccional con rollback.
+- Neon: alta de captura derivada → 3 participantes, 4 referencias y 1 registro público del calendario, prueba transaccional con rollback.
 - Neon: alta de un candidato del debate parlamentario → 2 referencias, prueba transaccional con rollback.
 - SQL: inserción de evento vocal + actualización de afirmación de la secuencia correcta → 1 cambio, rollback.
 - SQL: reconciliación tardía de evento y afirmación → 1 cambio, rollback.
+- Neon: ejecución completa de la sentencia del reinicio (incluyendo el apuntador de la sesión activa) → 3 participantes, 4 referencias y 1 registro público; rollback correcto.
+- Vercel: la API pública de la captura previamente rota pasó de HTTP 404 a HTTP 200 tras registrar su calendario.
 - Seguridad: ninguna de las pruebas de rollback dejó filas persistentes.
 - Modelo: las cuatro referencias conocidas dieron 4/4 etiquetas esperadas; una mezcla sintética y una huella alterada quedaron sin clasificar.
 - Código: validación sintáctica y compilación Vercel de vista previa.
