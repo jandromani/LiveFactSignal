@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#071018"><title>DEBATE / SIGNAL · Modo realización</title>
+<style>
+:root{--ink:#f2f8fb;--muted:#b0c0ca;--line:#39505a;--mint:#83edd2;--amber:#efd0a0}*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:#071018;color:var(--ink);font-family:Inter,Segoe UI,system-ui,sans-serif}body.transparent{background:transparent}body.transparent .backdrop{display:none}body.transparent .people{background:#071018df}body.transparent .ticker{background:#071018f5}.backdrop{position:fixed;inset:0;background:radial-gradient(circle at 9% 4%,#264e4b,transparent 42%),radial-gradient(circle at 95% 15%,#293e59,transparent 44%),#09121c}.layout{position:relative;min-height:100%;display:flex;flex-direction:column;padding:clamp(15px,2.2vw,46px);gap:clamp(10px,2vw,30px)}.top{display:flex;justify-content:space-between;align-items:center;gap:20px}.brand{font-size:clamp(17px,2.2vw,31px);font-weight:950;letter-spacing:.11em}.brand span{color:var(--mint)}.live{border:1px solid #477c70;background:#153b35a1;border-radius:40px;padding:10px 14px;color:var(--mint);font-weight:850;letter-spacing:.12em;font-size:clamp(10px,1.2vw,15px)}.live i{display:inline-block;width:9px;height:9px;background:var(--mint);border-radius:50%;margin-right:9px;box-shadow:0 0 12px var(--mint)}.info{display:flex;justify-content:space-between;align-items:end;gap:30px}.info h1{font-size:clamp(23px,3.4vw,53px);line-height:1.04;letter-spacing:-.045em;max-width:980px;margin:9px 0}.eyebrow{color:var(--mint);letter-spacing:.16em;font-weight:850;font-size:clamp(10px,1.15vw,16px)}.counts{display:flex;gap:18px}.counts strong{font-size:clamp(22px,3vw,42px);display:block;font-variant-numeric:tabular-nums}.counts small{color:var(--muted);white-space:nowrap;font-size:clamp(9px,.82vw,13px)}.people{background:#122635d9;border:1px solid #3f5c65;border-radius:15px;padding:clamp(12px,1.6vw,28px);display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.person{display:flex;align-items:center;gap:clamp(10px,1.4vw,21px);padding:clamp(8px,1vw,18px);background:#182e3c;border:1px solid #365567;border-radius:10px;min-width:0}.avatar{width:clamp(38px,4.5vw,75px);height:clamp(38px,4.5vw,75px);flex:none;display:grid;place-items:center;background:#2d514f;border:1px solid #588f81;border-radius:50%;font-weight:850;font-size:clamp(14px,1.5vw,25px)}.person .name{font-size:clamp(14px,1.5vw,25px);font-weight:850;overflow-wrap:anywhere;line-height:1.16}.person .meta{font-size:clamp(10px,.95vw,15px);color:var(--muted)}.person .number{margin-left:auto;font-weight:900;font-size:clamp(20px,3vw,49px);white-space:nowrap}.ticker{margin-top:auto;border:1px solid #498d7d;border-radius:15px;padding:clamp(17px,2.4vw,40px);background:linear-gradient(125deg,#17342f,#152739);min-height:210px}.tickerhead{display:flex;justify-content:space-between;align-items:center;gap:15px}.tickerhead .state{font-size:clamp(10px,.95vw,15px);font-weight:900;letter-spacing:.12em;color:var(--mint)}.tickerquote{font-size:clamp(18px,2.6vw,42px);font-weight:800;line-height:1.22;letter-spacing:-.028em;margin:17px 0;max-width:1540px}.byline{font-size:clamp(12px,1vw,17px);color:var(--muted)}.byline strong{color:var(--mint)}.bottom{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:clamp(9px,.85vw,14px);color:#cfdbdf}.bottom b{color:var(--amber)}.bar{height:4px;background:#2c484b;border-radius:20px;overflow:hidden;margin-top:8px}.progress{height:100%;background:var(--mint);width:0;transition:width .4s}.mini{font-size:clamp(9px,.85vw,13px);color:var(--muted)}.error{color:#e9aba1}.people.compact{grid-template-columns:repeat(4,1fr)}.people.compact .person{padding:10px}.people.compact .person .number{font-size:24px}@media(max-width:800px){.info{display:block}.counts{margin-top:14px}.people,.people.compact{grid-template-columns:1fr 1fr}.ticker{min-height:220px}.person .number{font-size:24px}}@media(max-width:500px){.people,.people.compact{grid-template-columns:1fr}.ticker{min-height:240px}.counts{gap:8px}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body><div class="backdrop"></div><main class="layout">
+<header class="top"><div class="brand">DEBATE <span>/ SIGNAL</span></div><div class="live"><i></i><span id="status">CONECTANDO</span></div></header>
+<div class="info"><div><div class="eyebrow">RADAR ELECTORAL · DATOS EN TIEMPO REAL</div><h1 id="heading">Observatorio electoral</h1><div class="mini" id="synced">Esperando datos del servidor…</div></div><div class="counts"><div><strong id="detected">—</strong><small>AFIRMACIONES</small></div><div><strong id="reviewed">—</strong><small>ANÁLISIS IA</small></div><div><strong id="pending">—</strong><small>PENDIENTES</small></div></div></div>
+<div id="people" class="people"><div class="mini">Cargando participantes…</div></div>
+<section class="ticker" id="ticker"><div class="tickerhead"><div class="state" id="verdict">◉ OBSERVATORIO PREPARADO</div><div class="mini" id="sources"></div></div><div class="tickerquote" id="quote">Las afirmaciones aparecerán aquí durante la emisión.</div><div class="byline"><strong id="speaker">Sin transcripción</strong> <span id="meta"></span></div><div class="bar"><div class="progress" id="progress"></div></div></section>
+<footer class="bottom"><span><b>AVISO:</b> Análisis automatizado y provisional. Ninguna etiqueta constituye verificación editorial.</span><span id="footerTime">Consultando servidor…</span></footer></main>
+<script>
+const $=q=>document.querySelector(q),ID=new URLSearchParams(location.search).get('debate')||'f3c2fd9b-5fa1-4818-a407-453f5cac4a34';
+if(new URLSearchParams(location.search).get('transparent')==='1')document.body.classList.add('transparent');
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
+const clock=t=>{const n=Math.max(0,Math.floor(Number(t||0)/1000));return [Math.floor(n/3600),Math.floor(n/60)%60,n%60].map(x=>String(x).padStart(2,'0')).join(':')};
+let current=null,rotate=0,loading=false;
+async function refresh(){
+ if(loading)return;loading=true;
+ try{
+  const resp=await fetch('/api/public?debate='+encodeURIComponent(ID)+'&tick='+Math.floor(Date.now()/5000),{cache:'no-store'});
+  if(!resp.ok)throw Error('HTTP '+resp.status);
+  const d=await resp.json();current=d;
+  $('#status').textContent='DATOS CONECTADOS';
+  $('#heading').textContent=d.debate.title;
+  $('#synced').textContent='Sincronizado · '+new Date(d.server_time).toLocaleTimeString('es-ES')+' · '+d.audio.processed+' bloques transcritos';
+  $('#detected').textContent=d.totals.n;
+  $('#reviewed').textContent=d.totals.provisional;
+  $('#pending').textContent=Number(d.totals.pending)+Number(d.totals.needs_review);
+  const persons=d.roster.filter(x=>x.role==='candidate'),ele=$('#people');ele.classList.toggle('compact',persons.length>4);
+  ele.innerHTML=persons.map(p=>{
+    const total=d.claims.filter(x=>x.speaker===p.name).length,initials=p.name.split(' ').slice(0,2).map(s=>s[0]).join('').toUpperCase();
+    return '<div class="person"><div class="avatar">'+esc(initials)+'</div><div><div class="name">'+esc(p.name)+'</div><div class="meta">'+esc(p.party)+' · Afirmaciones detectadas</div></div><div class="number">'+total+'</div></div>';
+  }).join('')||'<div class="mini">Sin participantes registrados</div>';
+  const pool=d.claims.filter(x=>x.quote&&x.state!=='excluded').slice(0,18);
+  if(pool.length){
+   const x=pool[rotate%pool.length];$('#quote').textContent='“'+x.quote+'”';
+   $('#speaker').textContent=/^voz \d+|^sin identificar/i.test(x.speaker)?'Hablante sin identificar':x.speaker;
+   $('#meta').textContent='· '+clock(x.start_ms)+' · '+x.topic;
+   const verdict=x.state==='provisional'?'IA PROVISIONAL · '+(x.verdict==='confirmada'?'COINCIDE CON FUENTES':x.verdict==='falsa'?'EVIDENCIAS CONTRADICTORIAS':'SIN CONCLUSIÓN'):'EN INVESTIGACIÓN';
+   $('#verdict').textContent=verdict;$('#sources').textContent=x.sources.length+' fuentes citadas';
+   $('#progress').style.width=Math.min(100,100*((rotate%pool.length)+1)/pool.length)+'%';
+  }else{
+   $('#quote').textContent='Esperando las primeras afirmaciones de la retransmisión…';$('#speaker').textContent='Fuente: '+(d.debate.source_url?.includes('rtve')?'RTVE Play':'Señal seleccionada');$('#meta').textContent=' · Captura pendiente';$('#verdict').textContent='◉ EN ESPERA DE AUDIO';$('#sources').textContent='';
+  }
+  $('#footerTime').textContent='ACTUALIZACIÓN '+new Date().toLocaleTimeString('es-ES')+' · /observatorio.html';
+ }catch(e){$('#status').textContent='REINTENTANDO CONEXIÓN';$('#footerTime').textContent=e.message}
+ finally{loading=false}
+}
+refresh();setInterval(refresh,5000);setInterval(()=>{rotate++;if(current?.claims?.length)refresh()},9000);
+</script></body></html>
