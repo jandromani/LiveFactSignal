@@ -695,6 +695,237 @@
       "speaker_confirmation_required": true,
       "origin": "congress-session",
       "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://www.europapress.tv/politica/1113911/1/feijoo-gobierno-pasara-nacion-espanola-continuara",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://www.europapress.tv/politica/1132368/1/feijoo-29n-tenemos-oportunidad-cambiar-espana",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://www.europapress.tv/politica/1133976/1/feijoo-compromete-aprobar-nuevo-modelo-financiacion-si-gana-elecciones",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://www.europapress.tv/politica/1111953/1/feijoo-critica-indolencia-gobierno-crisis-ceuta-cuestiona-gestion",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://www.europapress.tv/politica/1127885/1/feijoo-primer-objetivo-vaya-sanchez",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://www.europapress.tv/politica/1133969/1/alberto-nunez-feijoo-compromisos-asturias",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://www.europapress.tv/politica/1124506/1/feijoo-voy-dar-cara-cuando-pais-le-vaya-bien-tambien-cuando-me-equivoque",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://www.europapress.tv/politica/1118652/1/feijoo-propone-ruptura-democratica-gobierno-hacer-cambio-real-espana",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://www.europapress.tv/politica/1130389/1/feijoo-asegura-nunca-habido-presidente-tan-conflictivo-espana-sanchez",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://www.europapress.tv/politica/1130280/1/feijoo-espana-no-falla-gobierno-pide-cambio-29-noviembre",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://www.europapress.tv/politica/1135676/1/feijoo-afirma-estar-satisfecho-cara-cara-sanchez",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://www.europapress.tv/politica/1130387/1/feijoo-considera-momento-huelga-general-manifiestamente-inoportuna",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Pepa Millán",
+      "url": "https://www.europapress.tv/politica/1130686/1/pepa-millan-acusa-puente-no-tener-dignidad-verguenza-le-tacha-titere",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Pepa Millán",
+      "url": "https://www.europapress.tv/politica/1130655/1/pepa-millan-vox-puente-verguenza-siga-frente-cargo",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Pepa Millán",
+      "url": "https://www.europapress.tv/politica/1115055/1/vox-ve-cada-vez-mas-irreversible-situacion-ceuta-culpa-desidia-gobierno",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Pepa Millán",
+      "url": "https://www.europapress.tv/politica/1113412/1/vox-alerta-posible-cosoberania-ceuta-melilla",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://www.europapress.tv/politica/1113245/1/abascal-senala-curso-politico-va-ser-historico-decisivo",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://www.europapress.tv/politica/1131825/1/abascal-afirma-29n-continua-mafia-va-imponiendo-sentido-comun",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://www.europapress.tv/politica/1120398/1/abascal-cual-empeno-gobierno-no-proceda-devolucion-migrantes",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://www.europapress.tv/politica/1116177/1/abascal-estaremos-satisfechos-cuando-nos-garanticen-elecciones-no-pueden-robar",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://www.europapress.tv/politica/1116930/1/abascal-asegura-momento-cerrar-puertas-empezar-proceso-repatriaciones",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.europapress.tv/economia/1134729/1/colau-protagoniza-desayunos-informativos-europa-press",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.europapress.tv/politica/1126334/1/ada-colau-podemos-si-alguien-no-quiere-sentar-mesa-no-le-puede-obligar",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.europapress.tv/politica/1134516/1/colau-propone-iva-consumos-bajos-luz-agua-gas-elevarlo-progresivamente-21",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.europapress.tv/politica/1134457/1/colau-pide-enfrentarse-fondos-buitres-hacer-efectivo-derecho-vivienda",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.europapress.tv/politica/1134541/1/colau-defiende-medida-limitar-herencias-maximo-10-millones-persona",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.europapress.tv/politica/1131918/1/ada-colau-cuando-gente-organiza-historia-cambia",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.europapress.tv/politica/1126333/1/ada-colau-asegura-no-va-fallar-ciudadania-frente-amplio",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.europapress.tv/politica/1134628/1/colau-propone-subir-salarios-funcion-ipc-iva-consumos-bajos-luz-agua",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.europapress.tv/politica/1134539/1/colau-insta-gobierno-recurrir-tjue-deportacion-migrantes-ruanda-gravisimo",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.europapress.tv/politica/1133884/1/colau-denuncia-negocio-turismo-masificado-nos-robando-ciudades",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.europapress.tv/politica/1134540/1/colau-tacha-inaceptable-cuestionen-pulseras-antimaltrato-avisa-no-tocan",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.europapress.tv/politica/1131170/1/colau-confia-frente-amplio-consiga-buen-resultado-29n",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Accept only explicit broadcaster description and clean single-speaker passage"
     }
   ]
 }
