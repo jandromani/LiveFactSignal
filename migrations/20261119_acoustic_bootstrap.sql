@@ -73,3 +73,26 @@ ALTER TABLE public.voice_match_events ADD COLUMN IF NOT EXISTS candidate_party t
 CREATE INDEX IF NOT EXISTS lfs_voice_candidate_sequence_idx
  ON public.voice_match_events(debate_id,seq DESC,candidate_name,decision)
  WHERE method='campplus-v2-span' AND candidate_name IS NOT NULL;
+
+-- 2026-11-20: Operator-confirmed source clips, cross-checked acoustically.
+-- Audio is discarded; only embeddings are stored.
+CREATE OR REPLACE FUNCTION public.lfs_seed_voice_reference_for_person()
+RETURNS trigger LANGUAGE plpgsql AS $fn$
+BEGIN
+ IF NEW.role='candidate' THEN
+  INSERT INTO public.voice_profiles
+  (debate_id,person_name,party,model_id,embedding,duration_ms,source_type,source_reference,verified_by,quality_status)
+  SELECT NEW.debate_id,v.person_name,NEW.party,v.model_id,v.embedding,v.duration_ms,
+    'public-reference',
+    CASE WHEN v.quality_status='operator-reviewed' THEN v.source_url||'#training='||v.id::text
+         ELSE v.source_url||'#t='||coalesce(v.source_segment_start_s::text,'0') END,
+    CASE WHEN v.quality_status='operator-reviewed' THEN 'operator-confirmed+acoustic-check' ELSE 'public-source-metadata' END,
+    v.quality_status
+  FROM public.voice_reference_library v
+  WHERE v.person_name=NEW.name AND v.quality_status IN ('source-labeled','operator-reviewed')
+  ON CONFLICT DO NOTHING;
+ END IF;RETURN NEW;
+END $fn$;
+CREATE INDEX IF NOT EXISTS lfs_voice_training_refs_idx
+ ON public.voice_reference_library(person_name,quality_status,created_at DESC)
+ WHERE quality_status IN ('source-labeled','operator-reviewed');
