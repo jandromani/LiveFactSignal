@@ -1,0 +1,25 @@
+EXTERNAL_LABEL person=Ada Colau url=https://commons.wikimedia.org/wiki/File:Diada_2015_Ada_Colau_demana_al_Govern_espanyol_que.ogv
+EXTERNAL_LABEL person=Ada Colau url=https://commons.wikimedia.org/wiki/File:La_pla%C3%A7a_de_Sant_Jaume_rep_la_nova_alcaldessa.webm
+EXTERNAL_LABEL person=Alberto Núñez Feijóo url=https://ppcantabria.org/actualidad/noticias/13518-feijoo-el-presidente-de-espana-que-necesita-cantabria
+EXTERNAL_LABEL person=Alberto Núñez Feijóo url=https://ppcantabria.org/actualidad/noticias/13518-feijoo-el-presidente-de-espana-que-necesita-cantabria
+EXTERNAL_LABEL person=Emilio Delgado url=https://www.europapress.tv/politica/1132053/1/emilio-delgado-frente-amplio-hay-poner-riqueza-servicio-pueblo
+EXTERNAL_LABEL person=Emilio Delgado url=https://www.europapress.tv/politica/1132053/1/emilio-delgado-frente-amplio-hay-poner-riqueza-servicio-pueblo
+EXACT_MATCH person=Ester Muñoz i=778365 publisher='Muñoz de la Iglesia, Ester (GP)'
+EXACT_MATCH person=Ester Muñoz i=778856 publisher='Muñoz de la Iglesia, Ester (GP)'
+EXACT_MATCH person=Gabriel Rufián i=777812 publisher='Rufián Romero, Gabriel (GR)'
+EXACT_MATCH person=Gabriel Rufián i=780063 publisher='Rufián Romero, Gabriel (GR)'
+EXACT_MATCH person=Maribel Vaquero i=777815 publisher='Vaquero Montero, Maribel (GV (EAJ-PNV))'
+EXACT_MATCH person=Maribel Vaquero i=780060 publisher='Vaquero Montero, Maribel (GV (EAJ-PNV))'
+EXACT_MATCH person=Míriam Nogueras i=777813 publisher='Nogueras i Camero, Míriam (GJxCAT)'
+EXACT_MATCH person=Míriam Nogueras i=778355 publisher='Nogueras i Camero, Míriam (GJxCAT)'
+EXACT_MATCH person=Oskar Matute i=777880 publisher='Matute García de Jalón, Oskar (GEH Bildu)'
+EXACT_MATCH person=Oskar Matute i=780061 publisher='Matute García de Jalón, Oskar (GEH Bildu)'
+EXACT_MATCH person=Patxi López i=777821 publisher='López Álvarez, Patxi (GS)'
+EXACT_MATCH person=Patxi López i=779899 publisher='López Álvarez, Patxi (GS)'
+EXTERNAL_LABEL person=Pedro Sánchez url=https://commons.wikimedia.org/wiki/File:Pedro_S%C3%A1nchez_anuncia_la_convocatoria_de_elecciones_generales_para_el_
+EXTERNAL_LABEL person=Pedro Sánchez url=https://commons.wikimedia.org/wiki/File:Pedro_S%C3%A1nchez_anuncia_la_convocatoria_de_elecciones_generales_para_el_
+EXACT_MATCH person=Pepa Millán i=777904 publisher='Rodríguez de Millán Parro, María José (GVOX)'
+EXACT_MATCH person=Pepa Millán i=778400 publisher='Rodríguez de Millán Parro, María José (GVOX)'
+EXACT_MATCH person=Santiago Abascal i=777809 publisher='Abascal Conde, Santiago (GVOX)'
+EXACT_MATCH person=Santiago Abascal i=777856 publisher='Abascal Conde, Santiago (GVOX)'
+SUMMARY {"exact": 16, "wrong": 0, "unchecked_external": 8, "broken": 0}
