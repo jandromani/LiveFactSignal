@@ -36,6 +36,7 @@ PRIORITY=['Maribel Vaquero','Oskar Matute','Gabriel Rufián','Emilio Delgado',
  'Míriam Nogueras','Ester Muñoz','Patxi López','Pepa Millán',
  'Ada Colau','Alberto Núñez Feijóo','Pedro Sánchez','Santiago Abascal']
 session=requests.Session();session.headers.update(headers)
+CONGRESS_PAGES={}
 def norm(s):
  s=unicodedata.normalize('NFKD',str(s)).encode('ascii','ignore').decode('ascii').lower()
  return re.sub(r'\s+',' ',s)
@@ -44,13 +45,21 @@ def verified(name,text):
 def media(source,name):
  url=source['url'];host=urlsplit(url).hostname or ''
  if host=='static.congreso.es':
-  label=str(source.get('label') or '').strip()
-  if not verified(name,label):
-   raise ValueError('Candidate not explicitly named in indexed intervention label')
-  if label.lower().startswith(('pregunta','votaciones','del grupo','mocion')):
-   raise ValueError('Agenda text is not a speaker')
-  if not re.match(r'^[^,]{2,75},\s*[^()]{2,80}\s*\([^)]+\)',label):
-   raise ValueError('Source lacks formal congressional speaker-row label')
+  # Never trust stale index labels. Re-validate the exact MP4 row from
+  # the publisher's original source page before using any audio.
+  original=source.get('source_page','')
+  if urlsplit(original).hostname!='app.congreso.es':
+   raise ValueError('Exact publisher source page missing')
+  if original not in CONGRESS_PAGES:
+   resp=session.get(original,timeout=30);resp.raise_for_status()
+   CONGRESS_PAGES[original]=BeautifulSoup(html.unescape(resp.text),'html.parser')
+  soup=CONGRESS_PAGES[original]
+  matches=[a for a in soup.find_all('a',href=True) if urljoin(original,a['href']).split('?')[0]==url.split('?')[0]]
+  if not matches:raise ValueError('MP4 missing from official publisher page')
+  row=matches[0].find_parent('tr')
+  label=row.get_text(' ',strip=True) if row else ''
+  if not verified(name,label) or not re.match(r'^[^,]{2,75},\s*[^()]{2,80}\s*\([^)]+\)',label):
+   raise ValueError('Exact MP4 row not labelled as this speaker')
   return url,label[:180],None
  if host=='app.congreso.es':
   r=session.get(url,timeout=25);r.raise_for_status()
