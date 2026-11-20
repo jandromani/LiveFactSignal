@@ -1,0 +1,30 @@
+name: Voiceprint pilot official recordings CAM++
+on:
+  push:
+    paths:
+      - '.github/workflows/voiceprint-pilot.yml'
+      - 'scripts/voiceprints/pilot.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install inference dependencies
+        run: python -m pip install -q numpy soundfile requests sherpa-onnx
+      - name: Compute pinned CAM++ and verify official source clips
+        run: python -u scripts/voiceprints/pilot.py 2>&1 | tee scripts/voiceprints/pilot-last.txt
+      - name: Commit QA metrics only - never voiceprints or audio
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/voiceprints/pilot-last.txt
+          git diff --cached --quiet || git commit -m 'Store Congress CAM++ pilot QA metrics'
+          git push || true
