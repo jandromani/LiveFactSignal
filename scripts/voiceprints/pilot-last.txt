@@ -1,4 +1,16 @@
-  File "/home/runner/work/LiveFactSignal/LiveFactSignal/scripts/voiceprints/pilot.py", line 82
-    ,x)]
-      ^
-SyntaxError: unmatched ')'
+MODEL_FETCH 200 28281164
+MODEL_SHA256 aa3cfc16963a10586a9393f5035d6d6b57e98d358b347f80c2a30bf4f00ceba2 VERIFIED True
+MODEL_VALID True
+MEDIA 778482 ALL 173 MATCH 1
+CONTEXT :block;">                           	                	   	                	   <img width='16px' style="padding-left:5px"  alt="Descargar video" title="Descargar video"  src="/AudiovisualCongreso/recursos/img/download_trans_mp
+VIDEO https://static.congreso.es/audiovisual/video/leg15/400/15_000400_198/cortes/15_000400_198_1_27662_778482.mp4
+ERROR Alberto Núñez Feijóo FileNotFoundError [Errno 2] No such file or directory: 'ffmpeg'
+MEDIA 777821 ALL 30 MATCH 1
+CONTEXT :block;">                           	                	   	                	   <img width='16px' style="padding-left:5px"  alt="Descargar video" title="Descargar video"  src="/AudiovisualCongreso/recursos/img/download_trans_mp
+VIDEO https://static.congreso.es/audiovisual/video/leg15/400/15_000400_194/cortes/15_000400_194_0_27634_777821.mp4
+ERROR Patxi López FileNotFoundError [Errno 2] No such file or directory: 'ffmpeg'
+MEDIA 780063 ALL 49 MATCH 1
+CONTEXT :block;">                           	                	   	                	   <img width='16px' style="padding-left:5px"  alt="Descargar video" title="Descargar video"  src="/AudiovisualCongreso/recursos/img/download_trans_mp
+VIDEO https://static.congreso.es/audiovisual/video/leg15/500/15_000500_010/cortes/15_000500_010_0_27742_780063.mp4
+ERROR Gabriel Rufián FileNotFoundError [Errno 2] No such file or directory: 'ffmpeg'
+PILOT_FINISHED 0 embeddings computed; none persisted to repository
