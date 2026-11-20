@@ -25,7 +25,7 @@ No raw audio, raw voice embeddings, GitHub credentials or database secrets are s
 | Alberto Núñez Feijóo | 10 | 5 |
 | Pedro Sánchez | 10 | 6 |
 | Santiago Abascal | 10 | 10 |
-| **Total** | **120** | **69 per-person distinct URLs** |
+| **Total** | **120** | **70 per-person distinct URLs** |
 
 **Source hosts (stored origin for each reference):** 63 direct MP4s from `static.congreso.es`; 16 official `app.congreso.es` pages; 33 direct `video4.europapress.net` files; 2 `www.europapress.tv` pages; 4 Wikimedia Commons files; 2 `ppcantabria.org` references.
 
