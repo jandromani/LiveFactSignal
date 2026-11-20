@@ -1137,6 +1137,70 @@
       "origin": "europapress",
       "speaker_confirmation_required": true,
       "note": "Only if publisher lead explicitly confirms Pedro Sánchez speaking and acoustic comparison passes"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://www.europapress.tv/politica/1113904/1/abascal-asegura-ejecutivo-miente-referencia-informe-cenif",
+      "origin": "europapress",
+      "priority": 1,
+      "speaker_confirmation_required": true,
+      "note": "Editorial speaker attribution and CAM++ must both agree; mixed Q&A clips may be rejected."
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://www.europapress.tv/politica/1133434/1/abascal-destaca-nivel-corrupcion-sanchez-entorno-politico-familia",
+      "origin": "europapress",
+      "priority": 1,
+      "speaker_confirmation_required": true,
+      "note": "Editorial speaker attribution and CAM++ must both agree; mixed Q&A clips may be rejected."
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://www.europapress.tv/politica/1133887/1/vox-tacha-gobierno-mafia-mentirosa-corrupta",
+      "origin": "europapress",
+      "priority": 1,
+      "speaker_confirmation_required": true,
+      "note": "Editorial speaker attribution and CAM++ must both agree; mixed Q&A clips may be rejected."
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://www.europapress.tv/politica/1122880/1/abascal-exijo-elecciones-limpias-violencia",
+      "origin": "europapress",
+      "priority": 1,
+      "speaker_confirmation_required": true,
+      "note": "Editorial speaker attribution and CAM++ must both agree; mixed Q&A clips may be rejected."
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://www.europapress.tv/politica/1134475/1/abascal-asegura-ejes-campana-vox-son-sentido-comun-ciudadania",
+      "origin": "europapress",
+      "priority": 1,
+      "speaker_confirmation_required": true,
+      "note": "Editorial speaker attribution and CAM++ must both agree; mixed Q&A clips may be rejected."
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://www.europapress.tv/politica/1134761/1/abascal-incide-recuperacion-territorio-invasion-migratoria-sufre-canarias",
+      "origin": "europapress",
+      "priority": 1,
+      "speaker_confirmation_required": true,
+      "note": "Editorial speaker attribution and CAM++ must both agree; mixed Q&A clips may be rejected."
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://www.europapress.tv/politica/1118004/1/abascal-tacha-sanchez-ser-candidato-marroqui-espana",
+      "origin": "europapress",
+      "priority": 1,
+      "speaker_confirmation_required": true,
+      "note": "Editorial speaker attribution and CAM++ must both agree; mixed Q&A clips may be rejected."
+    },
+    {
+      "person": "Gabriel Rufián",
+      "url": "https://www.europapress.tv/politica/1115387/1/sanchez-reivindica-continuar-avanzando-dudas-erc-numeros-no-me-salen",
+      "origin": "europapress",
+      "priority": 1,
+      "speaker_confirmation_required": true,
+      "note": "Editorial speaker attribution and CAM++ must both agree; mixed Q&A clips may be rejected."
     }
   ]
 }
