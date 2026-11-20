@@ -13,7 +13,7 @@
 <div class="sectiontitle"><h2>Candidatos <span class="micro">· seleccionar para explorar</span></h2><div style="display:flex;align-items:center;gap:11px;flex-wrap:wrap"><small id="speakerInfo">Solo las afirmaciones atribuidas</small><button id="shareCandidate" class="linkbutton" hidden>↗ Compartir candidato</button></div></div>
 <div class="candidates" id="candidates"><div class="empty">Cargando participantes…</div></div>
 <div class="columns"><section class="surface"><div class="surfacehead"><h2 id="feedTitle">Afirmaciones en directo</h2><p>Toca una afirmación para ver el contexto y las fuentes. Los veredictos de la IA nunca se presentan como verificación editorial.</p></div>
-<div class="filters" id="filters"><button class="pill active" data-filter="contradicted">Contradicciones IA</button><button class="pill" data-filter="all">Todas</button><button class="pill" data-filter="prelim">Resultado IA</button><button class="pill" data-filter="pending">En investigación</button><button class="pill" data-filter="unknown">Sin identificar</button></div>
+<div class="filters" id="filters"><button class="pill" data-filter="contradicted">Contradicciones IA</button><button class="pill active" data-filter="all">Todas · en directo</button><button class="pill" data-filter="prelim">Resultado IA</button><button class="pill" data-filter="pending">En investigación</button><button class="pill" data-filter="unknown">Sin identificar</button></div>
 <label for="search" class="hidden">Buscar una afirmación</label><input id="search" class="feedsearch" placeholder="Buscar por cifra, tema o frase…">
 <div id="claims" class="items" aria-live="polite"><div class="empty">Esperando afirmaciones…</div></div></section>
 <aside class="surface"><div class="surfacehead"><h2>Radar de temas</h2><p>Temas detectados en las intervenciones, sin valorar automáticamente a los candidatos.</p></div><div id="topics" class="topics"><div class="empty">Esperando datos…</div></div><div class="surfacehead" style="border-top:1px solid var(--line)"><h2>Seguir la retransmisión</h2><p>El vídeo oficial se reproduce en su plataforma. Aquí se actualizan los datos, no redistribuimos su señal.</p></div><div class="topics"><div class="watch"><a class="linkbutton primary" target="_blank" rel="noopener" id="watch" href="https://www.rtve.es/play/videos/directo/la-1/">↗ Ver retransmisión oficial</a><a class="linkbutton" href="/" target="_blank" rel="noopener noreferrer">↗ Abrir consola en otra pestaña</a><a class="linkbutton" id="broadcast" target="_blank" rel="noopener" href="/overlay.html">◉ Modo realización / OBS</a></div><div class="micro" id="sttStatus">La captura se inicia desde la consola.</div></div></aside></div>
@@ -23,8 +23,9 @@
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Detalle de afirmación"><div class="drawer"><button class="close" id="close">✕ Cerrar</button><div id="detail"></div></div></div>
 <script>
 const $=s=>document.querySelector(s),AUDIT='5cd33d45-32a0-4116-a9ed-92b8312757c2',FIRST='f3c2fd9b-5fa1-4818-a407-453f5cac4a34';
-const followCurrent=!new URLSearchParams(location.search).has('archive')&&(!new URLSearchParams(location.search).get('debate')||new URLSearchParams(location.search).get('debate')===FIRST);
-let session=new URLSearchParams(location.search).get('debate')||FIRST,identity='',filter='contradicted',term='',topic='',last=null,fetching=false,allEvents=[],lastSignature='',lastChangedAt=Date.now();
+const params=new URLSearchParams(location.search);
+const followCurrent=params.get('archive')!=='1'&&(params.get('follow')==='1'||!params.get('debate')||params.get('debate')===FIRST);
+let session=new URLSearchParams(location.search).get('debate')||FIRST,identity='',filter='all',term='',topic='',last=null,fetching=false,allEvents=[],lastSignature='',lastChangedAt=Date.now();
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
 const fmt=t=>{const n=Math.max(0,Math.floor(Number(t||0)/1000));return [Math.floor(n/3600),Math.floor(n/60)%60,n%60].map(x=>String(x).padStart(2,'0')).join(':')};
 const unknown=x=>!x||/^sin identificar$/i.test(x)||/^voz\s*\d+/i.test(x);
@@ -40,6 +41,7 @@ async function agenda(){
  ]);
  allEvents=(catalog.events||[]).filter(x=>!String(x.slug||'').includes('-run-'));const select=$('#event');
  const url=new URL(location.href),archive=url.searchParams.get('archive')==='1';
+ if(followCurrent&&!archive)url.searchParams.set('follow','1');
  if(!archive&&(!url.searchParams.has('debate')||session===FIRST)&&reset?.current_id)session=reset.current_id;
  select.innerHTML=allEvents.map(x=>'<option value="'+esc(x.debate_id)+'">'+esc(new Date(x.scheduled_at).toLocaleDateString('es-ES',{day:'2-digit',month:'short'}))+' · '+esc(x.title)+'</option>').join('')+'<option value="'+AUDIT+'">Archivo · Debate a cinco (2019, experimental)</option>';
  if(![...select.options].some(x=>x.value===session)){
@@ -51,12 +53,12 @@ async function agenda(){
 async function load(){
  if(fetching)return;fetching=true;
  try{
-  if(followCurrent){try{const active=await fetch('/api/reset',{cache:'no-store'}).then(r=>r.ok?r.json():null);if(active?.current_id&&session!==active.current_id){session=active.current_id;const selector=$('#event');if(![...selector.options].some(o=>o.value===session)){const opt=document.createElement('option');opt.value=session;opt.textContent='Captura nueva · En directo';selector.prepend(opt)}selector.value=session;const url=new URL(location.href);url.searchParams.set('debate',session);history.replaceState({},'',url.pathname+url.search+url.hash);last=null;lastSignature=''}}catch{}}
+  if(followCurrent){try{const active=await fetch('/api/reset',{cache:'no-store'}).then(r=>r.ok?r.json():null);if(active?.current_id&&session!==active.current_id){session=active.current_id;const selector=$('#event');if(![...selector.options].some(o=>o.value===session)){const opt=document.createElement('option');opt.value=session;opt.textContent='Captura nueva · En directo';selector.prepend(opt)}selector.value=session;const url=new URL(location.href);url.searchParams.set('debate',session);if(followCurrent)url.searchParams.set('follow','1');history.replaceState({},'',url.pathname+url.search+url.hash);last=null;lastSignature=''}}catch{}}
   const r=await fetch('/api/public?debate='+encodeURIComponent(session)+'&ts='+Math.floor(Date.now()/5000),{cache:'no-store'});
   if(!r.ok)throw Error('Servidor '+r.status);
   const j=await r.json();
   if(j.debate.id!==session)return;
-  const signature=[j.audio?.processed,j.totals?.n,j.totals?.provisional,j.totals?.pending,j.totals?.needs_review,j.totals?.excluded].join(':');if(signature!==lastSignature){lastSignature=signature;lastChangedAt=Date.now();}last=j;setStatus(true);render();if(!window.__lfsDeepLinked){window.__lfsDeepLinked=true;const share=new URLSearchParams(location.search),person=share.get('person');if(person&&candidates().some(p=>p.name===person)){identity=person;render()}const claim=new URLSearchParams(location.hash.slice(1)).get('claim');if(claim&&j.claims.some(x=>x.id===claim))showDetail(claim);}
+  const signature=[j.audio?.processed,j.totals?.n,j.totals?.provisional,j.totals?.pending,j.totals?.needs_review,j.totals?.excluded,j.totals?.latest_claim,(j.claims||[]).filter(c=>!unknown(c.speaker)).length].join(':');if(signature!==lastSignature){lastSignature=signature;lastChangedAt=Date.now();}last=j;setStatus(true);render();if(!window.__lfsDeepLinked){window.__lfsDeepLinked=true;const share=new URLSearchParams(location.search),person=share.get('person');if(person&&candidates().some(p=>p.name===person)){identity=person;render()}const claim=new URLSearchParams(location.hash.slice(1)).get('claim');if(claim&&j.claims.some(x=>x.id===claim))showDetail(claim);}
   $('#updated').textContent=new Date(j.server_time).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
  }catch(e){setStatus(false);$('#updated').textContent='Sin conexión: '+e.message}
  finally{fetching=false}
@@ -96,7 +98,7 @@ function filtered(){
  });
 }
 function drawClaims(){
- const items=filtered().sort((a,b)=>{const rank=x=>x.state==='provisional'&&x.verdict==='falsa'?0:x.state==='provisional'?1:x.state==='needs_review'?2:3;return rank(a)-rank(b)||(b.start_ms||0)-(a.start_ms||0)});$('#feedTitle').textContent=identity?'Afirmaciones de '+identity:(filter==='contradicted'?'Contradicciones detectadas por IA':'Afirmaciones y evidencias');
+ const items=filtered().sort((a,b)=>(b.start_ms||0)-(a.start_ms||0));$('#feedTitle').textContent=identity?'Afirmaciones recientes de '+identity:(filter==='contradicted'?'Contradicciones detectadas por IA':'Últimas afirmaciones · en directo');
  const p=$('#claims');p.innerHTML=items.length?items.slice(0,250).map(x=>{
   const [label,kind]=stage(x);
   const by=unknown(x.speaker)?'Hablante no identificado':x.speaker+(x.speaker_origin==='turn_cue'?' · atribución por turno':x.speaker_origin==='voice_embedding'?' · coincidencia acústica':'');
@@ -134,7 +136,7 @@ $('#spotlightFeed').addEventListener('click',e=>{const b=e.target.closest('[data
 $('#topics').addEventListener('click',e=>{const b=e.target.closest('[data-topic]');if(!b)return;topic=b.dataset.topic;drawTopics();drawClaims()});
 $('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;filter=b.dataset.filter;for(const x of $('#filters').querySelectorAll('[data-filter]'))x.classList.toggle('active',x.dataset.filter===filter);drawClaims()});
 $('#search').addEventListener('input',e=>{term=e.target.value.trim().toLocaleLowerCase('es');drawClaims()});
-$('#event').addEventListener('change',e=>{session=e.target.value;identity='';filter='contradicted';topic='';term='';$('#search').value='';for(const b of $('#filters').querySelectorAll('[data-filter]'))b.classList.toggle('active',b.dataset.filter==='contradicted');history.replaceState({},'',location.pathname+'?debate='+encodeURIComponent(session));last=null;load()});
+$('#event').addEventListener('change',e=>{session=e.target.value;identity='';filter='all';topic='';term='';$('#search').value='';for(const b of $('#filters').querySelectorAll('[data-filter]'))b.classList.toggle('active',b.dataset.filter==='all');history.replaceState({},'',location.pathname+'?debate='+encodeURIComponent(session));last=null;load()});
 $('#close').addEventListener('click',closeDetail);$('#overlay').addEventListener('click',e=>{if(e.target===$('#overlay'))closeDetail()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDetail()});
 agenda();setInterval(load,5000);
