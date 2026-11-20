@@ -20,6 +20,17 @@ for name,url in SOURCES.items():
    print("TITLE",soup.title.get_text(' ',strip=True)[:200] if soup.title else "none")
    media=re.findall(r'[^"\'\s<>]+(?:\.mp4|\.m3u8|\.mpd|\.webm)[^"\'\s<>]*',html,re.I)
    print("MEDIA_LINKS",json.dumps(media[:8],ensure_ascii=False)[:1200])
+   from urllib.parse import parse_qs,urlsplit
+   key=parse_qs(urlsplit(url).query).get('i',[''])[0]
+   if key:
+    matches=[a for a in soup.find_all('a',href=True) if a['href'].split('?')[0].endswith('_'+key+'.mp4')]
+    print("EXACT_ANCHOR",len(matches))
+    for tag in matches[:2]:
+     tr=tag.find_parent('tr')
+     cell=tag.find_parent('td')
+     print("PUBLISHER_ROW",tr.get_text(" ",strip=True)[:700] if tr else "NONE")
+     print("PUBLISHER_CELL",cell.get_text(" ",strip=True)[:250] if cell else "NONE")
+     print("PREV_SIBLING",str(tr.find_previous_sibling('tr'))[:400] if tr and tr.find_previous_sibling('tr') else "NONE")
    for pattern in ['download','descargar','stream','video','speaker']:
     print("MARKER",pattern,html.lower().find(pattern))
   try:
