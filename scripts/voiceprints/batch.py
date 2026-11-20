@@ -239,8 +239,14 @@ def main():
    # Three separated windows per media file prevents saturating a voice profile
    # with nearly identical contiguous samples from a single recording.
    offsets=[6,24,42]
+   if 'europapress.tv' in source['url']:
+    # Long raw parliamentary recordings may begin with agenda, applause or a
+    # different speaker. Sample several separated passages, accept <=3 per file.
+    offsets=[8,26,50,80,120,180,250,340]
    if 'rtve.es' in source['url'] and 'la-revuelta' in source['url']:offsets=[70,120,180]
+   accepted_from_media=0
    for start in offsets:
+    if accepted_from_media>=3:break
     if accepted>=target:break
     attempts+=1
     try:
@@ -257,7 +263,7 @@ def main():
      result=session.post(ENDPOINT,headers=auth_header,json=request,timeout=20)
      payload=result.json()
      if result.status_code==200 and payload.get('added')==1:
-      accepted+=1;output['accepted']+=1
+      accepted+=1;accepted_from_media+=1;output['accepted']+=1
       print('SAVED',name,accepted,'from',source['url'][:60],
        'self',payload.get('score'),'gap',payload.get('margin'),flush=True)
      else:
