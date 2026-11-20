@@ -173,7 +173,11 @@ def main():
     print('DUPLICATE_MEDIA',name,url[:100],flush=True);continue
    used_media.add(url)
    used_events.add(source['url'])
-   offsets=[float(base)+18,float(base)+36,float(base)+54] if base and float(base)>15 else [6,22,38,54]
+   # Congress URLs point to isolated intervention MP4s, NOT the full debate timeline.
+   # Original library start offsets can refer to the full session and must not be reused.
+   # Three separated windows per media file prevents saturating a voice profile
+   # with nearly identical contiguous samples from a single recording.
+   offsets=[6,24,42]
    if 'rtve.es' in source['url'] and 'la-revuelta' in source['url']:offsets=[70,120,180]
    for start in offsets:
     if accepted>=target:break
