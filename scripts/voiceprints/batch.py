@@ -149,7 +149,17 @@ class OIDC:
   self.expiry=int(payload['exp']);return self.token
 def group_sources():
  out={n:[] for n in PRIORITY};seen={n:set() for n in PRIORITY}
- # Diverse providers/events first, and seed-referenced segments second.
+ # Prefer exact MP4 URLs indexed from the publisher's speaker-labelled rows.
+ index_path=ROOT/'speaker-index.json'
+ if index_path.exists():
+  verified_index=json.loads(index_path.read_text()).get('people',{})
+  for person in PRIORITY:
+   for item in verified_index.get(person,[]):
+    media_url=item.get('url')
+    if media_url and media_url not in seen[person]:
+     out[person].append({'url':media_url,'label':item.get('label',''),'start':0})
+     seen[person].add(media_url)
+ # Diverse interviews and known sources remain as fallbacks.
  for source in MANIFEST.get('scout',[])+MANIFEST.get('seed_sources',[]):
   name=source.get('person')
   if name not in out:continue
