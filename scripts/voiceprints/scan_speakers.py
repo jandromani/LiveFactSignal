@@ -52,10 +52,10 @@ for key,url in pages.items():
    media=urljoin(url,a['href'])
    for person,aliases in ALIASES.items():
     if any(alias in norm(label) for alias in aliases):
-     if media not in events[person]:events[person].append(media)
+     if not any(media==x[0] for x in events[person]):events[person].append((media,label[:200]))
   for person,medias in events.items():
-   for m in medias:
-    if not any(z['url']==m for z in out[person]):out[person].append({'url':m,'label':person+' · '+str(key),'source_page':url,'meeting':list(key)})
+   for m,label in medias:
+    if not any(z['url']==m for z in out[person]):out[person].append({'url':m,'label':label,'source_page':url,'meeting':list(key)})
   print('SESSION',key,'mp4_rows',len(raw),'people',json.dumps({name:len(items) for name,items in events.items()},ensure_ascii=False),flush=True)
  except Exception as e:print('SOURCE_ERROR',key,type(e).__name__,str(e)[:200],flush=True)
 result={'format':1,'note':'Exact MP4 row speaker labels from official Congress. No voice samples or embeddings.', 'people':dict(out)}
