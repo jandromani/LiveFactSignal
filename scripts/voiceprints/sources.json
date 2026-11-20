@@ -275,6 +275,426 @@
       "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=777809&idLegislaturaElegida=15&mp4=mp4",
       "speaker_confirmation_required": true,
       "origin": "congress"
+    },
+    {
+      "person": "Maribel Vaquero",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Maribel Vaquero",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Maribel Vaquero",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Maribel Vaquero",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=200&fechaSesion=23%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Maribel Vaquero",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=203&fechaSesion=02%2F10%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Maribel Vaquero",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=500&codSesion=10&fechaSesion=12%2F11%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Oskar Matute",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Oskar Matute",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Oskar Matute",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Oskar Matute",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=200&fechaSesion=23%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Oskar Matute",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=203&fechaSesion=02%2F10%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Oskar Matute",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=500&codSesion=10&fechaSesion=12%2F11%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Gabriel Rufián",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Gabriel Rufián",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Gabriel Rufián",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Gabriel Rufián",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=200&fechaSesion=23%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Gabriel Rufián",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=203&fechaSesion=02%2F10%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Gabriel Rufián",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=500&codSesion=10&fechaSesion=12%2F11%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Míriam Nogueras",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Míriam Nogueras",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Míriam Nogueras",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Míriam Nogueras",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=200&fechaSesion=23%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Míriam Nogueras",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=203&fechaSesion=02%2F10%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Míriam Nogueras",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=500&codSesion=10&fechaSesion=12%2F11%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Ester Muñoz",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Ester Muñoz",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Ester Muñoz",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Ester Muñoz",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=200&fechaSesion=23%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Ester Muñoz",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=203&fechaSesion=02%2F10%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Ester Muñoz",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=500&codSesion=10&fechaSesion=12%2F11%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Patxi López",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Patxi López",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Patxi López",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Patxi López",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=200&fechaSesion=23%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Patxi López",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=203&fechaSesion=02%2F10%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Patxi López",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=500&codSesion=10&fechaSesion=12%2F11%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Pepa Millán",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Pepa Millán",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Pepa Millán",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Pepa Millán",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=200&fechaSesion=23%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Pepa Millán",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=203&fechaSesion=02%2F10%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Pepa Millán",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=500&codSesion=10&fechaSesion=12%2F11%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=200&fechaSesion=23%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=203&fechaSesion=02%2F10%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=500&codSesion=10&fechaSesion=12%2F11%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Pedro Sánchez",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Pedro Sánchez",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Pedro Sánchez",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Pedro Sánchez",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=200&fechaSesion=23%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Pedro Sánchez",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=203&fechaSesion=02%2F10%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Pedro Sánchez",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=500&codSesion=10&fechaSesion=12%2F11%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=200&fechaSesion=23%2F09%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=203&fechaSesion=02%2F10%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=500&codSesion=10&fechaSesion=12%2F11%2F2026&i=0&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress-session",
+      "note": "Discover speaker-specific rows and exact MP4s; page-wide presence is NOT proof"
     }
   ]
 }
