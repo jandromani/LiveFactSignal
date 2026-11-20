@@ -21,7 +21,7 @@ def media(url):
  text=html.unescape(r.text)
  key=parse_qs(urlsplit(url).query).get('i',[''])[0]
  urls=re.findall(r'https://static\.congreso\.es/[^"\s<>]+?\.mp4',text)
-  matches=[x for x in urls if x.endswith('_'+key+'.mp4')]
+ matches=[x for x in urls if x.endswith('_'+key+'.mp4')]
  print('MEDIA',key,'ALL',len(urls),'MATCH',len(matches),flush=True)
  i=text.find('_'+key+'.mp4')
  print('CONTEXT',re.sub(r'<[^>]+>',' ',text[max(0,i-200):i+160]).strip().replace('\n',' ')[:330])
