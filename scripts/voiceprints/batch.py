@@ -203,7 +203,7 @@ def group_sources():
  out={n:[] for n in PRIORITY};seen={n:set() for n in PRIORITY}
  # Independent editorial interviews take precedence for the four profiles
  # that had only 2-3 original references.
- underrepresented={'Alberto Núñez Feijóo','Ada Colau','Santiago Abascal','Gabriel Rufián','Pedro Sánchez'}
+ underrepresented={'Alberto Núñez Feijóo','Ada Colau','Santiago Abascal','Pedro Sánchez'}
  for item in sorted(MANIFEST.get('scout',[]),key=lambda row:-int(row.get('priority') or 0)):
   person=item.get('person');url=item.get('url','')
   if person in seen and person in underrepresented and urlsplit(url).hostname=='www.europapress.tv' and url not in seen[person]:
@@ -249,7 +249,9 @@ def main():
    # Original library start offsets can refer to the full session and must not be reused.
    # Three separated windows per media file prevents saturating a voice profile
    # with nearly identical contiguous samples from a single recording.
-   offsets=[6,24,42]
+   # Congreso intervention MP4s may include introductions and pauses.
+   # Search distinct sections while retaining the single-speaker audio gate.
+   offsets=[6,24,42,64,90,120]
    if 'europapress.tv' in source['url']:
     # Long raw parliamentary recordings may begin with agenda, applause or a
     # different speaker. Sample several separated passages, accept <=3 per file.
