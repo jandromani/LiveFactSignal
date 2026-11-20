@@ -68,10 +68,14 @@ async function refresh(){
   const sel=$('#voiceCandidate'),previous=sel.value;
   sel.innerHTML='<option value="">Seleccionar político o moderador</option>'+rosterPeople.map(p=>'<option value="'+escape(p.name)+'">'+escape(p.name)+' · '+escape(p.party)+'</option>').join('');
   if(rosterPeople.some(p=>p.name===previous))sel.value=previous;
-  const counts=new Map();for(const p of data.profiles||[])counts.set(p.person_name,(counts.get(p.person_name)||0)+1);
-  profileCount=(data.profiles||[]).filter(x=>x.source_type==='public-reference'||x.quality_status==='source-labeled').length;
+  const counts=new Map(),trained=new Map();
+  for(const p of data.profiles||[]){
+   counts.set(p.person_name,(counts.get(p.person_name)||0)+1);
+   if(p.quality_status==='operator-reviewed')trained.set(p.person_name,(trained.get(p.person_name)||0)+1);
+  }
+  profileCount=(data.profiles||[]).filter(x=>x.source_type==='public-reference'&&['source-labeled','operator-reviewed'].includes(x.quality_status)).length;
   sessionId=id;lastRefresh=Date.now();
-  $('#voiceProfiles').innerHTML=(data.profiles||[]).length?rosterPeople.map(p=>'<div class="measure"><span>'+escape(p.name)+'</span><strong>'+(counts.get(p.name)||0)+' muestras</strong></div>').join('')+
+  $('#voiceProfiles').innerHTML=(data.profiles||[]).length?rosterPeople.map(p=>'<div class="measure"><span>'+escape(p.name)+'</span><strong>'+(counts.get(p.name)||0)+' huellas · '+(trained.get(p.name)||0)+' entrenadas</strong></div>').join('')+
    '<div class="caption">'+profileCount+' referencias de la biblioteca. Identidades acústicas provisionales; similitud coseno, no probabilidad.</div>':
    '<div class="micro">Sin referencias para esta sesión. El panel las recupera automáticamente de la biblioteca etiquetada.</div>';
   $('#voiceRemove').innerHTML='<option value="">Eliminar una muestra concreta…</option>'+(data.profiles||[]).map(p=>'<option value="'+escape(p.id)+'">'+escape(p.person_name)+' · '+escape(p.source_type)+' · '+new Date(p.created_at).toLocaleString('es-ES')+'</option>').join('');
