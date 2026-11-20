@@ -1,11 +1,6 @@
 name: Enroll 10 acoustic references for 12 political debate participants
+# Corpus completed (120/120): opt-in reruns only, avoiding needless audio processing.
 on:
-  push:
-    paths:
-      - '.github/workflows/voiceprints-batch.yml'
-      - 'scripts/voiceprints/batch.py'
-      - 'scripts/voiceprints/sources.json'
-      - 'scripts/voiceprints/speaker-index.json'
   workflow_dispatch:
 concurrency:
   group: voiceprints-enrollment-master
