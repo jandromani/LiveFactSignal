@@ -96,7 +96,8 @@ def media(source,name):
    expected={'Alberto Núñez Feijóo':['feijoo','alberto nunez feijoo'],
     'Santiago Abascal':['abascal','santiago abascal'],
     'Ada Colau':['colau','ada colau'],
-    'Pepa Millán':['pepa millan','millan']}
+    'Pepa Millán':['pepa millan','millan'],
+    'Gabriel Rufián':['rufian','gabriel rufian']}
    return any(words.startswith(prefix+' ') or words.startswith(prefix+':') or words==prefix for prefix in expected.get(name,[]))
   # The article must identify the speaker in its headline AND body.
   publisher_text=norm(soup.get_text(' ',strip=True))
@@ -116,6 +117,8 @@ def media(source,name):
    raise ValueError('Publisher article does not confirm Millán full name')
   if name=='Ada Colau' and 'ada colau' not in publisher_text:
    raise ValueError('Publisher article does not confirm Colau full name')
+  if name=='Gabriel Rufián' and 'gabriel rufian' not in publisher_text:
+   raise ValueError('Publisher article does not confirm Rufián full name')
   links=re.findall(r'https://video\d+\.europapress\.net/[^"\s<>]+?\.mp4',html.unescape(r.text))
   if not links:raise ValueError('No EuropePress MP4')
   return links[0],title[:180],source.get('start')
