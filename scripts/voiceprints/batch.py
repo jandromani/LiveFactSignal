@@ -49,7 +49,7 @@ def media(source,name):
    raise ValueError('Candidate not explicitly named in indexed intervention label')
   if label.lower().startswith(('pregunta','votaciones','del grupo','mocion')):
    raise ValueError('Agenda text is not a speaker')
-  if not re.match(r'^[^,]{2,75},\\s*[^()]{2,80}\\s*\\([^)]+\\)',label):
+  if not re.match(r'^[^,]{2,75},\s*[^()]{2,80}\s*\([^)]+\)',label):
    raise ValueError('Source lacks formal congressional speaker-row label')
   return url,label[:180],None
  if host=='app.congreso.es':
