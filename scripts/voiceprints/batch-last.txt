@@ -1,7 +1,34 @@
 MODEL_VERIFIED aa3cfc16963a10586a9393f5035d6d6b57e98d358b347f80c2a30bf4f00ceba2
-CANDIDATE Maribel Vaquero SOURCES 25
-FAILED_CLIP Maribel Vaquero 6 Low speech fraction
-REJECTED Maribel Vaquero at 24 HTTP 409 cause Duplicate/nearby reference
-REJECTED Maribel Vaquero at 42 HTTP 409 cause Duplicate/nearby reference
-FAILED_CLIP Maribel Vaquero 6 Low speech fraction
-FAILED_CLIP Maribel Vaquero 24 Low speech fraction
+CANDIDATE Alberto Núñez Feijóo SOURCES 43
+SOURCE_REJECT Alberto Núñez Feijóo ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+REJECTED Alberto Núñez Feijóo at 6 HTTP 409 cause Target already met
+CANDIDATE_RESULT Alberto Núñez Feijóo new_this_run 0 already_full True
+CANDIDATE Pepa Millán SOURCES 45
+FAILED_CLIP Pepa Millán 6 Low speech fraction
+FAILED_CLIP Pepa Millán 24 Low speech fraction
+FAILED_CLIP Pepa Millán 42 Low speech fraction
+REJECTED Pepa Millán at 6 HTTP 422 cause Acoustic validation failed
+REJECTED Pepa Millán at 24 HTTP 422 cause Acoustic validation failed
+REJECTED Pepa Millán at 42 HTTP 422 cause Acoustic validation failed
+REJECTED Pepa Millán at 6 HTTP 422 cause Acoustic validation failed
+REJECTED Pepa Millán at 24 HTTP 422 cause Acoustic validation failed
+REJECTED Pepa Millán at 42 HTTP 422 cause Acoustic validation failed
+SOURCE_REJECT Pepa Millán ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+FAILED_CLIP Pepa Millán 6 Low speech fraction
+FAILED_CLIP Pepa Millán 24 Low speech fraction
+FAILED_CLIP Pepa Millán 42 Low speech fraction
+FAILED_CLIP Pepa Millán 6 Low speech fraction
+FAILED_CLIP Pepa Millán 24 Low speech fraction
+FAILED_CLIP Pepa Millán 42 Low speech fraction
+REJECTED Pepa Millán at 6 HTTP 422 cause Acoustic validation failed
+REJECTED Pepa Millán at 24 HTTP 422 cause Acoustic validation failed
+REJECTED Pepa Millán at 42 HTTP 422 cause Acoustic validation failed
+REJECTED Pepa Millán at 6 HTTP 422 cause Acoustic validation failed
+FAILED_CLIP Pepa Millán 24 Low speech fraction
+REJECTED Pepa Millán at 42 HTTP 422 cause Acoustic validation failed
+REJECTED Pepa Millán at 6 HTTP 422 cause Acoustic validation failed
+REJECTED Pepa Millán at 24 HTTP 422 cause Acoustic validation failed
+REJECTED Pepa Millán at 42 HTTP 422 cause Acoustic validation failed
+REJECTED Pepa Millán at 6 HTTP 422 cause Acoustic validation failed
+REJECTED Pepa Millán at 24 HTTP 422 cause Acoustic validation failed
+FAILED_CLIP Pepa Millán 42 Low speech fraction
