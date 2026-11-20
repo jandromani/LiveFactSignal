@@ -29,6 +29,8 @@ jobs:
           python -m py_compile scripts/voiceprints/batch.py
           python -m json.tool scripts/voiceprints/sources.json >/dev/null
       - name: Run acoustic quality and publisher attribution checks; import only through GitHub OIDC
+        env:
+          VOICEPRINT_TARGETS: 'Gabriel Rufián|Santiago Abascal'
         shell: bash
         run: |
           set -o pipefail
