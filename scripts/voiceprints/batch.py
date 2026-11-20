@@ -100,8 +100,14 @@ def media(source,name):
    return any(words.startswith(prefix+' ') or words.startswith(prefix+':') or words==prefix for prefix in expected.get(name,[]))
   # The article must identify the speaker in its headline AND body.
   publisher_text=norm(soup.get_text(' ',strip=True))
-  if not (verified(name,title) or normalized_title_prefix()):
-   raise ValueError('EuropePress headline does not label the speaker')
+  # A party-prefixed headline may describe a single spokeswoman.
+  # Require the lead text to explicitly name the spokeswoman and her role.
+  pepa_lead=(
+   name=='Pepa Millán' and norm(title).startswith(('vox ','vox:'))
+   and re.search(r'(?:(?:declaraciones|la portavoz|la representante)[^.!?]{0,110})pepa (?:rodriguez de )?millan',publisher_text[:3500]) is not None
+  )
+  if not (verified(name,title) or normalized_title_prefix() or pepa_lead):
+   raise ValueError('EuropePress headline/lead does not establish the speaker')
   if name=='Alberto Núñez Feijóo' and 'alberto nunez feijoo' not in publisher_text:
    raise ValueError('Publisher article does not confirm Feijóo full name')
   if name=='Santiago Abascal' and 'santiago abascal' not in publisher_text:
