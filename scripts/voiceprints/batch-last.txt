@@ -1,0 +1,129 @@
+MODEL_VERIFIED aa3cfc16963a10586a9393f5035d6d6b57e98d358b347f80c2a30bf4f00ceba2
+CANDIDATE Maribel Vaquero SOURCES 3
+SOURCE_REJECT Maribel Vaquero Publisher row does not explicitly name Maribel Vaquero: Cruset Domènech, Josep Maria (GJxCAT)
+SAVED Maribel Vaquero 1 from https://app.congreso.es/AudiovisualCongreso/audiovisualdetal self 0.844 gap 0.471
+SAVED Maribel Vaquero 2 from https://app.congreso.es/AudiovisualCongreso/audiovisualdetal self 0.937 gap 0.544
+FAILED_CLIP Maribel Vaquero 426.5 Low speech fraction
+FAILED_CLIP Maribel Vaquero 194.5 Low speech fraction
+FAILED_CLIP Maribel Vaquero 212.5 Low speech fraction
+FAILED_CLIP Maribel Vaquero 230.5 Low speech fraction
+CANDIDATE_RESULT Maribel Vaquero 4 / 10 total (including baseline)
+CANDIDATE Oskar Matute SOURCES 4
+SOURCE_REJECT Oskar Matute Publisher row does not explicitly name Oskar Matute: Del Grupo Parlamentario Popular en el Congreso, a la Ministra de Vivienda y Agenda Urbana sobre la política
+SOURCE_REJECT Oskar Matute Publisher row does not explicitly name Oskar Matute: Marí Bosó, José Vicente (GP)
+FAILED_CLIP Oskar Matute 95.2 Low speech fraction
+SAVED Oskar Matute 1 from https://app.congreso.es/AudiovisualCongreso/audiovisualdetal self 0.922 gap 0.261
+FAILED_CLIP Oskar Matute 131.2 Insufficient speech
+FAILED_CLIP Oskar Matute 331.7 Low speech fraction
+FAILED_CLIP Oskar Matute 349.7 Low speech fraction
+FAILED_CLIP Oskar Matute 367.7 Low speech fraction
+CANDIDATE_RESULT Oskar Matute 3 / 10 total (including baseline)
+CANDIDATE Gabriel Rufián SOURCES 4
+SOURCE_REJECT Gabriel Rufián Publisher row does not explicitly name Gabriel Rufián: Bolaños García, Félix (GS) (Ministro de la Presidencia, Justicia y Relaciones con las Cortes)
+SOURCE_REJECT Gabriel Rufián Publisher row does not explicitly name Gabriel Rufián: Del Grupo Parlamentario Mixto (Sr. Catalán Higueras), a la Vicepresidenta Tercera del Gobierno y Ministra
+FAILED_CLIP Gabriel Rufián 98.0 Low speech fraction
+SAVED Gabriel Rufián 1 from https://app.congreso.es/AudiovisualCongreso/audiovisualdetal self 0.852 gap 0.22
+FAILED_CLIP Gabriel Rufián 134.0 Low speech fraction
+FAILED_CLIP Gabriel Rufián 68.0 Low speech fraction
+FAILED_CLIP Gabriel Rufián 86.0 Low speech fraction
+SAVED Gabriel Rufián 2 from https://app.congreso.es/AudiovisualCongreso/audiovisualdetal self 0.885 gap 0.236
+CANDIDATE_RESULT Gabriel Rufián 4 / 10 total (including baseline)
+CANDIDATE Emilio Delgado SOURCES 3
+REJECTED Emilio Delgado at 6 HTTP 422 cause Acoustic validation failed
+REJECTED Emilio Delgado at 22 HTTP 422 cause Acoustic validation failed
+REJECTED Emilio Delgado at 38 HTTP 422 cause Acoustic validation failed
+REJECTED Emilio Delgado at 54 HTTP 422 cause Acoustic validation failed
+REJECTED Emilio Delgado at 6 HTTP 422 cause Acoustic validation failed
+REJECTED Emilio Delgado at 22 HTTP 422 cause Acoustic validation failed
+REJECTED Emilio Delgado at 38 HTTP 422 cause Acoustic validation failed
+REJECTED Emilio Delgado at 54 HTTP 422 cause Acoustic validation failed
+SAVED Emilio Delgado 1 from https://www.europapress.tv/politica/1132053/1/emilio-delgado self 0.977 gap 0.468
+SAVED Emilio Delgado 2 from https://www.europapress.tv/politica/1132053/1/emilio-delgado self 0.927 gap 0.456
+FAILED_CLIP Emilio Delgado 92.0 Insufficient speech
+CANDIDATE_RESULT Emilio Delgado 4 / 10 total (including baseline)
+CANDIDATE Míriam Nogueras SOURCES 4
+SOURCE_REJECT Míriam Nogueras Publisher row does not explicitly name Míriam Nogueras: López Águeda, Óscar (Ministro para la Transformación Digital y de la Función Pública)
+SOURCE_REJECT Míriam Nogueras No exact indexed MP4 for intervention 774636C
+SAVED Míriam Nogueras 1 from https://app.congreso.es/AudiovisualCongreso/audiovisualdetal self 0.887 gap 0.435
+FAILED_CLIP Míriam Nogueras 439.3 Low speech fraction
+SAVED Míriam Nogueras 2 from https://app.congreso.es/AudiovisualCongreso/audiovisualdetal self 0.911 gap 0.503
+SAVED Míriam Nogueras 3 from https://app.congreso.es/AudiovisualCongreso/audiovisualdetal self 0.936 gap 0.407
+FAILED_CLIP Míriam Nogueras 22 Low speech fraction
+FAILED_CLIP Míriam Nogueras 38 Insufficient speech
+FAILED_CLIP Míriam Nogueras 54 Insufficient speech
+CANDIDATE_RESULT Míriam Nogueras 5 / 10 total (including baseline)
+CANDIDATE Ester Muñoz SOURCES 5
+SOURCE_REJECT Ester Muñoz Publisher row does not explicitly name Ester Muñoz: Del Grupo Parlamentario Popular en el Congreso, a la Ministra de Educación, Formación Profesional y Deportes
+SOURCE_REJECT Ester Muñoz Publisher row does not explicitly name Ester Muñoz: PREGUNTA de la Diputada Dª IDOIA SAGASTIZABAL UNZETABARRENETXEA, del Grupo Parlamentario Vasco (EAJ-PNV), qu
+SOURCE_REJECT Ester Muñoz Publisher row does not explicitly name Ester Muñoz: España García, Arcadi (Ministro de Hacienda)
+FAILED_CLIP Ester Muñoz 81.7 Low speech fraction
+REJECTED Ester Muñoz at 99.7 HTTP 422 cause Acoustic validation failed
+FAILED_CLIP Ester Muñoz 117.7 Insufficient speech
+SAVED Ester Muñoz 1 from https://app.congreso.es/AudiovisualCongreso/audiovisualdetal self 0.844 gap 0.285
+FAILED_CLIP Ester Muñoz 96.5 Low speech fraction
+FAILED_CLIP Ester Muñoz 114.5 Insufficient speech
+CANDIDATE_RESULT Ester Muñoz 3 / 10 total (including baseline)
+CANDIDATE Patxi López SOURCES 3
+SOURCE_REJECT Patxi López Publisher row does not explicitly name Patxi López: Matute García de Jalón, Oskar (GEH Bildu)
+SAVED Patxi López 1 from https://app.congreso.es/AudiovisualCongreso/audiovisualdetal self 0.896 gap 0.373
+SAVED Patxi López 2 from https://app.congreso.es/AudiovisualCongreso/audiovisualdetal self 0.819 gap 0.355
+FAILED_CLIP Patxi López 746.3 Low speech fraction
+SAVED Patxi López 3 from https://app.congreso.es/AudiovisualCongreso/audiovisualdetal self 0.883 gap 0.306
+SAVED Patxi López 4 from https://app.congreso.es/AudiovisualCongreso/audiovisualdetal self 0.893 gap 0.365
+FAILED_CLIP Patxi López 134.0 Low speech fraction
+CANDIDATE_RESULT Patxi López 6 / 10 total (including baseline)
+CANDIDATE Pepa Millán SOURCES 2
+FAILED_CLIP Pepa Millán 6 Low speech fraction
+FAILED_CLIP Pepa Millán 22 Insufficient speech
+FAILED_CLIP Pepa Millán 38 Insufficient speech
+FAILED_CLIP Pepa Millán 54 Insufficient speech
+FAILED_CLIP Pepa Millán 6 Low speech fraction
+FAILED_CLIP Pepa Millán 22 Insufficient speech
+FAILED_CLIP Pepa Millán 38 Insufficient speech
+FAILED_CLIP Pepa Millán 54 Insufficient speech
+CANDIDATE_RESULT Pepa Millán 2 / 10 total (including baseline)
+CANDIDATE Ada Colau SOURCES 4
+REJECTED Ada Colau at 70 HTTP 400 cause Invalid source URL
+REJECTED Ada Colau at 120 HTTP 400 cause Invalid source URL
+REJECTED Ada Colau at 180 HTTP 400 cause Invalid source URL
+SOURCE_REJECT Ada Colau RTVE title mismatch
+FAILED_CLIP Ada Colau 45.0 ffmpeg: media.org&utm_campaign=imageinfo&utm_content=original.
+Error opening input files: Server returned 429 Too Many Requests
+
+FAILED_CLIP Ada Colau 63.0 ffmpeg: media.org&utm_campaign=imageinfo&utm_content=original.
+Error opening input files: Server returned 429 Too Many Requests
+
+FAILED_CLIP Ada Colau 81.0 ffmpeg: media.org&utm_campaign=imageinfo&utm_content=original.
+Error opening input files: Server returned 429 Too Many Requests
+
+SOURCE_REJECT Ada Colau Wikimedia title does not label person
+CANDIDATE_RESULT Ada Colau 2 / 10 total (including baseline)
+CANDIDATE Alberto Núñez Feijóo SOURCES 6
+SOURCE_REJECT Alberto Núñez Feijóo Publisher row does not explicitly name Alberto Núñez Feijóo: Iñarritu García, Jon (GEH Bildu)
+SOURCE_REJECT Alberto Núñez Feijóo Publisher row does not explicitly name Alberto Núñez Feijóo: Sánchez Pérez-Castejón, Pedro (GS) (Presidente del Gobierno)
+SOURCE_REJECT Alberto Núñez Feijóo Publisher row does not explicitly name Alberto Núñez Feijóo: Robles López, Joaquín (GVOX)
+SOURCE_REJECT Alberto Núñez Feijóo Publisher row does not explicitly name Alberto Núñez Feijóo: Sagastizabal Unzetabarrenetxea, Idoia (GV (EAJ-PNV))
+SOURCE_REJECT Alberto Núñez Feijóo Publisher row does not explicitly name Alberto Núñez Feijóo: Votaciones
+SOURCE_REJECT Alberto Núñez Feijóo Unapproved source type: ppcantabria.org
+CANDIDATE_RESULT Alberto Núñez Feijóo 2 / 10 total (including baseline)
+CANDIDATE Pedro Sánchez SOURCES 1
+FAILED_CLIP Pedro Sánchez 96.0 ffmpeg: media.org&utm_campaign=imageinfo&utm_content=original.
+Error opening input files: Server returned 429 Too Many Requests
+
+FAILED_CLIP Pedro Sánchez 114.0 ffmpeg: media.org&utm_campaign=imageinfo&utm_content=original.
+Error opening input files: Server returned 429 Too Many Requests
+
+FAILED_CLIP Pedro Sánchez 132.0 ffmpeg: media.org&utm_campaign=imageinfo&utm_content=original.
+Error opening input files: Server returned 429 Too Many Requests
+
+CANDIDATE_RESULT Pedro Sánchez 2 / 10 total (including baseline)
+CANDIDATE Santiago Abascal SOURCES 2
+FAILED_CLIP Santiago Abascal 6 Low speech fraction
+FAILED_CLIP Santiago Abascal 22 Low speech fraction
+FAILED_CLIP Santiago Abascal 38 Low speech fraction
+FAILED_CLIP Santiago Abascal 54 Low speech fraction
+REJECTED Santiago Abascal at 151.9 HTTP 422 cause Acoustic validation failed
+FAILED_CLIP Santiago Abascal 169.9 Insufficient speech
+FAILED_CLIP Santiago Abascal 187.9 Insufficient speech
+CANDIDATE_RESULT Santiago Abascal 2 / 10 total (including baseline)
+COMPLETE 15 new verified references across 12 people

@@ -1,0 +1,105 @@
+{
+  "model_id": "sherpaw-campplus-zh-en-advanced@5fc23543",
+  "goal_each": 10,
+  "initial_references_each": 2,
+  "people": {
+    "Maribel Vaquero": {
+      "added": 2,
+      "expected_total": 4,
+      "source_pages_attempted": 2,
+      "clip_attempts": 6,
+      "meets_ten": false
+    },
+    "Oskar Matute": {
+      "added": 1,
+      "expected_total": 3,
+      "source_pages_attempted": 2,
+      "clip_attempts": 6,
+      "meets_ten": false
+    },
+    "Gabriel Rufián": {
+      "added": 2,
+      "expected_total": 4,
+      "source_pages_attempted": 2,
+      "clip_attempts": 6,
+      "meets_ten": false
+    },
+    "Emilio Delgado": {
+      "added": 2,
+      "expected_total": 4,
+      "source_pages_attempted": 3,
+      "clip_attempts": 11,
+      "meets_ten": false
+    },
+    "Míriam Nogueras": {
+      "added": 3,
+      "expected_total": 5,
+      "source_pages_attempted": 2,
+      "clip_attempts": 7,
+      "meets_ten": false
+    },
+    "Ester Muñoz": {
+      "added": 1,
+      "expected_total": 3,
+      "source_pages_attempted": 2,
+      "clip_attempts": 6,
+      "meets_ten": false
+    },
+    "Patxi López": {
+      "added": 4,
+      "expected_total": 6,
+      "source_pages_attempted": 2,
+      "clip_attempts": 6,
+      "meets_ten": false
+    },
+    "Pepa Millán": {
+      "added": 0,
+      "expected_total": 2,
+      "source_pages_attempted": 2,
+      "clip_attempts": 8,
+      "meets_ten": false
+    },
+    "Ada Colau": {
+      "added": 0,
+      "expected_total": 2,
+      "source_pages_attempted": 2,
+      "clip_attempts": 6,
+      "meets_ten": false
+    },
+    "Alberto Núñez Feijóo": {
+      "added": 0,
+      "expected_total": 2,
+      "source_pages_attempted": 0,
+      "clip_attempts": 0,
+      "meets_ten": false
+    },
+    "Pedro Sánchez": {
+      "added": 0,
+      "expected_total": 2,
+      "source_pages_attempted": 1,
+      "clip_attempts": 3,
+      "meets_ten": false
+    },
+    "Santiago Abascal": {
+      "added": 0,
+      "expected_total": 2,
+      "source_pages_attempted": 2,
+      "clip_attempts": 7,
+      "meets_ten": false
+    }
+  },
+  "accepted": 15,
+  "rejected": 57,
+  "failures": {
+    "Maribel Vaquero @ https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?co": "Publisher row does not explicitly name Maribel Vaquero: Cruset Domènech, Josep Maria (GJxCAT)",
+    "Oskar Matute @ https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?co": "Publisher row does not explicitly name Oskar Matute: Marí Bosó, José Vicente (GP)",
+    "Gabriel Rufián @ https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?co": "Publisher row does not explicitly name Gabriel Rufián: Del Grupo Parlamentario Mixto (Sr. Catalán Higueras), a la Vicepresidenta Tercera del Gobierno y Ministra para la Transi",
+    "Míriam Nogueras @ https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?co": "No exact indexed MP4 for intervention 774636C",
+    "Ester Muñoz @ https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?co": "Publisher row does not explicitly name Ester Muñoz: España García, Arcadi (Ministro de Hacienda)",
+    "Patxi López @ https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?co": "Publisher row does not explicitly name Patxi López: Matute García de Jalón, Oskar (GEH Bildu)",
+    "Ada Colau @ https://www.rtve.es/play/videos/la-hora-de-la-1/colau-sobre-dimision-puente": "RTVE title mismatch",
+    "Ada Colau @ https://commons.wikimedia.org/wiki/File:La_pla%C3%A7a_de_Sant_Jaume_rep_la_": "Wikimedia title does not label person",
+    "Alberto Núñez Feijóo @ https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?co": "Publisher row does not explicitly name Alberto Núñez Feijóo: Votaciones",
+    "Alberto Núñez Feijóo @ https://ppcantabria.org/actualidad/noticias/13518-feijoo-el-presidente-de-e": "Unapproved source type: ppcantabria.org"
+  }
+}
