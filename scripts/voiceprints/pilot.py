@@ -6,6 +6,7 @@ import os,sys,re,html,hashlib,tempfile,subprocess,requests,json
 from urllib.parse import parse_qs,urlsplit
 import numpy as np
 import soundfile as sf
+import imageio_ffmpeg
 from pathlib import Path
 
 MODEL="https://huggingface.co/moeru-ai/sherpaw-campplus-zh-en-advanced/resolve/5fc23543ac94200ae77514cf1c40596c5d70f6e8/install/bin/wasm/preload.data"
@@ -29,7 +30,7 @@ def media(url):
 def extract(url,seek=5,duration=12):
  with tempfile.TemporaryDirectory() as d:
   output=d+'/sample.wav'
-  cmd=['ffmpeg','-hide_banner','-loglevel','error','-nostdin','-ss',str(seek),'-i',url,'-t',str(duration),'-ac','1','-ar','16000','-y',output]
+  cmd=[imageio_ffmpeg.get_ffmpeg_exe(),'-hide_banner','-loglevel','error','-nostdin','-ss',str(seek),'-i',url,'-t',str(duration),'-ac','1','-ar','16000','-y',output]
   r=subprocess.run(cmd,capture_output=True,text=True,timeout=130)
   print('FFMPEG',r.returncode,r.stderr[-450:].replace('\n',' '),flush=True)
   if r.returncode:return None
