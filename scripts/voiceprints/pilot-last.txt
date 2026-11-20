@@ -7,7 +7,7 @@ VIDEO https://static.congreso.es/audiovisual/video/leg15/400/15_000400_198/corte
 FFMPEG 0 
 AUDIO 12.0 s 16000 Hz RMS 0.001 clipped_pct 0.0
 EMBEDDING_COMPUTED Alberto Núñez Feijóo dimension (192,) L2 10.872 segment 6
-FFMPEG 0 
+FFMPEG 0 [tcp @ 0x5e59cf39a240] Connection to tcp://static.congreso.es:443 failed: Connection timed out 
 AUDIO 12.0 s 16000 Hz RMS 0.0094 clipped_pct 0.0
 EMBEDDING_COMPUTED Alberto Núñez Feijóo dimension (192,) L2 6.378 segment 20
 COSINE_QA Alberto Núñez Feijóo 6 vs Alberto Núñez Feijóo 20 0.483
