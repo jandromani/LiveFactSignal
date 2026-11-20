@@ -97,7 +97,8 @@ def media(source,name):
     'Santiago Abascal':['abascal','santiago abascal'],
     'Ada Colau':['colau','ada colau'],
     'Pepa Millán':['pepa millan','millan'],
-    'Gabriel Rufián':['rufian','gabriel rufian']}
+    'Gabriel Rufián':['rufian','gabriel rufian'],
+    'Pedro Sánchez':['sanchez','pedro sanchez']}
    return any(words.startswith(prefix+' ') or words.startswith(prefix+':') or words==prefix for prefix in expected.get(name,[]))
   # The article must identify the speaker in its headline AND body.
   publisher_text=norm(soup.get_text(' ',strip=True))
@@ -119,6 +120,8 @@ def media(source,name):
    raise ValueError('Publisher article does not confirm Colau full name')
   if name=='Gabriel Rufián' and 'gabriel rufian' not in publisher_text:
    raise ValueError('Publisher article does not confirm Rufián full name')
+  if name=='Pedro Sánchez' and 'pedro sanchez' not in publisher_text:
+   raise ValueError('Publisher article does not confirm Sánchez full name')
   links=re.findall(r'https://video\d+\.europapress\.net/[^"\s<>]+?\.mp4',html.unescape(r.text))
   if not links:raise ValueError('No EuropePress MP4')
   return links[0],title[:180],source.get('start')
@@ -196,7 +199,7 @@ def group_sources():
  out={n:[] for n in PRIORITY};seen={n:set() for n in PRIORITY}
  # Independent editorial interviews take precedence for the four profiles
  # that had only 2-3 original references.
- underrepresented={'Alberto Núñez Feijóo','Ada Colau','Santiago Abascal'}
+ underrepresented={'Alberto Núñez Feijóo','Ada Colau','Santiago Abascal','Gabriel Rufián','Pedro Sánchez'}
  for item in MANIFEST.get('scout',[]):
   person=item.get('person');url=item.get('url','')
   if person in underrepresented and urlsplit(url).hostname=='www.europapress.tv' and url not in seen[person]:
