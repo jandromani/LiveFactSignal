@@ -1,0 +1,22 @@
+name: Voiceprint archive access probe
+on:
+  push:
+    paths:
+      - '.github/workflows/voiceprint-probe.yml'
+      - 'scripts/voiceprints/probe.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install media audit dependencies
+        run: pip install -q requests beautifulsoup4 yt-dlp
+      - name: Probe source pages, playable media and exact CAM++ asset
+        run: python -u scripts/voiceprints/probe.py
