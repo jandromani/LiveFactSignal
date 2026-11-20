@@ -163,7 +163,8 @@ async function drain(){
   if(item.id!==debate())return;
   const match=await api('match-v2',{id:item.id,embedding:sample.embedding,start_ms:item.start_ms,end_ms:item.end_ms,seq:item.seq});
   lastVoiceResult=Date.now();
-  if(match.matched)status('CAM++ · '+match.name+' · similitud '+Number(match.score).toFixed(3)+' · margen '+Number(match.gap).toFixed(3)+' · '+match.changed+' afirmaciones etiquetadas. Atribución provisional.');
+  if(match.matched)status('CAM++ · '+match.name+' · similitud '+Number(match.score).toFixed(3)+' · margen '+Number(match.gap).toFixed(3)+' · '+match.changed+' afirmaciones etiquetadas'+(match.promoted_prior?' · tramo anterior confirmado por continuidad':'')+'. Atribución provisional.');
+  else if(match.status==='candidate')status('CAM++ · candidato acústico detectado ('+Number(match.score).toFixed(3)+'), esperando siguiente fragmento para confirmar continuidad. Sin atribución todavía.');
   else status('CAM++ · Voz no concluyente · máximo '+Number(match.score||0).toFixed(3)+' · no se etiqueta a ningún candidato.');
   window.dispatchEvent(new CustomEvent('debate-voice-result',{detail:match}));
  }catch(e){status('Comparación acústica: '+e.message,true);console.warn('[VOICE v2]',e)}
