@@ -43,6 +43,15 @@ def verified(name,text):
  t=norm(text);return any(x in t for x in ALIASES[name])
 def media(source,name):
  url=source['url'];host=urlsplit(url).hostname or ''
+ if host=='static.congreso.es':
+  label=str(source.get('label') or '').strip()
+  if not verified(name,label):
+   raise ValueError('Candidate not explicitly named in indexed intervention label')
+  if label.lower().startswith(('pregunta','votaciones','del grupo','mocion')):
+   raise ValueError('Agenda text is not a speaker')
+  if not re.match(r'^[^,]{2,75},\\s*[^()]{2,80}\\s*\\([^)]+\\)',label):
+   raise ValueError('Source lacks formal congressional speaker-row label')
+  return url,label[:180],None
  if host=='app.congreso.es':
   r=session.get(url,timeout=25);r.raise_for_status()
   page=html.unescape(r.text);key=parse_qs(urlsplit(url).query).get('i',[''])[0]
