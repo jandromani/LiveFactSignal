@@ -229,7 +229,7 @@ def main():
   target=8;accepted=0;attempts=0;used_events=set();already_full=False
   used_media=set()
   for source in sources[name]:
-   if accepted>=target or already_full:break
+   if accepted>=target or already_full or attempts>=42:break
    try:url,label,base=media(source,name)
    except Exception as e:
     output['failures'][name+' @ '+source['url'][:75]]=str(e)[:180];print('SOURCE_REJECT',name,str(e)[:160],flush=True);continue
@@ -249,7 +249,7 @@ def main():
    if 'rtve.es' in source['url'] and 'la-revuelta' in source['url']:offsets=[70,120,180]
    accepted_from_media=0
    for start in offsets:
-    if accepted_from_media>=3:break
+    if accepted_from_media>=3 or attempts>=42:break
     if accepted>=target:break
     attempts+=1
     try:
