@@ -193,7 +193,7 @@ def group_sources():
  out={n:[] for n in PRIORITY};seen={n:set() for n in PRIORITY}
  # Independent editorial interviews take precedence for the four profiles
  # that had only 2-3 original references.
- underrepresented={'Alberto Núñez Feijóo','Ada Colau','Pepa Millán','Santiago Abascal'}
+ underrepresented={'Alberto Núñez Feijóo','Ada Colau','Santiago Abascal'}
  for item in MANIFEST.get('scout',[]):
   person=item.get('person');url=item.get('url','')
   if person in underrepresented and urlsplit(url).hostname=='www.europapress.tv' and url not in seen[person]:
@@ -268,7 +268,7 @@ def main():
        'self',payload.get('score'),'gap',payload.get('margin'),flush=True)
      else:
       output['rejected']+=1
-      print('REJECTED',name,'at',start,'HTTP',result.status_code,'cause',payload.get('error'),flush=True)
+      print('REJECTED',name,'at',start,'HTTP',result.status_code,'cause',payload.get('error'),'own',payload.get('own'),'other',payload.get('other'),'clip',url.rsplit('/',1)[-1][:50],flush=True)
       if payload.get('error')=='Target already met':already_full=True;break
     except Exception as e:
      output['rejected']+=1
