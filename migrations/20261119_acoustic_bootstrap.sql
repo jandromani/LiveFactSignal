@@ -66,3 +66,10 @@ FOR EACH ROW EXECUTE FUNCTION public.lfs_auto_roster_for_live_run();
 CREATE UNIQUE INDEX IF NOT EXISTS lfs_voice_match_v2_idempotent
 ON public.voice_match_events(debate_id,seq,start_ms,end_ms,method)
 WHERE method='campplus-v2-span';
+-- 2026-11-20: Persist low-confidence acoustic candidates for a two-chunk continuity rule.
+-- A candidate is not a confirmed speaker. No raw PCM or embedding is persisted here.
+ALTER TABLE public.voice_match_events ADD COLUMN IF NOT EXISTS candidate_name text;
+ALTER TABLE public.voice_match_events ADD COLUMN IF NOT EXISTS candidate_party text;
+CREATE INDEX IF NOT EXISTS lfs_voice_candidate_sequence_idx
+ ON public.voice_match_events(debate_id,seq DESC,candidate_name,decision)
+ WHERE method='campplus-v2-span' AND candidate_name IS NOT NULL;
