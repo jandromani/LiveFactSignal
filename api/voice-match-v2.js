@@ -59,7 +59,7 @@ export default async function handler(req,res){
   const sql=neon(process.env.DATABASE_URL);
   const [seg,refs]=await Promise.all([
    sql.query("SELECT start_ms,end_ms,status FROM audio_segments WHERE debate_id=$1 AND seq=$2 LIMIT 1",[id,seq]),
-   sql.query("SELECT v.person_name,r.party,v.embedding FROM voice_profiles v JOIN debate_roster r ON r.debate_id=v.debate_id AND r.name=v.person_name WHERE v.debate_id=$1 AND v.model_id=$2 AND v.source_type='public-reference' AND v.quality_status='source-labeled' AND r.role='candidate' LIMIT 120",[id,MODEL])
+   sql.query("SELECT v.person_name,r.party,v.embedding FROM voice_profiles v JOIN debate_roster r ON r.debate_id=v.debate_id AND r.name=v.person_name WHERE v.debate_id=$1 AND v.model_id=$2 AND v.source_type='public-reference' AND v.quality_status IN ('source-labeled','operator-reviewed') AND r.role='candidate' LIMIT 120",[id,MODEL])
   ]);
   const audio=seg[0];
   if(!audio||audio.status!=='processed')return answer(res,409,{error:'El fragmento todavía no se ha guardado'});
