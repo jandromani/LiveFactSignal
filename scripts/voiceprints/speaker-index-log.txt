@@ -1,0 +1,14 @@
+PAGES 12
+SESSION ('400', '198', '16/09/2026') mp4_rows 173 people {"Alberto Núñez Feijóo": 2, "Pedro Sánchez": 6, "Míriam Nogueras": 2, "Ester Muñoz": 2, "Pepa Millán": 2, "Oskar Matute": 1}
+SOURCE_ERROR ('400', '200', '23/09/2026') ConnectionError ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+SESSION ('400', '194', '03/09/2026') mp4_rows 30 people {"Pedro Sánchez": 3, "Alberto Núñez Feijóo": 2, "Santiago Abascal": 2, "Gabriel Rufián": 2, "Míriam Nogueras": 2, "Maribel Vaquero": 1, "Patxi López": 2}
+SESSION ('500', '10', '12/11/2026') mp4_rows 49 people {"Maribel Vaquero": 2, "Oskar Matute": 2, "Gabriel Rufián": 3, "Pepa Millán": 1}
+SESSION ('400', '195', '09/09/2026') mp4_rows 140 people {"Alberto Núñez Feijóo": 2, "Pedro Sánchez": 5, "Santiago Abascal": 1, "Gabriel Rufián": 2, "Ester Muñoz": 2, "Oskar Matute": 2, "Pepa Millán": 2}
+SESSION ('400', '203', '02/10/2026') mp4_rows 39 people {"Maribel Vaquero": 2, "Oskar Matute": 2, "Míriam Nogueras": 1, "Gabriel Rufián": 1, "Patxi López": 2, "Pedro Sánchez": 1}
+SESSION ('400', '166', '18/03/2026') mp4_rows 145 people {"Alberto Núñez Feijóo": 2, "Pedro Sánchez": 6, "Maribel Vaquero": 3, "Ester Muñoz": 2, "Oskar Matute": 2, "Pepa Millán": 2}
+SESSION ('400', '184', '10/06/2026') mp4_rows 139 people {"Alberto Núñez Feijóo": 1, "Pedro Sánchez": 4, "Míriam Nogueras": 2, "Ester Muñoz": 2, "Pepa Millán": 2, "Maribel Vaquero": 1, "Oskar Matute": 1}
+SESSION ('400', '174', '22/04/2026') mp4_rows 125 people {"Alberto Núñez Feijóo": 2, "Pedro Sánchez": 5, "Míriam Nogueras": 2, "Ester Muñoz": 2, "Pepa Millán": 2, "Maribel Vaquero": 2}
+SESSION ('400', '190', '24/06/2026') mp4_rows 129 people {"Pedro Sánchez": 7, "Alberto Núñez Feijóo": 4, "Santiago Abascal": 4, "Gabriel Rufián": 2, "Míriam Nogueras": 2, "Maribel Vaquero": 2, "Patxi López": 2, "Ester Muñoz": 2, "Pepa Millán": 2, "Oskar Matute": 2}
+SESSION ('400', '202', '30/09/2026') mp4_rows 155 people {"Ester Muñoz": 4, "Pepa Millán": 2, "Maribel Vaquero": 3, "Oskar Matute": 2}
+SESSION ('400', '65', '09/10/2024') mp4_rows 124 people {"Pedro Sánchez": 8, "Alberto Núñez Feijóo": 4, "Santiago Abascal": 2, "Gabriel Rufián": 2, "Míriam Nogueras": 4, "Patxi López": 2, "Oskar Matute": 2, "Pepa Millán": 2}
+INDEX_TOTAL 173 counts {"Alberto Núñez Feijóo": 19, "Pedro Sánchez": 45, "Míriam Nogueras": 15, "Ester Muñoz": 16, "Pepa Millán": 17, "Oskar Matute": 16, "Santiago Abascal": 9, "Gabriel Rufián": 12, "Maribel Vaquero": 16, "Patxi López": 8}
