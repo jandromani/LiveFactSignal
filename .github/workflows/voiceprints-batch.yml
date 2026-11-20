@@ -5,6 +5,7 @@ on:
       - '.github/workflows/voiceprints-batch.yml'
       - 'scripts/voiceprints/batch.py'
       - 'scripts/voiceprints/sources.json'
+      - 'scripts/voiceprints/speaker-index.json'
   workflow_dispatch:
 permissions:
   contents: write
