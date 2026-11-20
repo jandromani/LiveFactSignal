@@ -166,7 +166,7 @@ def group_sources():
    for item in verified_index.get(person,[]):
     media_url=item.get('url')
     if media_url and media_url not in seen[person]:
-     out[person].append({'url':media_url,'label':item.get('label',''),'start':0})
+     out[person].append({'url':media_url,'label':item.get('label',''),'source_page':item.get('source_page',''),'start':0})
      seen[person].add(media_url)
  # Diverse interviews and known sources remain as fallbacks.
  for source in MANIFEST.get('scout',[])+MANIFEST.get('seed_sources',[]):
