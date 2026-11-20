@@ -1,45 +1,13 @@
 MODEL_VERIFIED aa3cfc16963a10586a9393f5035d6d6b57e98d358b347f80c2a30bf4f00ceba2
-CANDIDATE Alberto Núñez Feijóo SOURCES 43
-SOURCE_REJECT Alberto Núñez Feijóo ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-REJECTED Alberto Núñez Feijóo at 8 HTTP 422 cause Acoustic validation failed own 0.774 other 0.57 clip 1132368_1_21.mp4
-REJECTED Alberto Núñez Feijóo at 26 HTTP 422 cause Acoustic validation failed own 0.702 other 0.553 clip 1132368_1_21.mp4
-REJECTED Alberto Núñez Feijóo at 50 HTTP 422 cause Acoustic validation failed own 0.672 other 0.551 clip 1132368_1_21.mp4
-REJECTED Alberto Núñez Feijóo at 80 HTTP 422 cause Acoustic validation failed own 0.723 other 0.567 clip 1132368_1_21.mp4
-REJECTED Alberto Núñez Feijóo at 120 HTTP 422 cause Acoustic validation failed own 0.421 other 0.519 clip 1132368_1_21.mp4
-REJECTED Alberto Núñez Feijóo at 180 HTTP 422 cause Acoustic validation failed own 0.709 other 0.588 clip 1132368_1_21.mp4
-REJECTED Alberto Núñez Feijóo at 250 HTTP 422 cause Acoustic validation failed own 0.618 other 0.61 clip 1132368_1_21.mp4
-REJECTED Alberto Núñez Feijóo at 340 HTTP 422 cause Acoustic validation failed own 0.665 other 0.58 clip 1132368_1_21.mp4
-REJECTED Alberto Núñez Feijóo at 8 HTTP 409 cause Duplicate/nearby reference own None other None clip 1133976_1_21.mp4
-REJECTED Alberto Núñez Feijóo at 26 HTTP 409 cause Duplicate/nearby reference own None other None clip 1133976_1_21.mp4
-REJECTED Alberto Núñez Feijóo at 50 HTTP 409 cause Duplicate/nearby reference own None other None clip 1133976_1_21.mp4
-FAILED_CLIP Alberto Núñez Feijóo 80 Insufficient speech
-FAILED_CLIP Alberto Núñez Feijóo 120 Insufficient speech
-FAILED_CLIP Alberto Núñez Feijóo 180 Insufficient speech
-FAILED_CLIP Alberto Núñez Feijóo 250 Insufficient speech
-FAILED_CLIP Alberto Núñez Feijóo 340 Insufficient speech
-FAILED_CLIP Alberto Núñez Feijóo 8 Low speech fraction
-FAILED_CLIP Alberto Núñez Feijóo 26 Low speech fraction
-FAILED_CLIP Alberto Núñez Feijóo 50 Low speech fraction
-FAILED_CLIP Alberto Núñez Feijóo 80 Low speech fraction
-FAILED_CLIP Alberto Núñez Feijóo 120 Low speech fraction
-FAILED_CLIP Alberto Núñez Feijóo 180 Low speech fraction
-FAILED_CLIP Alberto Núñez Feijóo 250 Low speech fraction
-FAILED_CLIP Alberto Núñez Feijóo 340 Low speech fraction
-FAILED_CLIP Alberto Núñez Feijóo 8 Low speech fraction
-FAILED_CLIP Alberto Núñez Feijóo 26 Low speech fraction
-REJECTED Alberto Núñez Feijóo at 50 HTTP 422 cause Acoustic validation failed own 0.746 other 0.563 clip 1127885_1_21.mp4
-REJECTED Alberto Núñez Feijóo at 80 HTTP 422 cause Acoustic validation failed own 0.464 other 0.564 clip 1127885_1_21.mp4
-FAILED_CLIP Alberto Núñez Feijóo 120 Low speech fraction
-REJECTED Alberto Núñez Feijóo at 180 HTTP 422 cause Acoustic validation failed own 0.555 other 0.537 clip 1127885_1_21.mp4
-REJECTED Alberto Núñez Feijóo at 250 HTTP 409 cause Target already met own None other None clip 1127885_1_21.mp4
-CANDIDATE_RESULT Alberto Núñez Feijóo new_this_run 0 already_full True
-CANDIDATE Pepa Millán SOURCES 45
-FAILED_CLIP Pepa Millán 6 Low speech fraction
-FAILED_CLIP Pepa Millán 24 Insufficient speech
-FAILED_CLIP Pepa Millán 42 Insufficient speech
-REJECTED Pepa Millán at 6 HTTP 409 cause Duplicate/nearby reference own None other None clip 15_000400_198_0_27661_778402.mp4
-REJECTED Pepa Millán at 24 HTTP 409 cause Duplicate/nearby reference own None other None clip 15_000400_198_0_27661_778402.mp4
-REJECTED Pepa Millán at 42 HTTP 409 cause Duplicate/nearby reference own None other None clip 15_000400_198_0_27661_778402.mp4
-FAILED_CLIP Pepa Millán 6 Low speech fraction
-FAILED_CLIP Pepa Millán 24 Insufficient speech
-FAILED_CLIP Pepa Millán 42 Insufficient speech
+CANDIDATE Gabriel Rufián SOURCES 36
+FAILED_CLIP Gabriel Rufián 8 Low speech fraction
+FAILED_CLIP Gabriel Rufián 26 Low speech fraction
+FAILED_CLIP Gabriel Rufián 50 Low speech fraction
+FAILED_CLIP Gabriel Rufián 80 Low speech fraction
+FAILED_CLIP Gabriel Rufián 120 Insufficient speech
+FAILED_CLIP Gabriel Rufián 180 Insufficient speech
+FAILED_CLIP Gabriel Rufián 250 Insufficient speech
+FAILED_CLIP Gabriel Rufián 340 Insufficient speech
+FAILED_CLIP Gabriel Rufián 8 Low speech fraction
+REJECTED Gabriel Rufián at 26 HTTP 422 cause Acoustic validation failed own 0.8 other 0.598 clip 1125886_1_21.mp4
+REJECTED Gabriel Rufián at 50 HTTP 422 cause Acoustic validation failed own 0.839 other 0.623 clip 1125886_1_21.mp4
