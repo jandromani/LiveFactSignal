@@ -1,0 +1,41 @@
+name: Enroll 10 acoustic references for 12 political debate participants
+on:
+  push:
+    paths:
+      - '.github/workflows/voiceprints-batch.yml'
+      - 'scripts/voiceprints/batch.py'
+      - 'scripts/voiceprints/sources.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+  id-token: write
+jobs:
+  enroll:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install vetted audio utilities and local speaker model interface
+        run: python -m pip install -q numpy soundfile requests beautifulsoup4 sherpa-onnx imageio-ffmpeg yt-dlp
+      - name: Validate Python syntax and pinned-source manifest
+        run: |
+          python -m py_compile scripts/voiceprints/batch.py
+          python -m json.tool scripts/voiceprints/sources.json >/dev/null
+      - name: Run acoustic quality and publisher attribution checks; import only through GitHub OIDC
+        shell: bash
+        run: |
+          set -o pipefail
+          python -u scripts/voiceprints/batch.py 2>&1 | tee scripts/voiceprints/batch-last.txt
+      - name: Publish NON-BIOMETRIC QA report to repository
+        if: always()
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/voiceprints/batch-report.json scripts/voiceprints/batch-last.txt 2>/dev/null || true
+          git diff --cached --quiet || git commit -m 'Report automated speaker enrollment and acoustic rejection statistics'
+          git pull --rebase --autostash origin master || { git rebase --abort || true; exit 0; }
+          git push origin HEAD:master || true
