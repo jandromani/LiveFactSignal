@@ -91,7 +91,25 @@ def media(source,name):
  if 'europapress.tv' in host:
   r=session.get(url,timeout=25);r.raise_for_status()
   soup=BeautifulSoup(r.text,'html.parser');title=soup.title.get_text(' ',strip=True) if soup.title else ''
-  if not verified(name,title):raise ValueError('EuropePress title does not label speaker')
+  def normalized_title_prefix():
+   words=norm(title.split('|')[0]).strip()
+   expected={'Alberto Núñez Feijóo':['feijoo','alberto nunez feijoo'],
+    'Santiago Abascal':['abascal','santiago abascal'],
+    'Ada Colau':['colau','ada colau'],
+    'Pepa Millán':['pepa millan','millan']}
+   return any(words.startswith(prefix+' ') or words.startswith(prefix+':') or words==prefix for prefix in expected.get(name,[]))
+  # The article must identify the speaker in its headline AND body.
+  publisher_text=norm(soup.get_text(' ',strip=True))
+  if not (verified(name,title) or normalized_title_prefix()):
+   raise ValueError('EuropePress headline does not label the speaker')
+  if name=='Alberto Núñez Feijóo' and 'alberto nunez feijoo' not in publisher_text:
+   raise ValueError('Publisher article does not confirm Feijóo full name')
+  if name=='Santiago Abascal' and 'santiago abascal' not in publisher_text:
+   raise ValueError('Publisher article does not confirm Abascal full name')
+  if name=='Pepa Millán' and 'pepa millan' not in publisher_text:
+   raise ValueError('Publisher article does not confirm Millán full name')
+  if name=='Ada Colau' and 'ada colau' not in publisher_text:
+   raise ValueError('Publisher article does not confirm Colau full name')
   links=re.findall(r'https://video\d+\.europapress\.net/[^"\s<>]+?\.mp4',html.unescape(r.text))
   if not links:raise ValueError('No EuropePress MP4')
   return links[0],title[:180],source.get('start')
