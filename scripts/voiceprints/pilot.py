@@ -30,8 +30,8 @@ def media(url):
 def extract(url,seek=5,duration=12):
  with tempfile.TemporaryDirectory() as d:
   output=d+'/sample.wav'
-  cmd=[imageio_ffmpeg.get_ffmpeg_exe(),'-hide_banner','-loglevel','error','-nostdin','-ss',str(seek),'-i',url,'-t',str(duration),'-ac','1','-ar','16000','-y',output]
-  r=subprocess.run(cmd,capture_output=True,text=True,timeout=130)
+  cmd=[imageio_ffmpeg.get_ffmpeg_exe(),'-hide_banner','-loglevel','error','-nostdin','-rw_timeout','15000000','-ss',str(seek),'-i',url,'-t',str(duration),'-ac','1','-ar','16000','-y',output]
+  r=subprocess.run(cmd,capture_output=True,text=True,timeout=35)
   print('FFMPEG',r.returncode,r.stderr[-450:].replace('\n',' '),flush=True)
   if r.returncode:return None
   data,rate=sf.read(output,dtype='float32')
@@ -57,7 +57,7 @@ def main():
  print('MODEL_VALID',config.validate(),flush=True)
  extractor=sherpa_onnx.SpeakerEmbeddingExtractor(config)
  all=[]
- for who,page in SOURCES:
+ for who,page in SOURCES[:1]:
   try:
    video=media(page)
    if not video:print('SKIP_MEDIA',who);continue
