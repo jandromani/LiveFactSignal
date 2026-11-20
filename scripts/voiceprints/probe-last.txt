@@ -3,6 +3,10 @@
 HTTP 200 TYPE text/html; charset=ISO-8859-1 LENGTH 152337
 TITLE Video Sesión Plenaria - 03/09/2026
 MEDIA_LINKS ["https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_194/cortes/smil:15_000400_194.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_194/cortes/smil:15_000400_194.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_194/cortes/smil:15_000400_194.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_194/cortes/smil:15_000400_194.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_194/cortes/smil:15_000400_194_0_27634_777802.smil/manifest.m3u8", "https://static.congreso.es/audiovisual/video/leg15/400/15_000400_194/cortes/15_000400_194_0_27634_777802.mp4", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_194/cortes/smil:15_000400_194_0_27634_777803.smil/manifest.m3u8", "https://static.congreso.es/audiovisual/video/leg15/400/15_000400_194/cortes/15_000400_194_0_27634_777803.mp4"]
+EXACT_ANCHOR 1
+PUBLISHER_ROW López Álvarez, Patxi (GS)
+PUBLISHER_CELL 
+PREV_SIBLING NONE
 MARKER download 15018
 MARKER descargar 14937
 MARKER stream 2265
@@ -15,6 +19,10 @@ YT_DLP 1 URLS  ERROR ERROR: Unsupported URL: https://app.congreso.es/Audiovisual
 HTTP 200 TYPE text/html; charset=ISO-8859-1 LENGTH 811491
 TITLE Video Sesión Plenaria - 16/09/2026
 MEDIA_LINKS ["https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_198/cortes/smil:15_000400_198.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_198/cortes/smil:15_000400_198.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_198/cortes/smil:15_000400_198.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_198/cortes/smil:15_000400_198.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_198/cortes/smil:15_000400_198_0_27661_778349.smil/manifest.m3u8", "https://static.congreso.es/audiovisual/video/leg15/400/15_000400_198/cortes/15_000400_198_0_27661_778349.mp4", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_198/cortes/smil:15_000400_198_0_27661_778350.smil/manifest.m3u8", "https://static.congreso.es/audiovisual/video/leg15/400/15_000400_198/cortes/15_000400_198_0_27661_778350.mp4"]
+EXACT_ANCHOR 1
+PUBLISHER_ROW Iñarritu García, Jon (GEH Bildu)
+PUBLISHER_CELL 
+PREV_SIBLING NONE
 MARKER download 15719
 MARKER descargar 15638
 MARKER stream 2265
@@ -24,7 +32,7 @@ YT_DLP 1 URLS  ERROR ERROR: Unsupported URL: https://app.congreso.es/Audiovisual
 
 
 === SOURCE EuropePress-Emilio
-HTTP 200 TYPE text/html; charset=utf-8 LENGTH 107427
+HTTP 200 TYPE text/html; charset=utf-8 LENGTH 107397
 TITLE Emilio Delgado (Frente Amplio): "Hay que poner la riqueza al servicio del pueblo" | Parte 1
 MEDIA_LINKS ["https://video4.europapress.net/ep/H264/1132000/1132053_1_21.mp4"]
 MARKER download -1
