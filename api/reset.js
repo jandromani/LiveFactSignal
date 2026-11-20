@@ -49,12 +49,12 @@ export default async function handler(req,res){
    ), voice_reference_copy AS (
     INSERT INTO voice_profiles (debate_id,person_name,party,model_id,embedding,duration_ms,source_type,source_reference,verified_by,quality_status)
     SELECT n.id,v.person_name,r.party,v.model_id,v.embedding,v.duration_ms,
-           'public-reference',v.source_url||'#t='||coalesce(v.source_segment_start_s::text,'0'),
-           'public-source-metadata',v.quality_status
+           'public-reference',CASE WHEN v.quality_status='operator-reviewed' THEN v.source_url||'#training='||v.id::text ELSE v.source_url||'#t='||coalesce(v.source_segment_start_s::text,'0') END,
+           CASE WHEN v.quality_status='operator-reviewed' THEN 'operator-confirmed+acoustic-check' ELSE 'public-source-metadata' END,v.quality_status
     FROM voice_reference_library v
     CROSS JOIN new_debate n
     JOIN debate_roster r ON r.debate_id=$1 AND r.name=v.person_name
-    WHERE v.quality_status='source-labeled' AND r.role='candidate'
+    WHERE v.quality_status IN ('source-labeled','operator-reviewed') AND r.role='candidate'
     ON CONFLICT DO NOTHING
     RETURNING id
    ), pointer AS (
