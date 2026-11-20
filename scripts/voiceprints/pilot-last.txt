@@ -1,0 +1,4 @@
+  File "/home/runner/work/LiveFactSignal/LiveFactSignal/scripts/voiceprints/pilot.py", line 24
+    matches=[x for x in urls if re.search(r'_'+re.escape(key)+r'\.mp4,x)]
+                                                              ^
+SyntaxError: unterminated string literal (detected at line 24)
