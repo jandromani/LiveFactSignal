@@ -99,9 +99,21 @@
 </details><details id="voicePanel" open style="border:1px solid #47756d;background:#122e30;padding:14px;border-radius:12px;margin:14px 0">
 <summary style="font-size:14px;font-weight:800;cursor:pointer;color:var(--mint)">◉ VOICEPRINT LAB · Autocalibración automática de participantes <span class="badge green">CAM++ · 192D</span></summary>
 <p class="micro">Una huella vocal neuronal por participante, calculada localmente en tu navegador. Después compara cada tramo que Scribe asigna a una voz, aunque el moderador no anuncie el turno. Se guardan únicamente vectores y metadatos, nunca la grabación. Primera carga: unos 40 MB de modelo y WebAssembly.</p>
-<div class="hint"><b>Modo automático:</b> no necesitas cargar entrevistas a mano. Cuando el moderador anuncie un turno, el sistema intentará aprender esa voz a partir de dos fragmentos compatibles y la reconocerá después. Los controles manuales quedan como alternativa para candidatos que no reciban un turno claramente anunciado.</div>
+<div class="hint"><b>Identificación:</b> CAM++ compara tramos contra referencias de audio etiquetadas. El aprendizaje por anuncios del moderador está desactivado para evitar confusiones. Si una voz queda sin identificar, puedes ampliar sus referencias con fragmentos limpios de un vídeo de origen conocido; las muestras validadas se reutilizan en futuras sesiones.</div>
 <div class="gap"></div><div class="field"><label>¿De quién es esta muestra?</label><select id="voiceCandidate"><option value="">Seleccionar persona…</option></select></div>
 <div class="gap"></div><div class="field"><label>URL de la muestra original (opcional, trazabilidad)</label><input id="voiceSourceUrl" placeholder="https://www.youtube.com/watch?v=..."></div>
+<section id="voiceTrainingStudio" style="padding:14px;background:#0d242b;border:1px solid #567f78;border-radius:12px;margin:12px 0">
+<h3 style="margin:0 0 6px;color:var(--mint);font-size:15px">🎙 AMPLIAR ENTRENAMIENTO DE FEIJÓO · REFERENCIAS COMPARTIDAS</h3>
+<p class="micro">Actualmente tiene dos cortes del mismo vídeo. Añadiremos dos muestras de 12 s de otra fuente con su voz sola, sin aplausos, presentador ni intervenciones de Sánchez. <b>No se guarda el audio</b>: solo la huella CAM++ y el enlace a su procedencia.</p>
+<div class="toolbar" style="margin:9px 0;flex-wrap:wrap">
+<button type="button" class="button ghost" data-training-source="https://www.rtve.es/play/videos/especiales-informativos/debate-cara-pedro-sanchez-feijoo-elecciones-2026/17322618/">↗ Vídeo oficial RTVE · debate</button>
+<button type="button" class="button ghost" data-training-source="https://www.rtve.es/play/videos/informativo-24h/feijoo-junts-pnv-mocion-censura-elecciones/17096645/">↗ RTVE · Feijóo</button>
+<button type="button" class="button ghost" data-training-source="https://ppcantabria.org/actualidad/noticias/13518-feijoo-el-presidente-de-espana-que-necesita-cantabria">↗ PP Cantabria · Feijóo</button>
+</div>
+<label class="check" style="margin:8px 0"><input id="voiceTrainingConfirm" type="checkbox"><span>Confirmo haber comprobado que los fragmentos contienen solamente la voz de la persona seleccionada. La etiqueta es manual y provisional.</span></label>
+<button type="button" class="button primary" id="voiceTrainFeijoo">🎙 Entrenar Feijóo · 2 muestras de 12 s</button>
+<div id="voiceTrainingProgress" role="status" class="micro" style="margin-top:8px">Elige una fuente, abre el vídeo, localiza una intervención seguida de Feijóo y comparte esa pestaña con audio.</div>
+</section>
 <div class="toolbar" style="margin:9px 0"><button class="button ghost" id="voiceSearch">↗ Buscar entrevista en YouTube</button><button class="button ghost" id="voiceTabSend">🎙 Registrar 12 s de otra pestaña</button></div>
 <div class="field"><label>O seleccionar una muestra de audio autorizada</label><input type="file" id="voiceFile" accept="audio/*,.wav,.mp3,.m4a,.ogg,.webm"></div>
 <div class="toolbar" style="margin:10px 0"><button class="button primary" id="voiceFileSend">＋ Guardar voz de referencia</button><button class="button ghost" id="voiceRefresh">⟳ Actualizar galería</button></div>
