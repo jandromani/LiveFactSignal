@@ -1102,6 +1102,41 @@
       "url": "https://www.europapress.tv/politica/1133125/1/rufian-vivienda-gobierno-actua-ambulancia",
       "origin": "europapress",
       "speaker_confirmation_required": true
+    },
+    {
+      "person": "Pedro Sánchez",
+      "url": "https://www.europapress.tv/politica/1114889/1/sanchez-vincula-nuevos-presupuestos-consolidacion-crecimiento-economico",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Only if publisher lead explicitly confirms Pedro Sánchez speaking and acoustic comparison passes"
+    },
+    {
+      "person": "Pedro Sánchez",
+      "url": "https://www.europapress.tv/politica/1119715/1/sanchez-reivindica-fuerza-derecho-no-podemos-hacer-camino-contrario",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Only if publisher lead explicitly confirms Pedro Sánchez speaking and acoustic comparison passes"
+    },
+    {
+      "person": "Pedro Sánchez",
+      "url": "https://www.europapress.tv/politica/1122774/1/sanchez-carga-contra-peor-oposicion-historia",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Only if publisher lead explicitly confirms Pedro Sánchez speaking and acoustic comparison passes"
+    },
+    {
+      "person": "Pedro Sánchez",
+      "url": "https://www.europapress.tv/politica/1122773/1/sanchez-anuncia-elecciones-anticipadas-29-noviembre",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Only if publisher lead explicitly confirms Pedro Sánchez speaking and acoustic comparison passes"
+    },
+    {
+      "person": "Pedro Sánchez",
+      "url": "https://www.europapress.tv/politica/1114887/1/sanchez-pide-psoe-echar-resto-iniciativas-legislativas-pendientes",
+      "origin": "europapress",
+      "speaker_confirmation_required": true,
+      "note": "Only if publisher lead explicitly confirms Pedro Sánchez speaking and acoustic comparison passes"
     }
   ]
 }
