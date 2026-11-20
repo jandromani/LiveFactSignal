@@ -78,7 +78,8 @@ async function preflight(){
   check('opCheckVoice',(allReady?'✓ ':'! ')+detail+' · sesión '+selected.slice(0,8),allReady);
   const stats=$('#opVoiceDiagnostics');
   if(stats){
-   stats.textContent='CAM++ · '+(info.voice_v2?.matched||0)+' tramos reconocidos / '+(info.voice_v2?.total||0)+' comparados · '+(info.claims?.voice_attributed||0)+' afirmaciones atribuidas por voz / '+(info.claims?.total||0)+' totales · '+(info.claims?.unknown||0)+' sin identificar';
+   stats.textContent='CAM++ · '+(info.voice_v2?.matched||0)+' tramos reconocidos / '+(info.voice_v2?.total||0)+' comparados · '+(info.voice_v2?.candidate_pending||0)+' esperando continuidad · '+(info.claims?.voice_attributed||0)+' afirmaciones atribuidas por voz / '+(info.claims?.total||0)+' totales · '+(info.claims?.unknown||0)+' sin identificar'+
+     ((info.voice_v2?.by_voice||[]).length?' · '+info.voice_v2.by_voice.map(x=>x.candidate+': '+x.matched+' reconocidos, '+x.awaiting_continuity+' pendientes').join(' · '):'');
   }
   const voice=$('#voiceAuto');
   if(voice&&(!voiceInitialized.has(selected)||!allReady)){
