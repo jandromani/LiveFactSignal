@@ -37,12 +37,9 @@ CANDIDATE Pepa Millán SOURCES 45
 FAILED_CLIP Pepa Millán 6 Low speech fraction
 FAILED_CLIP Pepa Millán 24 Insufficient speech
 FAILED_CLIP Pepa Millán 42 Insufficient speech
-REJECTED Pepa Millán at 6 HTTP 422 cause Acoustic validation failed own 0.717 other 0.509 clip 15_000400_198_0_27661_778402.mp4
-REJECTED Pepa Millán at 24 HTTP 422 cause Acoustic validation failed own 0.548 other 0.485 clip 15_000400_198_0_27661_778402.mp4
-REJECTED Pepa Millán at 42 HTTP 422 cause Acoustic validation failed own 0.572 other 0.514 clip 15_000400_198_0_27661_778402.mp4
+REJECTED Pepa Millán at 6 HTTP 409 cause Duplicate/nearby reference own None other None clip 15_000400_198_0_27661_778402.mp4
+REJECTED Pepa Millán at 24 HTTP 409 cause Duplicate/nearby reference own None other None clip 15_000400_198_0_27661_778402.mp4
+REJECTED Pepa Millán at 42 HTTP 409 cause Duplicate/nearby reference own None other None clip 15_000400_198_0_27661_778402.mp4
 FAILED_CLIP Pepa Millán 6 Low speech fraction
 FAILED_CLIP Pepa Millán 24 Insufficient speech
 FAILED_CLIP Pepa Millán 42 Insufficient speech
-REJECTED Pepa Millán at 6 HTTP 422 cause Acoustic validation failed own 0.563 other 0.556 clip 15_000400_200_0_27678_778863.mp4
-REJECTED Pepa Millán at 24 HTTP 422 cause Acoustic validation failed own 0.613 other 0.544 clip 15_000400_200_0_27678_778863.mp4
-REJECTED Pepa Millán at 42 HTTP 422 cause Acoustic validation failed own 0.546 other 0.546 clip 15_000400_200_0_27678_778863.mp4
