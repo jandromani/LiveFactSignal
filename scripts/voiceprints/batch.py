@@ -163,7 +163,7 @@ def main():
  ext=model();auth=OIDC();sources=group_sources()
  for name in PRIORITY:
   print('CANDIDATE',name,'SOURCES',len(sources[name]),flush=True)
-  target=8;accepted=0;attempts=0;used_events=set()
+  target=8;accepted=0;attempts=0;used_events=set();already_full=False
   used_media=set()
   for source in sources[name]:
    if accepted>=target:break
@@ -203,12 +203,15 @@ def main():
      else:
       output['rejected']+=1
       print('REJECTED',name,'at',start,'HTTP',result.status_code,'cause',payload.get('error'),flush=True)
-      if payload.get('error')=='Target already met':accepted=8;break
+      if payload.get('error')=='Target already met':already_full=True;break
     except Exception as e:
      output['rejected']+=1
      print('FAILED_CLIP',name,round(start,1),str(e)[:180],flush=True)
-  output['people'][name]={'added':accepted,'expected_total':accepted+2,'source_pages_attempted':len(used_events),'clip_attempts':attempts,'meets_ten':accepted>=8}
-  print('CANDIDATE_RESULT',name,accepted+2,'/ 10 total (including baseline)',flush=True)
+  output['people'][name]={'added_in_this_run':accepted,'initial_baseline':2,
+   'minimum_expected_total_from_this_run':accepted+2,
+   'source_pages_attempted':len(used_events),'clip_attempts':attempts,
+   'meets_ten_reported_by_server':already_full,'note':'For current totals query Neon; concurrent batches may add other references.'}
+  print('CANDIDATE_RESULT',name,'new_this_run',accepted,'already_full',already_full,flush=True)
  (ROOT/'batch-report.json').write_text(json.dumps(output,ensure_ascii=False,indent=2))
  print('COMPLETE',output['accepted'],'new verified references across',len(PRIORITY),'people',flush=True)
 if __name__=='__main__':main()
