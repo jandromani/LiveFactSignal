@@ -1,3 +1,4 @@
-  File "/home/runner/work/LiveFactSignal/LiveFactSignal/scripts/voiceprints/pilot.py", line 24
-    matches=[x for x in urls if x.endswith('_'+key+'.mp4')]
-IndentationError: unexpected indent
+  File "/home/runner/work/LiveFactSignal/LiveFactSignal/scripts/voiceprints/pilot.py", line 82
+    ,x)]
+      ^
+SyntaxError: unmatched ')'
