@@ -35,6 +35,10 @@ ALIASES={
 PRIORITY=['Gabriel Rufián','Pedro Sánchez','Santiago Abascal',
  'Pepa Millán','Alberto Núñez Feijóo','Ada Colau','Míriam Nogueras',
  'Ester Muñoz','Oskar Matute','Maribel Vaquero','Patxi López','Emilio Delgado']
+# Batch can be restricted through the workflow without dropping support for all 12.
+requested=[x.strip() for x in os.getenv('VOICEPRINT_TARGETS','').split('|') if x.strip()]
+if requested:
+ PRIORITY=[x for x in PRIORITY if x in requested]
 session=requests.Session();session.headers.update(headers)
 CONGRESS_PAGES={}
 def norm(s):
@@ -200,7 +204,7 @@ def group_sources():
  # Independent editorial interviews take precedence for the four profiles
  # that had only 2-3 original references.
  underrepresented={'Alberto Núñez Feijóo','Ada Colau','Santiago Abascal','Gabriel Rufián','Pedro Sánchez'}
- for item in MANIFEST.get('scout',[]):
+ for item in sorted(MANIFEST.get('scout',[]),key=lambda row:-int(row.get('priority') or 0)):
   person=item.get('person');url=item.get('url','')
   if person in underrepresented and urlsplit(url).hostname=='www.europapress.tv' and url not in seen[person]:
    out[person].append({'url':url,'start':0})
@@ -231,8 +235,9 @@ def main():
   print('CANDIDATE',name,'SOURCES',len(sources[name]),flush=True)
   target=8;accepted=0;attempts=0;used_events=set();already_full=False
   used_media=set()
+  max_attempts=100 if name=='Gabriel Rufián' else 55
   for source in sources[name]:
-   if accepted>=target or already_full or attempts>=42:break
+   if accepted>=target or already_full or attempts>=max_attempts:break
    try:url,label,base=media(source,name)
    except Exception as e:
     output['failures'][name+' @ '+source['url'][:75]]=str(e)[:180];print('SOURCE_REJECT',name,str(e)[:160],flush=True);continue
@@ -252,7 +257,7 @@ def main():
    if 'rtve.es' in source['url'] and 'la-revuelta' in source['url']:offsets=[70,120,180]
    accepted_from_media=0
    for start in offsets:
-    if accepted_from_media>=3 or attempts>=42:break
+    if accepted_from_media>=3 or attempts>=max_attempts:break
     if accepted>=target:break
     attempts+=1
     try:
