@@ -11,7 +11,7 @@ export default async function handler(req,res){
  if(!process.env.DATABASE_URL)return res.status(503).json({error:'Neon no configurado'});
  try{
   const sql=neon(process.env.DATABASE_URL);
-  const [db,people,claims,audio,events]=await Promise.all([
+  const [db,people,claims,audio,events,byVoice]=await Promise.all([
    sql.query('SELECT id,title,identity_enabled,voice_embedding_enabled FROM debates WHERE id=$1 LIMIT 1',[id]),
    sql.query(`SELECT r.name,r.party,r.role,
       count(p.id) FILTER(WHERE p.source_type='public-reference' AND p.quality_status='source-labeled')::int AS references
@@ -28,8 +28,17 @@ export default async function handler(req,res){
    sql.query(`SELECT count(*)::int AS total,
      count(*) FILTER(WHERE decision='matched')::int AS matched,
      count(*) FILTER(WHERE decision='unknown')::int AS inconclusive,
-     coalesce(sum(0),0)::int AS placeholder,max(created_at) AS latest
-     FROM voice_match_events WHERE debate_id=$1 AND method='campplus-v2-span'`,[id])
+     count(*) FILTER(WHERE decision='candidate')::int AS candidate_pending,
+     max(created_at) AS latest
+     FROM voice_match_events WHERE debate_id=$1 AND method='campplus-v2-span'`,[id]),
+   sql.query(`SELECT coalesce(person_name,candidate_name) AS candidate,
+     count(*) FILTER(WHERE decision='matched')::int AS matched,
+     count(*) FILTER(WHERE decision='candidate')::int AS awaiting_continuity,
+     round(avg(score) FILTER(WHERE decision IN ('matched','candidate')),3) AS avg_similarity
+     FROM voice_match_events
+     WHERE debate_id=$1 AND method='campplus-v2-span'
+       AND (person_name IS NOT NULL OR candidate_name IS NOT NULL)
+     GROUP BY coalesce(person_name,candidate_name) ORDER BY candidate`,[id])
   ]);
   if(!db.length)return res.status(404).json({error:'Sesión no encontrada'});
   const candidates=people.filter(x=>x.role==='candidate');
@@ -40,7 +49,9 @@ export default async function handler(req,res){
    total_candidates:candidates.length,ready_candidates:ready.length,
    roster:people.map(x=>({name:x.name,party:x.party,role:x.role,reference_count:x.references})),
    claims:claims[0],audio:audio[0],
-   voice_v2:{total:events[0].total,matched:events[0].matched,inconclusive:events[0].inconclusive,latest:events[0].latest},
+   voice_v2:{total:events[0].total,matched:events[0].matched,
+      inconclusive:events[0].inconclusive,candidate_pending:events[0].candidate_pending,
+      by_voice:byVoice,latest:events[0].latest},
    metadata_only:true,note:'Referencia etiquetada por su fuente; no se certifica identidad de la persona ni se expone su vector acústico.'
   });
  }catch(e){return res.status(500).json({error:'No se pudo comprobar el motor de identidad',detail:String(e.message||e).slice(0,180)})}
