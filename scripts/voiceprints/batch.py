@@ -32,9 +32,9 @@ ALIASES={
  'Pedro Sánchez':['pedro sanchez','sanchez perez-castejon'],
  'Santiago Abascal':['santiago abascal','abascal conde'],
 }
-PRIORITY=['Alberto Núñez Feijóo','Pepa Millán','Ada Colau','Santiago Abascal',
- 'Pedro Sánchez','Gabriel Rufián','Míriam Nogueras','Ester Muñoz',
- 'Oskar Matute','Maribel Vaquero','Patxi López','Emilio Delgado']
+PRIORITY=['Gabriel Rufián','Pedro Sánchez','Santiago Abascal',
+ 'Pepa Millán','Alberto Núñez Feijóo','Ada Colau','Míriam Nogueras',
+ 'Ester Muñoz','Oskar Matute','Maribel Vaquero','Patxi López','Emilio Delgado']
 session=requests.Session();session.headers.update(headers)
 CONGRESS_PAGES={}
 def norm(s):
