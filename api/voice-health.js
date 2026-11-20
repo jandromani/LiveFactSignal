@@ -14,7 +14,7 @@ export default async function handler(req,res){
   const [db,people,claims,audio,events,byVoice]=await Promise.all([
    sql.query('SELECT id,title,identity_enabled,voice_embedding_enabled FROM debates WHERE id=$1 LIMIT 1',[id]),
    sql.query(`SELECT r.name,r.party,r.role,
-      count(p.id) FILTER(WHERE p.source_type='public-reference' AND p.quality_status='source-labeled')::int AS references
+      count(p.id) FILTER(WHERE p.source_type='public-reference' AND p.quality_status IN ('source-labeled','operator-reviewed'))::int AS references
       FROM debate_roster r LEFT JOIN voice_profiles p ON p.debate_id=r.debate_id AND p.person_name=r.name
       WHERE r.debate_id=$1 GROUP BY r.name,r.party,r.role ORDER BY r.role,r.name`,[id]),
    sql.query(`SELECT count(*)::int AS total,
