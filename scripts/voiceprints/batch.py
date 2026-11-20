@@ -50,10 +50,11 @@ def media(source,name):
   soup=BeautifulSoup(page,'html.parser')
   all_downloads=[a for a in soup.find_all('a',href=True) if a['href'].split('?')[0].endswith('.mp4')]
   matches=[a for a in all_downloads if a['href'].split('?')[0].endswith('_'+key+'.mp4')]
-  if not matches:raise ValueError('No exact indexed MP4 for intervention '+key)
-  chosen=matches[0];tr=chosen.find_parent('tr')
+  if not matches and key!='0':raise ValueError('No exact indexed MP4 for intervention '+key)
+  chosen=matches[0] if matches else None
+  tr=chosen.find_parent('tr') if chosen else None
   line=tr.get_text(' ',strip=True)[:3000] if tr else ''
-  initial_match=verified(name,line)
+  initial_match=bool(chosen and verified(name,line))
   if not initial_match:
    # The selected i= often addresses a different intervention on the same session page.
    # Search for candidate-specific, publisher-labelled rows, never assign the old clip.
