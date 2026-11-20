@@ -5,5 +5,3 @@ REJECTED Maribel Vaquero at 24 HTTP 409 cause Duplicate/nearby reference
 REJECTED Maribel Vaquero at 42 HTTP 409 cause Duplicate/nearby reference
 FAILED_CLIP Maribel Vaquero 6 Low speech fraction
 FAILED_CLIP Maribel Vaquero 24 Low speech fraction
-FAILED_CLIP Maribel Vaquero 42 Low speech fraction
-FAILED_CLIP Maribel Vaquero 6 Low speech fraction
