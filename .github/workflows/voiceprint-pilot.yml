@@ -17,7 +17,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install inference dependencies
-        run: python -m pip install -q numpy soundfile requests sherpa-onnx
+        run: python -m pip install -q numpy soundfile requests sherpa-onnx imageio-ffmpeg
       - name: Compute pinned CAM++ and verify official source clips
         run: python -u scripts/voiceprints/pilot.py 2>&1 | tee scripts/voiceprints/pilot-last.txt
       - name: Commit QA metrics only - never voiceprints or audio
