@@ -48,16 +48,27 @@ def media(source,name):
   page=html.unescape(r.text);key=parse_qs(urlsplit(url).query).get('i',[''])[0]
   if not key:raise ValueError('No Congreso intervention ID')
   soup=BeautifulSoup(page,'html.parser')
-  matches=[a for a in soup.find_all('a',href=True) if a['href'].split('?')[0].endswith('_'+key+'.mp4')]
+  all_downloads=[a for a in soup.find_all('a',href=True) if a['href'].split('?')[0].endswith('.mp4')]
+  matches=[a for a in all_downloads if a['href'].split('?')[0].endswith('_'+key+'.mp4')]
   if not matches:raise ValueError('No exact indexed MP4 for intervention '+key)
-  a=matches[0];href=urljoin(url,a['href'])
-  row=a.find_parent('tr')
-  line=row.get_text(' ',strip=True)[:3000] if row else ''
-  if not verified(name,line):
-   # Sometimes the speaker label belongs to a sibling event header, NOT the download cell.
-   # Do not guess from a full session's list of speakers.
-   raise ValueError('Publisher row does not explicitly name '+name+': '+line[:120])
-  return href,line[:180],source.get('start')
+  chosen=matches[0];tr=chosen.find_parent('tr')
+  line=tr.get_text(' ',strip=True)[:3000] if tr else ''
+  initial_match=verified(name,line)
+  if not initial_match:
+   # The selected i= often addresses a different intervention on the same session page.
+   # Search for candidate-specific, publisher-labelled rows, never assign the old clip.
+   correct=[]
+   for a in all_downloads:
+    row=a.find_parent('tr')
+    label=row.get_text(' ',strip=True)[:3000] if row else ''
+    if verified(name,label):
+     correct.append((a,label))
+   if not correct:raise ValueError('Publisher has no matching intervention for '+name+'; original row='+line[:130])
+   chosen,line=correct[0]
+   print('SOURCE_IDENTITY_CORRECTED',name,'bad_id',key,'bad_speaker',tr.get_text(' ',strip=True)[:100] if tr else '(none)','correct',line[:150],flush=True)
+  href=urljoin(url,chosen['href'])
+  if urlsplit(href).hostname!='static.congreso.es':raise ValueError('Unapproved Congress media URL')
+  return href,line[:180],source.get('start') if initial_match else None
  if 'europapress.tv' in host:
   r=session.get(url,timeout=25);r.raise_for_status()
   soup=BeautifulSoup(r.text,'html.parser');title=soup.title.get_text(' ',strip=True) if soup.title else ''
@@ -152,11 +163,15 @@ def main():
  for name in PRIORITY:
   print('CANDIDATE',name,'SOURCES',len(sources[name]),flush=True)
   target=8;accepted=0;attempts=0;used_events=set()
+  used_media=set()
   for source in sources[name]:
    if accepted>=target:break
    try:url,label,base=media(source,name)
    except Exception as e:
     output['failures'][name+' @ '+source['url'][:75]]=str(e)[:180];print('SOURCE_REJECT',name,str(e)[:160],flush=True);continue
+   if url in used_media:
+    print('DUPLICATE_MEDIA',name,url[:100],flush=True);continue
+   used_media.add(url)
    used_events.add(source['url'])
    offsets=[float(base)+18,float(base)+36,float(base)+54] if base and float(base)>15 else [6,22,38,54]
    if 'rtve.es' in source['url'] and 'la-revuelta' in source['url']:offsets=[70,120,180]
