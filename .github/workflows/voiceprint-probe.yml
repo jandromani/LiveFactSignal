@@ -27,4 +27,5 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add scripts/voiceprints/probe-last.txt
           git diff --cached --quiet || git commit -m 'Store voice archive reachability audit'
-          git push || true
+          git pull --rebase --autostash origin master || { git rebase --abort || true; exit 0; }
+          git push origin HEAD:master || true
