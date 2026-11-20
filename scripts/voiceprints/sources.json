@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "goal_each": 10,
+  "model_id": "sherpaw-campplus-zh-en-advanced@5fc23543",
+  "model_sha256": "aa3cfc16963a10586a9393f5035d6d6b57e98d358b347f80c2a30bf4f00ceba2",
+  "seed_sources": [
+    {
+      "person": "Ada Colau",
+      "url": "https://commons.wikimedia.org/wiki/File:Diada_2015_Ada_Colau_demana_al_Govern_espanyol_que.ogv",
+      "start": "27.00",
+      "end": "37.00"
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://commons.wikimedia.org/wiki/File:La_pla%C3%A7a_de_Sant_Jaume_rep_la_nova_alcaldessa.webm",
+      "start": "51.00",
+      "end": "61.00"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://ppcantabria.org/actualidad/noticias/13518-feijoo-el-presidente-de-espana-que-necesita-cantabria",
+      "start": "12.00",
+      "end": "24.00"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://ppcantabria.org/actualidad/noticias/13518-feijoo-el-presidente-de-espana-que-necesita-cantabria",
+      "start": "45.00",
+      "end": "57.00"
+    },
+    {
+      "person": "Emilio Delgado",
+      "url": "https://www.europapress.tv/politica/1132053/1/emilio-delgado-frente-amplio-hay-poner-riqueza-servicio-pueblo",
+      "start": "38.00",
+      "end": "48.00"
+    },
+    {
+      "person": "Emilio Delgado",
+      "url": "https://www.europapress.tv/politica/1132053/1/emilio-delgado-frente-amplio-hay-poner-riqueza-servicio-pueblo",
+      "start": "62.00",
+      "end": "72.00"
+    },
+    {
+      "person": "Ester Muñoz",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=778365&idLegislaturaElegida=15&mp4=mp4",
+      "start": "63.70",
+      "end": "75.70"
+    },
+    {
+      "person": "Ester Muñoz",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=200&fechaSesion=23%2F09%2F2026&i=778856&idLegislaturaElegida=15&mp4=mp4",
+      "start": "60.50",
+      "end": "72.50"
+    },
+    {
+      "person": "Gabriel Rufián",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=777812&idLegislaturaElegida=15&mp4=mp4",
+      "start": "80.00",
+      "end": "92.00"
+    },
+    {
+      "person": "Gabriel Rufián",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=500&codSesion=10&fechaSesion=12%2F11%2F2026&i=780063&idLegislaturaElegida=15&mp4=mp4",
+      "start": "50.00",
+      "end": "62.00"
+    },
+    {
+      "person": "Maribel Vaquero",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=777815&idLegislaturaElegida=15&mp4=mp4",
+      "start": "372.50",
+      "end": "384.50"
+    },
+    {
+      "person": "Maribel Vaquero",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=500&codSesion=10&fechaSesion=12%2F11%2F2026&i=780060&idLegislaturaElegida=15&mp4=mp4",
+      "start": "176.50",
+      "end": "188.50"
+    },
+    {
+      "person": "Míriam Nogueras",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=777813&idLegislaturaElegida=15&mp4=mp4",
+      "start": "403.30",
+      "end": "415.30"
+    },
+    {
+      "person": "Míriam Nogueras",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=778355&idLegislaturaElegida=15&mp4=mp4",
+      "start": "4.00",
+      "end": "16.00"
+    },
+    {
+      "person": "Oskar Matute",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=777880&idLegislaturaElegida=15&mp4=mp4",
+      "start": "77.20",
+      "end": "89.20"
+    },
+    {
+      "person": "Oskar Matute",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=500&codSesion=10&fechaSesion=12%2F11%2F2026&i=780061&idLegislaturaElegida=15&mp4=mp4",
+      "start": "313.70",
+      "end": "325.70"
+    },
+    {
+      "person": "Patxi López",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=777821&idLegislaturaElegida=15&mp4=mp4",
+      "start": "692.30",
+      "end": "704.30"
+    },
+    {
+      "person": "Patxi López",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=203&fechaSesion=02%2F10%2F2026&i=779899&idLegislaturaElegida=15&mp4=mp4",
+      "start": "80.00",
+      "end": "92.00"
+    },
+    {
+      "person": "Pedro Sánchez",
+      "url": "https://commons.wikimedia.org/wiki/File:Pedro_S%C3%A1nchez_anuncia_la_convocatoria_de_elecciones_generales_para_el_29_de_noviembre.webm",
+      "start": "78.00",
+      "end": "90.00"
+    },
+    {
+      "person": "Pedro Sánchez",
+      "url": "https://commons.wikimedia.org/wiki/File:Pedro_S%C3%A1nchez_anuncia_la_convocatoria_de_elecciones_generales_para_el_29_de_noviembre.webm",
+      "start": "142.00",
+      "end": "154.00"
+    },
+    {
+      "person": "Pepa Millán",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=777904&idLegislaturaElegida=15&mp4=mp4",
+      "start": "11.40",
+      "end": "23.40"
+    },
+    {
+      "person": "Pepa Millán",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=778400&idLegislaturaElegida=15&mp4=mp4",
+      "start": "2.00",
+      "end": "14.00"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=777809&idLegislaturaElegida=15&mp4=mp4",
+      "start": "641.40",
+      "end": "653.40"
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=777856&idLegislaturaElegida=15&mp4=mp4",
+      "start": "133.90",
+      "end": "145.90"
+    }
+  ],
+  "scout": [
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=778482&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=166&fechaSesion=18%2F03%2F2026&i=769417&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=184&fechaSesion=10%2F06%2F2026&i=774774&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=777968&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Alberto Núñez Feijóo",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=174&fechaSesion=22%2F04%2F2026&i=772114&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Ester Muñoz",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=778449&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Ester Muñoz",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=190&fechaSesion=24%2F06%2F2026&i=776244&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Ester Muñoz",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=202&fechaSesion=30%2F09%2F2026&i=779657&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Gabriel Rufián",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=190&fechaSesion=24%2F06%2F2026&i=776269&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Gabriel Rufián",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=195&fechaSesion=09%2F09%2F2026&i=777935&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Míriam Nogueras",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=778459&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Míriam Nogueras",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=184&fechaSesion=10%2F06%2F2026&i=774636C&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Oskar Matute",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=190&fechaSesion=24%2F06%2F2026&i=776308&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Oskar Matute",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=778487&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Patxi López",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=65&fechaSesion=09%2F10%2F2024&i=739451&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Maribel Vaquero",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=202&fechaSesion=30%2F09%2F2026&i=779665&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    },
+    {
+      "person": "Emilio Delgado",
+      "url": "https://www.europapress.tv/politica/1131897/1/emilio-delgado-defiende-frente-amplio-mejor-opcion-quitar-escanos-vox",
+      "origin": "europapress",
+      "speaker_confirmation_required": true
+    },
+    {
+      "person": "Emilio Delgado",
+      "url": "https://www.europapress.tv/politica/1131998/1/emilio-delgado-frente-amplio-ve-peligroso-pueril-discurso-pp-vox",
+      "origin": "europapress",
+      "speaker_confirmation_required": true
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.rtve.es/play/videos/la-revuelta/ada-colau-inmigracion-no-problema-son-personas/17308735/",
+      "origin": "rtve",
+      "speaker_confirmation_required": true
+    },
+    {
+      "person": "Ada Colau",
+      "url": "https://www.rtve.es/play/videos/la-hora-de-la-1/colau-sobre-dimision-puente-no-creo-fuera-culpable-directo-absoluto-pero-si-tenia-responsabilidad-politica/17298961/",
+      "origin": "rtve",
+      "speaker_confirmation_required": true
+    },
+    {
+      "person": "Santiago Abascal",
+      "url": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=777809&idLegislaturaElegida=15&mp4=mp4",
+      "speaker_confirmation_required": true,
+      "origin": "congress"
+    }
+  ]
+}
