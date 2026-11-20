@@ -38,7 +38,7 @@ PRIORITY=['Maribel Vaquero','Oskar Matute','Gabriel Rufián','Emilio Delgado',
 session=requests.Session();session.headers.update(headers)
 def norm(s):
  s=unicodedata.normalize('NFKD',str(s)).encode('ascii','ignore').decode('ascii').lower()
- return re.sub(r'\\s+',' ',s)
+ return re.sub(r'\s+',' ',s)
 def verified(name,text):
  t=norm(text);return any(x in t for x in ALIASES[name])
 def media(source,name):
@@ -62,7 +62,7 @@ def media(source,name):
   r=session.get(url,timeout=25);r.raise_for_status()
   soup=BeautifulSoup(r.text,'html.parser');title=soup.title.get_text(' ',strip=True) if soup.title else ''
   if not verified(name,title):raise ValueError('EuropePress title does not label speaker')
-  links=re.findall(r'https://video\\d+\\.europapress\\.net/[^"\\s<>]+?\\.mp4',html.unescape(r.text))
+  links=re.findall(r'https://video\d+\.europapress\.net/[^"\s<>]+?\.mp4',html.unescape(r.text))
   if not links:raise ValueError('No EuropePress MP4')
   return links[0],title[:180],source.get('start')
  if 'wikimedia.org' in host:
@@ -151,8 +151,7 @@ def main():
  ext=model();auth=OIDC();sources=group_sources()
  for name in PRIORITY:
   print('CANDIDATE',name,'SOURCES',len(sources[name]),flush=True)
-  target=8;accepted=0,  # placeholder deliberately overwritten in next statement
-  accepted=0;attempts=0;used_events=set()
+  target=8;accepted=0;attempts=0;used_events=set()
   for source in sources[name]:
    if accepted>=target:break
    try:url,label,base=media(source,name)
