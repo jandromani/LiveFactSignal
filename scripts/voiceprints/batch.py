@@ -185,6 +185,14 @@ class OIDC:
   self.expiry=int(payload['exp']);return self.token
 def group_sources():
  out={n:[] for n in PRIORITY};seen={n:set() for n in PRIORITY}
+ # Independent editorial interviews take precedence for the four profiles
+ # that had only 2-3 original references.
+ underrepresented={'Alberto Núñez Feijóo','Ada Colau','Pepa Millán','Santiago Abascal'}
+ for item in MANIFEST.get('scout',[]):
+  person=item.get('person');url=item.get('url','')
+  if person in underrepresented and urlsplit(url).hostname=='www.europapress.tv' and url not in seen[person]:
+   out[person].append({'url':url,'start':0})
+   seen[person].add(url)
  # Prefer exact MP4 URLs indexed from the publisher's speaker-labelled rows.
  index_path=ROOT/'speaker-index.json'
  if index_path.exists():
