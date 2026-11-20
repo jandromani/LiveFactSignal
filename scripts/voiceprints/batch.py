@@ -206,7 +206,7 @@ def group_sources():
  underrepresented={'Alberto Núñez Feijóo','Ada Colau','Santiago Abascal','Gabriel Rufián','Pedro Sánchez'}
  for item in sorted(MANIFEST.get('scout',[]),key=lambda row:-int(row.get('priority') or 0)):
   person=item.get('person');url=item.get('url','')
-  if person in underrepresented and urlsplit(url).hostname=='www.europapress.tv' and url not in seen[person]:
+  if person in seen and person in underrepresented and urlsplit(url).hostname=='www.europapress.tv' and url not in seen[person]:
    out[person].append({'url':url,'start':0})
    seen[person].add(url)
  # Prefer exact MP4 URLs indexed from the publisher's speaker-labelled rows.
