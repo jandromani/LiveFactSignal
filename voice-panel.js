@@ -41,11 +41,11 @@ async function embedding(blob,span=null){
 }
 async function api(action,data){
  const id=data?.id||debate();if(!id)throw Error('Selecciona una sesión');
- const matchV2=action==='match-v2';
- const url=matchV2?'/api/voice-match-v2':'/api/voice?action='+encodeURIComponent(action)+(data?'':'&id='+encodeURIComponent(id));
+ const matchV2=action==='match-v2',training=action==='train';
+ const url=training?'/api/voice-train':matchV2?'/api/voice-match-v2':'/api/voice?action='+encodeURIComponent(action)+(data?'':'&id='+encodeURIComponent(id));
  const response=await fetch(url,{method:data?'POST':'GET',credentials:'same-origin',cache:'no-store',
-   headers:data?{'Content-Type':'application/json',...(matchV2?{}:{'x-admin-token':admin()})}:{},
-   body:data?JSON.stringify(matchV2?data:{id,...data}):undefined});
+   headers:data?{'Content-Type':'application/json',...(matchV2||training?{}:{'x-admin-token':admin()})}:{},
+   body:data?JSON.stringify(matchV2||training?data:{id,...data}):undefined});
  const value=await response.json().catch(()=>({}));if(!response.ok)throw Error(value.error||'HTTP '+response.status);
  return value;
 }
@@ -83,42 +83,99 @@ async function refresh(){
  }catch(e){status('Galería vocal: '+e.message,true)}
  finally{loading=false}
 }
-async function saveSample(blob,kind){
+function trainingProgress(message,bad=false){
+ const el=$('#voiceTrainingProgress');
+ if(el){el.textContent=message;el.style.color=bad?'#f4ada0':'#a3e9d3'}
+ status(message,bad);
+}
+async function saveSample(blob,kind,span=null){
  const name=$('#voiceCandidate').value;
- if(!name)throw Error('Selecciona primero el candidato o moderador');
- if(!admin())throw Error('Necesitas la clave de administrador');
- status('Calculando huella CAM++ local… La primera carga descarga el modelo y WASM.');
- const r=await embedding(blob);
- const response=await api('enroll',{name,embedding:r.embedding,duration_ms:r.duration_ms,source_type:kind,source_reference:$('#voiceSourceUrl').value.trim()});
- status('Referencia de '+name+' registrada: '+(r.duration_ms/1000).toFixed(1)+'s y 192 dimensiones.');
- await refresh();
- return response;
+ if(!name)throw Error('Selecciona primero a Feijóo o a la persona que está hablando');
+ if(!admin())throw Error('Necesitas acceso de operador autorizado');
+ const training=['Alberto Núñez Feijóo','Pedro Sánchez'].includes(name);
+ if(training&&!$('#voiceTrainingConfirm')?.checked)throw Error('Marca la casilla que confirma una sola voz, sin solapamiento');
+ if(training&&!$('#voiceSourceUrl')?.value.trim())throw Error('Selecciona el vídeo original antes de registrar nuevas referencias');
+ trainingProgress('Calculando CAM++ local para '+name+'…');
+ const sample=await embedding(blob,span);
+ if(training){
+  const result=await api('train',{
+   id:debate(),name,embedding:sample.embedding,duration_ms:sample.duration_ms,
+   source_url:$('#voiceSourceUrl').value.trim(),operator_confirmed:true
+  });
+  trainingProgress('✓ '+name+': nueva referencia guardada para '+result.sessions_updated+
+   ' sesiones · similitud '+result.match+' · ventaja sobre la otra voz '+result.margin+
+   '. Las etiquetas siguen siendo provisionales.');
+  await refresh();
+  return result;
+ }
+ const response=await api('enroll',{name,embedding:sample.embedding,duration_ms:sample.duration_ms,source_type:kind,source_reference:$('#voiceSourceUrl').value.trim()});
+ trainingProgress('Referencia local de '+name+' registrada, '+(sample.duration_ms/1000).toFixed(1)+' s');
+ await refresh();return response;
 }
 async function enrollFile(){
- const file=$('#voiceFile').files?.[0];if(!file)return status('Selecciona primero un archivo WAV, MP3, M4A, OGG o WebM',true);
- if(file.size>35_000_000)return status('Máximo 35 MB por muestra',true);
- try{await saveSample(file,'file')}catch(e){status(e.message,true)}
+ const file=$('#voiceFile').files?.[0];if(!file)return trainingProgress('Selecciona primero un archivo WAV, MP3, M4A, OGG o WebM',true);
+ if(file.size>35_000_000)return trainingProgress('Máximo 35 MB por muestra',true);
+ try{
+  const name=$('#voiceCandidate').value,training=['Alberto Núñez Feijóo','Pedro Sánchez'].includes(name);
+  await saveSample(file,'file',training?{start_rel_ms:0,end_rel_ms:12000}:null);
+ }catch(e){trainingProgress(e.message,true)}
+}
+async function captureShortSamples(count=1){
+ if(window.LiveFactSignal?.snapshot?.().capturing)throw Error('Detén la captura del debate antes de registrar nuevas referencias; los datos quedarán conservados');
+ if(!$('#voiceCandidate')?.value)throw Error('Selecciona el candidato');
+ if(!$('#voiceTrainingConfirm')?.checked)throw Error('Confirma primero que el vídeo contiene solamente su voz');
+ if(!$('#voiceSourceUrl')?.value?.trim())throw Error('Selecciona una fuente verificable antes de grabar');
+ if(!navigator.mediaDevices?.getDisplayMedia)throw Error('La captura requiere Chrome/Edge en HTTPS');
+ // Request screen sharing synchronously from the user click; only the shared tab audio is used.
+ const stream=await navigator.mediaDevices.getDisplayMedia({video:{displaySurface:'browser'},audio:{echoCancellation:false,noiseSuppression:false}});
+ try{
+  const tracks=stream.getAudioTracks();
+  if(!tracks.length)throw Error('Marca «Compartir audio de la pestaña»');
+  const mime=['audio/webm;codecs=opus','audio/webm'].find(t=>MediaRecorder.isTypeSupported(t));
+  if(!mime)throw Error('El navegador no admite la grabación WebM/Opus');
+  const audio=new MediaStream(tracks),blobs=[];
+  for(let i=0;i<count;i++){
+   if(tracks[0].readyState!=='live')throw Error('La pestaña dejó de compartir audio');
+   trainingProgress('Grabando referencia '+(i+1)+'/'+count+' · 12 s · una sola persona, sin cruces de voz…');
+   const parts=[];
+   await new Promise((resolve,reject)=>{
+    const rec=new MediaRecorder(audio,{mimeType:mime,audioBitsPerSecond:48000});
+    let timer,done=false;
+    const finish=error=>{if(done)return;done=true;clearTimeout(timer);if(error)reject(error);else resolve()};
+    rec.ondataavailable=e=>{if(e.data?.size)parts.push(e.data)};
+    rec.onerror=()=>finish(Error('Error de grabación; comprueba el audio compartido'));
+    rec.onstop=()=>finish(parts.length?null:Error('Grabación vacía'));
+    rec.start();timer=setTimeout(()=>{try{if(rec.state==='recording')rec.stop()}catch(e){finish(e)}},12000);
+   });
+   blobs.push(new Blob(parts,{type:mime}));
+  }
+  return blobs;
+ }finally{stream.getTracks().forEach(t=>t.stop())}
+}
+async function trainFeijooBatch(){
+ const btn=$('#voiceTrainFeijoo');if(btn?.disabled)return;
+ if(btn)btn.disabled=true;
+ try{
+  if(![...$('#voiceCandidate').options].some(x=>x.value==='Alberto Núñez Feijóo'))await refresh();
+  $('#voiceCandidate').value='Alberto Núñez Feijóo';
+  const clips=await captureShortSamples(2);
+  if(!confirm('¿Confirmas que en las DOS grabaciones se escuchaba únicamente a Alberto Núñez Feijóo, sin intervenciones de otras personas? Si hay dudas, pulsa Cancelar.'))return trainingProgress('Muestras descartadas por falta de confirmación; no se ha enviado audio ni ninguna huella.');
+  let accepted=0;const errors=[];
+  for(let i=0;i<clips.length;i++){
+   try{await saveSample(clips[i],'tab');accepted++}
+   catch(e){errors.push('Muestra '+(i+1)+': '+e.message)}
+  }
+  await refresh();
+  trainingProgress(accepted+' de '+clips.length+' huellas nuevas aceptadas en la biblioteca compartida.'+(errors.length?' Rechazadas: '+errors.join(' | '):'') ,accepted===0);
+ }catch(e){trainingProgress(e.message,true)}
+ finally{if(btn)btn.disabled=false}
 }
 async function enrollTab(){
- if(!$('#voiceCandidate').value)return status('Selecciona primero el candidato a identificar',true);
- if(!navigator.mediaDevices?.getDisplayMedia)return status('La captura de pestaña requiere Chrome/Edge y HTTPS',true);
- let stream;try{
- stream=await navigator.mediaDevices.getDisplayMedia({video:{displaySurface:'browser'},audio:{echoCancellation:false,noiseSuppression:false}});
- if(!stream.getAudioTracks().length)throw Error('Marca «Compartir audio de la pestaña»');
- const audio=new MediaStream(stream.getAudioTracks()),mime=['audio/webm;codecs=opus','audio/webm'].find(t=>MediaRecorder.isTypeSupported(t));
- if(!mime)throw Error('MediaRecorder no admite WebM');
- const rec=new MediaRecorder(audio,{mimeType:mime,audioBitsPerSecond:64000}),parts=[];
- status('Grabando 12 segundos de UNA voz de la pestaña compartida…');
- await new Promise((resolve,reject)=>{
-  let timer;
-  rec.ondataavailable=e=>{if(e.data?.size)parts.push(e.data)};
-  rec.onerror=e=>reject(Error('Error de grabación de voz'));
-  rec.onstop=()=>{clearTimeout(timer);resolve()};
-  rec.start();timer=setTimeout(()=>{if(rec.state==='recording')rec.stop()},12000);
-  stream.getAudioTracks()[0].onended=()=>{if(rec.state==='recording')rec.stop()};
- });
- const blob=new Blob(parts,{type:mime});await saveSample(blob,'tab');
- }catch(e){status(e.message,true)}finally{stream?.getTracks().forEach(t=>t.stop())}
+ try{
+  const clips=await captureShortSamples(1);
+  if(!confirm('¿Confirma que el clip incluye exclusivamente la voz de '+$('#voiceCandidate').value+'?'))return;
+  await saveSample(clips[0],'tab');
+ }catch(e){trainingProgress(e.message,true)}
 }
 function normalizedSpans(result,chunkStart,chunkEnd){
  const duration=chunkEnd-chunkStart,reported=Number(result.speaker_count)||0,raw=Array.isArray(result.voice_spans)?result.voice_spans:[];
@@ -180,6 +237,13 @@ function findSample(){
  const query=name+' entrevista '+($('#eventDate')?.value?.slice(0,4)||'2019')+' voz';
  window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(query),'_blank','noopener,noreferrer');
 }
+for(const b of document.querySelectorAll('[data-training-source]'))b.addEventListener('click',()=>{
+ const url=b.dataset.trainingSource;$('#voiceSourceUrl').value=url;
+ $('#voiceCandidate').value='Alberto Núñez Feijóo';
+ window.open(url,'_blank','noopener,noreferrer');
+ trainingProgress('Fuente seleccionada. Reproduce un tramo largo donde hable solo Feijóo; después pulsa «Entrenar Feijóo» y comparte esa pestaña con audio.');
+});
+$('#voiceTrainFeijoo').onclick=trainFeijooBatch;
 $('#voiceFileSend').onclick=enrollFile;
 $('#voiceTabSend').onclick=enrollTab;
 $('#voiceRemoveGo').onclick=remove;
