@@ -32,9 +32,9 @@ ALIASES={
  'Pedro Sánchez':['pedro sanchez','sanchez perez-castejon'],
  'Santiago Abascal':['santiago abascal','abascal conde'],
 }
-PRIORITY=['Maribel Vaquero','Oskar Matute','Gabriel Rufián','Emilio Delgado',
- 'Míriam Nogueras','Ester Muñoz','Patxi López','Pepa Millán',
- 'Ada Colau','Alberto Núñez Feijóo','Pedro Sánchez','Santiago Abascal']
+PRIORITY=['Alberto Núñez Feijóo','Pepa Millán','Ada Colau','Santiago Abascal',
+ 'Pedro Sánchez','Gabriel Rufián','Míriam Nogueras','Ester Muñoz',
+ 'Oskar Matute','Maribel Vaquero','Patxi López','Emilio Delgado']
 session=requests.Session();session.headers.update(headers)
 CONGRESS_PAGES={}
 def norm(s):
@@ -220,7 +220,7 @@ def main():
   target=8;accepted=0;attempts=0;used_events=set();already_full=False
   used_media=set()
   for source in sources[name]:
-   if accepted>=target:break
+   if accepted>=target or already_full:break
    try:url,label,base=media(source,name)
    except Exception as e:
     output['failures'][name+' @ '+source['url'][:75]]=str(e)[:180];print('SOURCE_REJECT',name,str(e)[:160],flush=True);continue
