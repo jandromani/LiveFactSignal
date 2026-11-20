@@ -1,0 +1,62 @@
+
+=== SOURCE Congress-Patxi
+HTTP 200 TYPE text/html; charset=ISO-8859-1 LENGTH 152337
+TITLE Video Sesión Plenaria - 03/09/2026
+MEDIA_LINKS ["https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_194/cortes/smil:15_000400_194.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_194/cortes/smil:15_000400_194.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_194/cortes/smil:15_000400_194.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_194/cortes/smil:15_000400_194.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_194/cortes/smil:15_000400_194_0_27634_777802.smil/manifest.m3u8", "https://static.congreso.es/audiovisual/video/leg15/400/15_000400_194/cortes/15_000400_194_0_27634_777802.mp4", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_194/cortes/smil:15_000400_194_0_27634_777803.smil/manifest.m3u8", "https://static.congreso.es/audiovisual/video/leg15/400/15_000400_194/cortes/15_000400_194_0_27634_777803.mp4"]
+MARKER download 15018
+MARKER descargar 14937
+MARKER stream 2265
+MARKER video 999
+MARKER speaker -1
+YT_DLP 1 URLS  ERROR ERROR: Unsupported URL: https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=194&fechaSesion=03%2F09%2F2026&i=777821&idLegislaturaElegida=15&mp4=mp4
+
+
+=== SOURCE Congress-Feijoo
+HTTP 200 TYPE text/html; charset=ISO-8859-1 LENGTH 811491
+TITLE Video Sesión Plenaria - 16/09/2026
+MEDIA_LINKS ["https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_198/cortes/smil:15_000400_198.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_198/cortes/smil:15_000400_198.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_198/cortes/smil:15_000400_198.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_198/cortes/smil:15_000400_198.smil/manifest.m3u8", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_198/cortes/smil:15_000400_198_0_27661_778349.smil/manifest.m3u8", "https://static.congreso.es/audiovisual/video/leg15/400/15_000400_198/cortes/15_000400_198_0_27661_778349.mp4", "https://streaming.congreso.es:8443/vod/ondemand/video/leg15/400/15_000400_198/cortes/smil:15_000400_198_0_27661_778350.smil/manifest.m3u8", "https://static.congreso.es/audiovisual/video/leg15/400/15_000400_198/cortes/15_000400_198_0_27661_778350.mp4"]
+MARKER download 15719
+MARKER descargar 15638
+MARKER stream 2265
+MARKER video 999
+MARKER speaker -1
+YT_DLP 1 URLS  ERROR ERROR: Unsupported URL: https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=198&fechaSesion=16%2F09%2F2026&i=778482&idLegislaturaElegida=15&mp4=mp4
+
+
+=== SOURCE EuropePress-Emilio
+HTTP 200 TYPE text/html; charset=utf-8 LENGTH 107427
+TITLE Emilio Delgado (Frente Amplio): "Hay que poner la riqueza al servicio del pueblo" | Parte 1
+MEDIA_LINKS ["https://video4.europapress.net/ep/H264/1132000/1132053_1_21.mp4"]
+MARKER download -1
+MARKER descargar -1
+MARKER stream -1
+MARKER video 13691
+MARKER speaker -1
+YT_DLP 1 URLS  ERROR ERROR: Unsupported URL: https://www.europapress.tv/politica/1132053/1/emilio-delgado-frente-amplio-hay-poner-riqueza-servicio-pueblo
+
+
+=== SOURCE Wikimedia-Ada
+HTTP 200 TYPE text/html; charset=UTF-8 LENGTH 109054
+TITLE File:Diada 2015 Ada Colau demana al Govern espanyol que.ogv - Wikimedia Commons
+MEDIA_LINKS ["https://upload.wikimedia.org/wikipedia/commons/transcoded/0/0c/Diada_2015_Ada_Colau_demana_al_Govern_espanyol_que.ogv/Diada_2015_Ada_Colau_demana_al_Govern_espanyol_que.ogv.480p.vp9.webm", "480p.vp9.webm", "https://upload.wikimedia.org/wikipedia/commons/transcoded/0/0c/Diada_2015_Ada_Colau_demana_al_Govern_espanyol_que.ogv/Diada_2015_Ada_Colau_demana_al_Govern_espanyol_que.ogv.240p.vp9.webm", "240p.vp9.webm", "https://upload.wikimedia.org/wikipedia/commons/transcoded/0/0c/Diada_2015_Ada_Colau_demana_al_Govern_espanyol_que.ogv/Diada_2015_Ada_Colau_demana_al_Govern_espanyol_que.ogv.240p.vp9.webm", "240p.vp9.webm", "https://upload.wikimedia.org/wikipedia/commons/transcoded/0/0c/Diada_2015_Ada_Colau_demana_al_Govern_espanyol_que.ogv/Diada_2015_Ada_Colau_demana_al_Govern_espanyol_que.ogv.480p.vp9.webm", "480p.vp9.webm"]
+MARKER download 43716
+MARKER descargar -1
+MARKER stream -1
+MARKER video 2566
+MARKER speaker -1
+YT_DLP 0 URLS https://upload.wikimedia.org/wikipedia/commons/0/0c/Diada_2015_Ada_Colau_demana_al_Govern_espanyol_que.ogv?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+ ERROR 
+
+=== SOURCE PP-Feijoo
+HTTP 200 TYPE text/html LENGTH 23688
+TITLE Partido Popular en Cantabria - FeijÃ³o, el presidente de EspaÃ±a que necesita Cantabria
+MEDIA_LINKS []
+MARKER download 14647
+MARKER descargar -1
+MARKER stream -1
+MARKER video 3961
+MARKER speaker -1
+YT_DLP 1 URLS  ERROR . This helps protect our community. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+
+
+MODEL_HTTP 200 CT application/octet-stream SIZE 28281164
