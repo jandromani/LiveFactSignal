@@ -61,16 +61,16 @@ export default async function handler(req,res){
    ), seeded AS (
     INSERT INTO voice_profiles (debate_id,person_name,party,model_id,embedding,duration_ms,source_type,source_reference,verified_by,quality_status)
     SELECT $1::uuid,v.person_name,r.party,v.model_id,v.embedding,v.duration_ms,
-           'public-reference',v.source_url||'#t='||coalesce(v.source_segment_start_s::text,'0'),
-           'public-source-metadata',v.quality_status
+           'public-reference',CASE WHEN v.quality_status='operator-reviewed' THEN v.source_url||'#training='||v.id::text ELSE v.source_url||'#t='||coalesce(v.source_segment_start_s::text,'0') END,
+           CASE WHEN v.quality_status='operator-reviewed' THEN 'operator-confirmed+acoustic-check' ELSE 'public-source-metadata' END,v.quality_status
     FROM candidate_roster r JOIN voice_reference_library v ON v.person_name=r.name
-    WHERE v.quality_status='source-labeled'
+    WHERE v.quality_status IN ('source-labeled','operator-reviewed')
     ON CONFLICT DO NOTHING RETURNING person_name
    )
    SELECT count(*)::integer AS added_voices FROM seeded`,[id]);
   const counts=await sql.query(`
     SELECT r.name AS person_name,
-       count(vp.id) FILTER (WHERE vp.source_type='public-reference' AND vp.quality_status='source-labeled')::integer AS samples
+       count(vp.id) FILTER (WHERE vp.source_type='public-reference' AND vp.quality_status IN ('source-labeled','operator-reviewed'))::integer AS samples
     FROM debate_roster r LEFT JOIN voice_profiles vp ON vp.debate_id=r.debate_id AND vp.person_name=r.name
     WHERE r.debate_id=$1::uuid AND r.role='candidate'
     GROUP BY r.name ORDER BY r.name`,[id]);
