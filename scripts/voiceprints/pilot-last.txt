@@ -4,13 +4,11 @@ MODEL_VALID True
 MEDIA 778482 ALL 173 MATCH 1
 CONTEXT :block;">                           	                	   	                	   <img width='16px' style="padding-left:5px"  alt="Descargar video" title="Descargar video"  src="/AudiovisualCongreso/recursos/img/download_trans_mp
 VIDEO https://static.congreso.es/audiovisual/video/leg15/400/15_000400_198/cortes/15_000400_198_1_27662_778482.mp4
-ERROR Alberto Núñez Feijóo FileNotFoundError [Errno 2] No such file or directory: 'ffmpeg'
-MEDIA 777821 ALL 30 MATCH 1
-CONTEXT :block;">                           	                	   	                	   <img width='16px' style="padding-left:5px"  alt="Descargar video" title="Descargar video"  src="/AudiovisualCongreso/recursos/img/download_trans_mp
-VIDEO https://static.congreso.es/audiovisual/video/leg15/400/15_000400_194/cortes/15_000400_194_0_27634_777821.mp4
-ERROR Patxi López FileNotFoundError [Errno 2] No such file or directory: 'ffmpeg'
-MEDIA 780063 ALL 49 MATCH 1
-CONTEXT :block;">                           	                	   	                	   <img width='16px' style="padding-left:5px"  alt="Descargar video" title="Descargar video"  src="/AudiovisualCongreso/recursos/img/download_trans_mp
-VIDEO https://static.congreso.es/audiovisual/video/leg15/500/15_000500_010/cortes/15_000500_010_0_27742_780063.mp4
-ERROR Gabriel Rufián FileNotFoundError [Errno 2] No such file or directory: 'ffmpeg'
-PILOT_FINISHED 0 embeddings computed; none persisted to repository
+FFMPEG 0 
+AUDIO 12.0 s 16000 Hz RMS 0.001 clipped_pct 0.0
+EMBEDDING_COMPUTED Alberto Núñez Feijóo dimension (192,) L2 10.872 segment 6
+FFMPEG 0 
+AUDIO 12.0 s 16000 Hz RMS 0.0094 clipped_pct 0.0
+EMBEDDING_COMPUTED Alberto Núñez Feijóo dimension (192,) L2 6.378 segment 20
+COSINE_QA Alberto Núñez Feijóo 6 vs Alberto Núñez Feijóo 20 0.483
+PILOT_FINISHED 2 embeddings computed; none persisted to repository
