@@ -16,7 +16,9 @@ function render(){
  const waitingRaw=rawQueue.filter(x=>!x.done).length;
  const line='SEGUNDA PASADA · retraso 5 min · '+waitingRaw+' fragmentos WebM en memoria · '+pending+' vectores pendientes · '+
    mature+' listos · próxima revisión '+remaining+' s'+
-   (lastResult?' · '+lastResult.groups+' voces agrupadas, '+lastResult.recognized+' tramos reconocidos, '+lastResult.claims_changed+' citas actualizadas':'')+
+   (lastResult?' · '+lastResult.groups+' grupos de voz, '+lastResult.recognized+' tramos reconocidos, '+lastResult.claims_changed+' citas actualizadas':'')+
+   (lastResult?.nogueras?.length?' · Nogueras: '+lastResult.nogueras.filter(x=>x.accepted).length+' grupos confirmados, '+
+     lastResult.nogueras.filter(x=>!x.accepted).length+' pendientes (no atribuidos)':'')+
    (lastError?' · ERROR: '+lastError:'');
  if(el())el().textContent=line;
  window.dispatchEvent(new CustomEvent('debate-voice-delayed-status',
