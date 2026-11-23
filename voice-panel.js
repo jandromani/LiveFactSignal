@@ -273,6 +273,12 @@ async function drain(){
   reportVoice('Extrayendo huella CAM++ para STT #'+item.seq,'embedding',item.seq);
   const sample=await embedding(item.blob,item.span);
   if(item.id!==debate())return;
+  // Separate five-minute delayed pipeline: it receives only the normalized
+  // CAM++ fingerprint and interval, not the raw audio or first-pass decision.
+  // A first-pass HTTP error cannot prevent the independent second pass.
+  window.debateVoiceDelay?.push({id:item.id,seq:item.seq,
+   start_ms:item.start_ms,end_ms:item.end_ms,embedding:sample.embedding,
+   referenceCount:profileCount});
   const match=await api('match-v2',{id:item.id,embedding:sample.embedding,start_ms:item.start_ms,end_ms:item.end_ms,seq:item.seq});
   lastVoiceResult=Date.now();
   voiceStats.compared++;
