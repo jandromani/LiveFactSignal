@@ -84,6 +84,25 @@ function classify(batch,references){
  }
  return {proposed,summaries};
 }
+function claimRanges(mature){
+ // Combine overlapping 4–5s windows of the SAME confidently identified person
+ // into a continuous interval, without spanning gaps or a different speaker.
+ const sorted=mature.filter(x=>x.decision==='matched'&&x.person_name)
+   .sort((a,b)=>a.seq-b.seq||a.start_ms-b.start_ms);
+ const out=[];
+ for(const x of sorted){
+  const prior=out.at(-1);
+  if(prior&&prior.seq===x.seq&&prior.person_name===x.person_name&&
+    x.start_ms<=prior.end_ms+250){
+   prior.end_ms=Math.max(prior.end_ms,x.end_ms);
+   prior.score=Math.min(prior.score,x.score);
+   prior.parts++;
+  }else out.push({seq:x.seq,start_ms:x.start_ms,end_ms:x.end_ms,
+    person_name:x.person_name,party:x.party,score:x.score,parts:1});
+ }
+ return out.filter(x=>x.end_ms-x.start_ms>=3000&&x.end_ms-x.start_ms<=16000);
+}
+
 export default async function handler(req,res){
  if(req.method!=='POST')return respond(res,405,{error:'POST requerido'});
  if(!validOperator(req))return respond(res,401,{error:'Operador no autorizado'});
@@ -138,6 +157,7 @@ export default async function handler(req,res){
   const mature=proposed.filter(x=>keys.has(x.seq+':'+x.start_ms+':'+x.end_ms));
   if(mature.length!==keys.size)return respond(res,409,{error:'No se han clasificado todos los tramos maduros'});
   const selected=mature.map(x=>({...x,method:METHOD}));
+  const ranges=claimRanges(mature);
   const rows=await sql.query(`
    WITH src AS (
     SELECT * FROM jsonb_to_recordset($2::jsonb) AS s(
@@ -154,28 +174,44 @@ export default async function handler(req,res){
      AND a.status='processed' AND s.start_ms>=a.start_ms-300 AND s.end_ms<=a.end_ms+300
     ON CONFLICT DO NOTHING
     RETURNING seq,start_ms,end_ms,person_name,party,score,decision
+   ), ranges AS (
+    SELECT * FROM jsonb_to_recordset($4::jsonb) AS r(
+     seq integer,start_ms integer,end_ms integer,
+     person_name text,party text,score numeric,parts integer)
+    WHERE EXISTS (
+     SELECT 1 FROM matches m WHERE m.seq=r.seq AND m.person_name=r.person_name
+       AND m.decision='matched' AND m.start_ms>=r.start_ms
+       AND m.end_ms<=r.end_ms
+    )
+   ), possible AS (
+    SELECT c.id,r.person_name,r.party,r.score,
+     (LEAST(c.end_ms,r.end_ms)-GREATEST(c.start_ms,r.start_ms))::numeric/
+       GREATEST(1,c.end_ms-c.start_ms)::numeric AS coverage
+    FROM claims c JOIN ranges r
+      ON c.debate_id=$1::uuid AND c.source_type='audio_scribe'
+     AND c.speaker_origin='unknown'
+     AND c.speaker ILIKE '%(fragmento '||r.seq::text||')%'
+     AND c.start_ms<r.end_ms AND c.end_ms>r.start_ms
+    WHERE (LEAST(c.end_ms,r.end_ms)-GREATEST(c.start_ms,r.start_ms))::numeric/
+      GREATEST(1,c.end_ms-c.start_ms)::numeric>=0.80
+   ), consensus AS (
+    SELECT id,MIN(person_name) AS person_name,MIN(party) AS party,MAX(score) AS score
+    FROM possible GROUP BY id HAVING COUNT(DISTINCT person_name)=1
    ), attributed AS (
     UPDATE claims c SET speaker=m.person_name,party=m.party,
      speaker_origin='voice_embedding',speaker_model=$3,voice_similarity=m.score
-    FROM matches m
-    WHERE m.decision='matched' AND m.person_name IS NOT NULL
-     AND c.debate_id=$1::uuid AND c.source_type='audio_scribe'
-     AND c.speaker_origin='unknown'
-     AND c.speaker ILIKE '%(fragmento '||m.seq::text||')%'
-     AND c.start_ms<=m.end_ms AND c.end_ms>=m.start_ms
-     AND c.end_ms>c.start_ms
-     AND (LEAST(c.end_ms,m.end_ms)-GREATEST(c.start_ms,m.start_ms))::numeric/
-          GREATEST(1,c.end_ms-c.start_ms)::numeric>=0.80
+    FROM consensus m WHERE c.id=m.id AND c.speaker_origin='unknown'
     RETURNING c.id
    )
    SELECT (SELECT count(*)::int FROM matches) AS saved,
     (SELECT count(*)::int FROM matches WHERE decision='matched') AS recognized,
     (SELECT count(*)::int FROM attributed) AS claims_changed`,
-   [id,JSON.stringify(selected),MODEL+':delay-5m']);
+   [id,JSON.stringify(selected),MODEL+':delay-5m',JSON.stringify(ranges)]);
   const result=rows[0]||{};
   return respond(res,200,{ok:true,method:METHOD,delay_minutes:5,
    input:clean.length,matured:mature.length,groups:summaries.length,
-   saved:result.saved||0,recognized:result.recognized||0,claims_changed:result.claims_changed||0,
+   saved:result.saved||0,recognized:result.recognized||0,
+   contiguous_ranges:ranges.length,claims_changed:result.claims_changed||0,
    nogueras:summaries.filter(x=>x.proposed==='Míriam Nogueras'),
    summary:summaries.slice(0,15)});
  }catch(err){return respond(res,500,{error:'Falló la segunda pasada CAM++',detail:String(err?.message||err).slice(0,220)})}
