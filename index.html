@@ -171,10 +171,10 @@ const $=s=>document.querySelector(s);
 const escape=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const displayVoice=s=>{
  const x=String(s||'Sin identificar');
- // Scribe restarts Voz 1 / Voz 2 numbering on every audio block.
- // It is NOT a stable human identity, so never show it as one.
- return /^Voz\\s*\\d+\\s*\\(fragmento\\s*\\d+\\)/i.test(x)?'Orador pendiente de identificar · '+(x.match(/fragmento\\s*\\d+/i)?.[0]||'') :
- /^Voz\\s*\\d+(?:\\s*·.*)?$/i.test(x)?'Voz local de Scribe (sin identidad)':x;
+ // Scribe speaker indices restart on each STT chunk. They are NOT persistent identities.
+ return /^Voz\s*\d+\s*\(fragmento\s*\d+\)/i.test(x)
+  ? 'Orador pendiente de identificar · '+(x.match(/fragmento\s*\d+/i)?.[0]||'')
+  : /^Voz\s*\d+(?:\s*·.*)?$/i.test(x)?'Voz local de Scribe (sin identidad)':x;
 };
 const clock=s=>{s=Math.max(0,Math.floor(Number(s)||0));return [Math.floor(s/3600),Math.floor(s/60)%60,s%60].map(x=>String(x).padStart(2,'0')).join(':')};
 const seconds=s=>{const p=String(s||'').split(':').map(Number);return p.length===3&&p.every(Number.isFinite)?p[0]*3600+p[1]*60+p[2]:0};
