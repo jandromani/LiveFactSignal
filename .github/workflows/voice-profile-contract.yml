@@ -1,0 +1,21 @@
+name: CAM++ browser reference contract
+on:
+  push:
+    paths:
+      - 'voice-panel.js'
+      - 'tests/voice-profile-contract.cjs'
+      - '.github/workflows/voice-profile-contract.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify 80 CAM++ references from public API shape
+        run: node tests/voice-profile-contract.cjs
