@@ -96,3 +96,10 @@ END $fn$;
 CREATE INDEX IF NOT EXISTS lfs_voice_training_refs_idx
  ON public.voice_reference_library(person_name,quality_status,created_at DESC)
  WHERE quality_status IN ('source-labeled','operator-reviewed');
+
+-- Second-pass speaker diarization (2026-11-24).
+-- This is a distinct, idempotent method; CAM++ v2 fast-path is unchanged.
+-- Delay client keeps vectors in RAM for five minutes; no raw media is saved.
+CREATE UNIQUE INDEX IF NOT EXISTS lfs_voice_delay_five_min_unique
+ ON public.voice_match_events(debate_id,seq,start_ms,end_ms,method)
+ WHERE method='campplus-delayed-5m';
