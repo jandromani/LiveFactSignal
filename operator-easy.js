@@ -24,7 +24,13 @@ function check(id,message,ready){
  el.textContent=message;el.classList.toggle('ok',Boolean(ready));el.classList.toggle('warn',!ready);
 }
 let authReady=false,voiceWarm=false,voiceLoading=false,activeCapture=false,wakeLock=null,routerVerified=false;
-const voiceSeedLastAttempt=new Map(),voiceInitialized=new Set(),voiceReconciledSignatures=new Map();
+const voiceSeedLastAttempt=new Map(),voiceInitialized=new Set(),voiceReconciledSignatures=new Map(),voiceManuallyDisabled=new Set();
+function updateLocalVoiceInfo(x){
+ const el=$('#opVoiceLocalDiagnostics');if(!el||!x)return;
+ const active=x.enabled?'✓ activo':'! desactivado';
+ el.textContent='NAVEGADOR · CAM++ '+active+' · '+x.profiles+' huellas · '+x.received+' respuestas STT recibidas · '+x.queued+' ventanas encoladas · '+x.attempted+' intentos · '+x.compared+' respuestas API · '+x.skipped+' descartes · '+x.errors+' errores · Último: '+x.lastReason;
+ el.style.color=x.errors||x.skipped&&!x.compared?'#ffcc8d':'#a7ded1';
+}
 async function preflight(){
  const selected=window.LiveFactSignal?.snapshot?.().id||localStorage.getItem('debate_live_id')||'';
  if(!selected)return;
@@ -81,12 +87,19 @@ async function preflight(){
    stats.textContent='CAM++ · '+(info.voice_v2?.matched||0)+' tramos reconocidos / '+(info.voice_v2?.total||0)+' comparados · '+(info.voice_v2?.candidate_pending||0)+' esperando continuidad · '+(info.claims?.voice_attributed||0)+' afirmaciones atribuidas por voz / '+(info.claims?.total||0)+' totales · '+(info.claims?.unknown||0)+' sin identificar'+
      ((info.voice_v2?.by_voice||[]).length?' · '+info.voice_v2.by_voice.map(x=>x.candidate+': '+x.matched+' reconocidos, '+x.awaiting_continuity+' pendientes').join(' · '):'');
   }
+  const local=window.debateVoice?.diagnostics?.();
+  if(local)updateLocalVoiceInfo(local);
   const voice=$('#voiceAuto');
-  if(voice&&(!voiceInitialized.has(selected)||!allReady)){
-   voice.checked=allReady;voiceInitialized.add(selected);
-   if($('#voiceAutoStats'))$('#voiceAutoStats').textContent=allReady?
-    'Comparación acústica habilitada: cada tramo se identifica por separado; no se aprenden identidades por el moderador. Resultados provisionales.':
-    'Comparación en pausa hasta tener las referencias de todos los participantes.';
+  if(voice){
+   // Fix sticky OFF state: previously an early preflight with missing refs
+   // unchecked this control and marked it initialized. Once all refs arrived,
+   // later checks NEVER re-enabled the matcher even though the status was green.
+   const shouldEnable=allReady&&!voiceManuallyDisabled.has(selected);
+   if(voice.checked!==shouldEnable)voice.checked=shouldEnable;
+   voiceInitialized.add(selected);
+   if($('#voiceAutoStats'))$('#voiceAutoStats').textContent=shouldEnable?
+    '✓ Comparación CAM++ activa. Scribe aporta tramos locales y CAM++ los identifica; las voces ambiguas quedan sin asignar.':
+    allReady?'Comparación desactivada manualmente por el operador.':'Comparación en pausa: esperando referencias.';
   }
   const key=$('#routerKey')?.value.trim()||'';
   check('opCheckRouter',routerVerified?'✓ OpenRouter probado':key.startsWith('sk-or-')?'◌ Verifica OpenRouter':'! Introduce OpenRouter',routerVerified);
@@ -156,7 +169,23 @@ function init(){
   diag.style.cssText='font-size:12px;color:#a7ded1;padding:9px 0;line-height:1.55;max-width:720px';
   diag.textContent='Esperando diagnóstico de reconocimiento vocal…';
   preflightRoot.appendChild(diag);
+  const local=document.createElement('div');
+  local.id='opVoiceLocalDiagnostics';local.setAttribute('role','status');
+  local.style.cssText='font-size:11px;color:#a7ded1;padding:5px 0;line-height:1.5;max-width:720px;overflow-wrap:anywhere';
+  local.textContent='NAVEGADOR · Esperando primer bloque STT enviado a CAM++';
+  preflightRoot.appendChild(local);
  }
+ $('#voiceAuto')?.addEventListener('change',event=>{
+  const sid=localStorage.getItem('debate_live_id')||'';
+  if(!event.isTrusted)return;
+  if(event.target.checked)voiceManuallyDisabled.delete(sid);
+  else voiceManuallyDisabled.add(sid);
+ });
+ window.addEventListener('debate-voice-diagnostic',event=>updateLocalVoiceInfo(event.detail));
+ window.addEventListener('debate-voice-unavailable',event=>{
+  const el=$('#opVoiceLocalDiagnostics');
+  if(el){el.textContent='! CAM++ no conectado: '+(event.detail?.reason||'modulo no cargado');el.style.color='#ffcc8d'}
+ });
  authStatus();preflight();setInterval(preflight,20000);window.addEventListener('livefact-session-changed',()=>{voiceReconciledSignatures.clear();voiceInitialized.clear();preflight().catch(()=>{})});let preloadAttempts=0;const preload=setInterval(()=>{if(window.debateVoice?.warmup){clearInterval(preload);warmupVoice()}else if(++preloadAttempts>100)clearInterval(preload)},500);setInterval(update,2000);update();
 }
 function update(){
