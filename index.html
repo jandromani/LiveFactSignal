@@ -169,6 +169,13 @@
 'use strict';
 const $=s=>document.querySelector(s);
 const escape=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const displayVoice=s=>{
+ const x=String(s||'Sin identificar');
+ // Scribe restarts Voz 1 / Voz 2 numbering on every audio block.
+ // It is NOT a stable human identity, so never show it as one.
+ return /^Voz\\s*\\d+\\s*\\(fragmento\\s*\\d+\\)/i.test(x)?'Orador pendiente de identificar · '+(x.match(/fragmento\\s*\\d+/i)?.[0]||'') :
+ /^Voz\\s*\\d+(?:\\s*·.*)?$/i.test(x)?'Voz local de Scribe (sin identidad)':x;
+};
 const clock=s=>{s=Math.max(0,Math.floor(Number(s)||0));return [Math.floor(s/3600),Math.floor(s/60)%60,s%60].map(x=>String(x).padStart(2,'0')).join(':')};
 const seconds=s=>{const p=String(s||'').split(':').map(Number);return p.length===3&&p.every(Number.isFinite)?p[0]*3600+p[1]*60+p[2]:0};
 const youtubeId=s=>{try{const u=new URL(s);const v=u.hostname.includes('youtu.be')?u.pathname.split('/')[1]:u.searchParams.get('v');return /^[\w-]{11}$/.test(v||'')?v:null}catch{return null}};
@@ -213,9 +220,9 @@ $('#sessionChip').textContent=state.debate?'SESIÓN '+state.debate.id.slice(0,8)
 $('#claimsView').innerHTML=c.length?c.slice().sort((a,b)=>b.start_ms-a.start_ms).map(x=>{
 const src=Array.isArray(x.sources)?x.sources:[];const t=Math.floor(x.start_ms/1000);
 const status=x.state==='provisional'?'CONSENSO IA · '+String(x.verdict||'').toUpperCase():x.state==='needs_review'?'REVISIÓN PENDIENTE':x.state==='verifying'?'INVESTIGANDO':x.state==='queued'?'EN COLA':'PROGRAMADA';
-return '<article class="claim"><div><div class="person"><span class="circle">'+escape((x.speaker||'?')[0])+'</span>'+escape(x.speaker)+'<span class="pill">'+escape(x.party||'—') +'</span><a class="timeLink" data-jump="'+t+'">◷ '+clock(t)+'</a>'+(x.speaker_origin==='voice_embedding'?'<span class="pill" style="color:var(--mint)">◉ Coincidencia acústica CAM++ · experimental</span>':x.speaker_origin==='turn_cue'?'<span class="pill" style="color:var(--gold)">↗ Inferido del anuncio de turno · no confirmado por voz</span>':'')+'</div><div class="quote">“'+escape(x.quote)+'”</div>'+(x.normalized!==x.quote?'<div class="caption">Proposición normalizada: '+escape(x.normalized)+'</div>':'')+(x.rationale?'<div class="reason">'+escape(x.rationale)+'</div>':'')+(src.length?'<div class="sourcelinks">'+src.map(s=>'<a href="'+escape(s.url)+'" target="_blank" rel="noopener noreferrer" title="'+escape(s.excerpt||'Fuente recuperada')+'">↗ '+escape(s.title||'Fuente')+'</a>').join('')+'</div>':'')+'<div class="caption">'+(x.time_precision==='audio-chunk'?'Momento aproximado ± intervalo audio':x.time_precision==='stt-segment'?'Marca de segmento STT':x.time_precision==='diarized-word'?'Marca estimada por voz y palabra':'Marca de tiempo importada')+'</div></div><div><div class="clstatus '+escape(x.state)+'">'+escape(status)+'</div><div class="caption" style="text-align:right;margin-top:6px">'+(x.latency_ms?Math.round(x.latency_ms/1000)+' s':'—')+'</div></div></article>';
+return '<article class="claim"><div><div class="person"><span class="circle">'+escape((x.speaker||'?')[0])+'</span>'+escape(displayVoice(x.speaker))+'<span class="pill">'+escape(x.party||'—') +'</span><a class="timeLink" data-jump="'+t+'">◷ '+clock(t)+'</a>'+(x.speaker_origin==='voice_embedding'?'<span class="pill" style="color:var(--mint)">◉ Coincidencia acústica CAM++ · experimental</span>':x.speaker_origin==='turn_cue'?'<span class="pill" style="color:var(--gold)">↗ Inferido del anuncio de turno · no confirmado por voz</span>':'')+'</div><div class="quote">“'+escape(x.quote)+'”</div>'+(x.normalized!==x.quote?'<div class="caption">Proposición normalizada: '+escape(x.normalized)+'</div>':'')+(x.rationale?'<div class="reason">'+escape(x.rationale)+'</div>':'')+(src.length?'<div class="sourcelinks">'+src.map(s=>'<a href="'+escape(s.url)+'" target="_blank" rel="noopener noreferrer" title="'+escape(s.excerpt||'Fuente recuperada')+'">↗ '+escape(s.title||'Fuente')+'</a>').join('')+'</div>':'')+'<div class="caption">'+(x.time_precision==='audio-chunk'?'Momento aproximado ± intervalo audio':x.time_precision==='stt-segment'?'Marca de segmento STT':x.time_precision==='diarized-word'?'Marca estimada por voz y palabra':'Marca de tiempo importada')+'</div></div><div><div class="clstatus '+escape(x.state)+'">'+escape(status)+'</div><div class="caption" style="text-align:right;margin-top:6px">'+(x.latency_ms?Math.round(x.latency_ms/1000)+' s':'—')+'</div></div></article>';
 }).join(''):'<div class="empty"><strong>No hay afirmaciones todavía</strong>Captura una pestaña con audio o introduce una frase de prueba. Cada resultado quedará guardado en PostgreSQL.</div>';
-$('#segmentsView').innerHTML=state.segments.length?state.segments.map(s=>'<div class="seg"><strong>#'+escape(s.seq)+' · '+clock(s.start_ms/1000)+' → '+clock(s.end_ms/1000)+'</strong><span class="pill" style="margin-left:9px">'+escape(s.status)+'</span><div>'+escape(s.transcript||'(sin transcripción)')+'</div><div class="caption">'+escape(s.speaker||'Sin identificar')+' · '+escape(s.claim_count)+' trabajos generados · '+(s.latency_ms?Math.round(s.latency_ms/1000)+'s':'—')+'</div></div>').join(''):'<div class="empty">Los fragmentos transcritos aparecerán aquí conforme lleguen de OpenRouter.</div>';
+$('#segmentsView').innerHTML=state.segments.length?state.segments.map(s=>'<div class="seg"><strong>#'+escape(s.seq)+' · '+clock(s.start_ms/1000)+' → '+clock(s.end_ms/1000)+'</strong><span class="pill" style="margin-left:9px">'+escape(s.status)+'</span><div>'+escape(s.transcript||'(sin transcripción)')+'</div><div class="caption">'+escape(displayVoice(s.speaker||'Sin identificar'))+' · '+escape(s.claim_count)+' trabajos generados · '+(s.latency_ms?Math.round(s.latency_ms/1000)+'s':'—')+'</div></div>').join(''):'<div class="empty">Los fragmentos transcritos aparecerán aquí conforme lleguen de OpenRouter.</div>';
 }
 async function createSession(){
 if(state.capturing||state.sttBusy||state.sttTasks.length||state.running)return notify('Finaliza la captura y el procesamiento pendiente antes de cambiar de sesión.','error');
@@ -262,7 +269,15 @@ function nextSeq(){return state.seq++;}
 async function drainStt(){
 while(state.sttBusy<2&&state.sttTasks.length){
 const item=state.sttTasks.shift();state.sttBusy++;render();
-(async()=>{try{if(item.blob.size>500000)throw Error('Fragmento excesivo ('+Math.round(item.blob.size/1024)+' KB). Reduce duración o bitrate; no se enviará un Base64 inválido.');const b64=arrayToBase64(await item.blob.arrayBuffer());const res=await api('transcribe',{id:state.id,seq:item.seq,start_ms:item.start_ms,end_ms:item.end_ms,speaker:item.speaker,party:item.party,format:item.format,audioBase64:b64});if(!res.duplicate&&$('#voiceAuto')?.checked&&window.debateVoice?.processChunk&&$('#sttModel')?.value==='scribe'){try{Promise.resolve(window.debateVoice.processChunk(item.blob,res,item.start_ms,item.end_ms,item.seq,state.id)).catch(e=>trace('VOICE',e.message))}catch(e){trace('VOICE',e.message)}}if(!res.duplicate)trace('STT','#'+item.seq+' '+(res.transcript||'').slice(0,65)+'… | '+res.added+' claims'+(res.speaker_count?' · '+res.speaker_count+' voces':''));await refresh();}
+(async()=>{try{if(item.blob.size>500000)throw Error('Fragmento excesivo ('+Math.round(item.blob.size/1024)+' KB). Reduce duración o bitrate; no se enviará un Base64 inválido.');const b64=arrayToBase64(await item.blob.arrayBuffer());const res=await api('transcribe',{id:state.id,seq:item.seq,start_ms:item.start_ms,end_ms:item.end_ms,speaker:item.speaker,party:item.party,format:item.format,audioBase64:b64});if(!res.duplicate&&$('#sttModel')?.value==='scribe'){
+ if(window.debateVoice?.processChunk){
+  try{Promise.resolve(window.debateVoice.processChunk(item.blob,res,item.start_ms,item.end_ms,item.seq,state.id)).catch(e=>trace('VOICE',e.message))}
+  catch(e){trace('VOICE',e.message)}
+ }else{
+  trace('VOICE','STT #'+item.seq+': motor CAM++ no inicializado. Transcripción conservada sin atribución; actualiza la consola.');
+  window.dispatchEvent(new CustomEvent('debate-voice-unavailable',{detail:{seq:item.seq,reason:'Módulo CAM++ no cargado'}}));
+ }
+}if(!res.duplicate)trace('STT','#'+item.seq+' '+(res.transcript||'').slice(0,65)+'… | '+res.added+' claims'+(res.speaker_count?' · '+res.speaker_count+' voces':''));await refresh();}
 catch(e){trace('STT FAIL','#'+item.seq+' '+e.message);notify('Falló un fragmento de audio: '+e.message,'error');}
 finally{state.sttBusy--;render();drainStt();}})();
 }
