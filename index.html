@@ -122,6 +122,11 @@
 <div class="hint" id="voiceAutoStats" style="margin:10px 0">Calibración automática preparada…</div><div id="voiceProfiles" style="padding:9px 0">Sin referencias</div>
 <div class="fieldrow"><div class="field"><label>Eliminar perfil biométrico</label><select id="voiceRemove"><option value="">Seleccionar muestra…</option></select></div><div style="align-self:end"><button class="button ghost" id="voiceRemoveGo">Eliminar muestra</button></div></div>
 <div id="voiceStatus" class="micro" aria-live="polite">Preparando galería…</div>
+<div class="hint" id="voiceDelayedStatus" role="status" aria-live="polite" style="margin-top:12px">
+ SEGUNDA PASADA · IA de voces con 5 minutos de retraso. Acumula huellas CAM++ en memoria del navegador,
+ agrupa voces por similitud y consulta independientemente las referencias del servidor.
+ Solo publica atribuciones cuando varios fragmentos concordantes alcanzan los criterios acústicos.
+ </div>
 </details><div class="separator"></div><div class="field"><label>Clave de administrador de esta instancia</label><input id="adminKey" type="password" autocomplete="off" placeholder="Contraseña del operador"></div>
 <div class="gap"></div><div class="field"><label>OpenRouter API key · solo memoria de esta pestaña</label><input id="routerKey" type="password" autocomplete="off" placeholder="sk-or-v1-..."></div>
 <div class="micro">Las claves se envían a tu propia API por HTTPS. La de OpenRouter no se guarda en el navegador, en Neon ni en el código público. Puedes configurarla como variable secreta en Vercel para no tener que introducirla.</div>
@@ -414,4 +419,4 @@ renderPlayer();const id=localStorage.getItem('debate_live_id');if(id&&/^[a-f0-9-
 }
 boot();
 })();
-</script><script src="/reset-ui.js" defer></script><script src="/rounds-autopilot.js" defer></script><script src="/identity-panel.js"></script><script type="module" src="/voice-panel.js"></script><script src="/agenda.js" defer></script><script src="/capture-assist.js" defer></script></body></html>
+</script><script src="/reset-ui.js" defer></script><script src="/rounds-autopilot.js" defer></script><script src="/identity-panel.js"></script><script src="/voice-delay.js"></script><script type="module" src="/voice-panel.js"></script><script src="/agenda.js" defer></script><script src="/capture-assist.js" defer></script></body></html>
