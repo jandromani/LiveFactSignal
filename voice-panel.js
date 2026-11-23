@@ -3,6 +3,12 @@ const $=s=>document.querySelector(s);
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let worker=null,req=0,pending=new Map(),profileCount=0,sessionId='',busy=0,queue=[],loading=false;
 const status=(m,error=false)=>{const x=$('#voiceStatus');if(x){x.textContent=m;x.style.color=error?'#f18e91':'#75ead0'}};
+const voiceStats={received:0,queued:0,attempted:0,compared:0,matched:0,unknown:0,skipped:0,errors:0,lastReason:'No ha llegado todavía ningún resultado STT al comparador',lastSeq:null,lastAt:0};
+function reportVoice(reason,kind='info',seq=null){
+ voiceStats.lastReason=String(reason);voiceStats.lastSeq=seq;voiceStats.lastAt=Date.now();
+ window.dispatchEvent(new CustomEvent('debate-voice-diagnostic',{detail:{...voiceStats,kind,enabled:!!$('#voiceAuto')?.checked,modelReady:!!worker,profiles:profileCount,queue:queue.length,busy}}));
+}
+
 const admin=()=>$('#adminKey')?.value?.trim()||sessionStorage.getItem('debate_admin')||'';
 const debate=()=>localStorage.getItem('debate_live_id')||'';
 function ensureWorker(){
@@ -182,37 +188,71 @@ async function enrollTab(){
  }catch(e){trainingProgress(e.message,true)}
 }
 function normalizedSpans(result,chunkStart,chunkEnd){
- const duration=chunkEnd-chunkStart,reported=Number(result.speaker_count)||0,raw=Array.isArray(result.voice_spans)?result.voice_spans:[];
- if(reported===1)return [{speaker_key:'única',start_rel_ms:0,end_rel_ms:duration,start_ms:chunkStart,end_ms:chunkEnd,duration_ms:duration}];
+ const duration=chunkEnd-chunkStart;
+ const raw=Array.isArray(result?.voice_spans)?result.voice_spans:[];
+ const reported=Number(result?.speaker_count)||0;
+ // Scribe speaker IDs are per-chunk, NOT persistent person identities.
+ // Prefer diarized, non-overlapping intervals when the API actually provides them.
  const spans=raw.map(x=>{
   const relA=x.start_rel_ms!=null&&Number.isFinite(Number(x.start_rel_ms))?Number(x.start_rel_ms):Number(x.start_ms)-chunkStart;
   const relB=x.end_rel_ms!=null&&Number.isFinite(Number(x.end_rel_ms))?Number(x.end_rel_ms):Number(x.end_ms)-chunkStart;
-  const a=Math.max(0,Math.min(duration,Math.round(relA))),b=Math.max(0,Math.min(duration,Math.round(relB)));
-  return {speaker_key:String(x.speaker_key||''),start_rel_ms:a,end_rel_ms:b,start_ms:chunkStart+a,end_ms:chunkStart+b,duration_ms:b-a};
- }).filter(x=>x.speaker_key&&x.speaker_key!=='desconocido'&&Number.isFinite(x.start_rel_ms)&&Number.isFinite(x.end_rel_ms)&&x.duration_ms>0)
-  .sort((a,b)=>a.start_rel_ms-b.start_rel_ms);
+  const start_rel_ms=Math.max(0,Math.min(duration,Math.round(relA)));
+  const end_rel_ms=Math.max(0,Math.min(duration,Math.round(relB)));
+  return {speaker_key:String(x.speaker_key||'speaker-local'),start_rel_ms,end_rel_ms,
+   start_ms:chunkStart+start_rel_ms,end_ms:chunkStart+end_rel_ms,
+   duration_ms:end_rel_ms-start_rel_ms};
+ }).filter(x=>x.duration_ms>=2800).sort((x,y)=>x.start_rel_ms-y.start_rel_ms);
  const merged=[];
  for(const x of spans){
-  const p=merged.at(-1);
-  if(p&&p.speaker_key===x.speaker_key&&x.start_rel_ms-p.end_rel_ms<=700){
-   p.end_rel_ms=Math.max(p.end_rel_ms,x.end_rel_ms);p.end_ms=chunkStart+p.end_rel_ms;p.duration_ms=p.end_rel_ms-p.start_rel_ms;
+  const prev=merged.at(-1);
+  if(prev&&prev.speaker_key===x.speaker_key&&x.start_rel_ms>=prev.end_rel_ms-200&&x.start_rel_ms-prev.end_rel_ms<=700){
+   prev.end_rel_ms=Math.max(prev.end_rel_ms,x.end_rel_ms);
+   prev.end_ms=chunkStart+prev.end_rel_ms;
+   prev.duration_ms=prev.end_rel_ms-prev.start_rel_ms;
   }else merged.push({...x});
  }
- // Reject actual overlapping distinct voices, not sequential interruptions.
- return merged.filter(x=>{
-  if(x.duration_ms<2800)return false;
-  return !merged.some(y=>y!==x&&y.speaker_key!==x.speaker_key&&Math.min(x.end_rel_ms,y.end_rel_ms)-Math.max(x.start_rel_ms,y.start_rel_ms)>450);
- });
+ const safe=merged.filter(x=>!merged.some(y=>y!==x&&x.speaker_key!==y.speaker_key&&
+  Math.min(x.end_rel_ms,y.end_rel_ms)-Math.max(x.start_rel_ms,y.start_rel_ms)>450));
+ if(safe.length)return {spans:safe,mode:'scribe-spans'};
+ // CRITICAL: Scribe may identify "Voz 1" / multiple speakers but provide NO
+ // interval annotations in the response. The old code dropped ALL these chunks,
+ // leaving 0 acoustic comparisons despite successful STT and 80 loaded voices.
+ const multi=reported>=2||/varias voces|múltiples voces|multiple speakers/i.test(String(result?.speaker||''));
+ if(multi&&duration>=7000){
+  const midpoint=Math.round(duration/2);
+  return {mode:'multi-fallback',spans:[
+   {speaker_key:'window-a',start_rel_ms:0,end_rel_ms:midpoint,start_ms:chunkStart,end_ms:chunkStart+midpoint,duration_ms:midpoint},
+   {speaker_key:'window-b',start_rel_ms:midpoint,end_rel_ms:duration,start_ms:chunkStart+midpoint,end_ms:chunkEnd,duration_ms:duration-midpoint}
+  ].filter(x=>x.duration_ms>=2800)};
+ }
+ if(duration>=2800&&duration<=16000)
+  return {mode:reported===1?'single-speaker':'unknown-speaker-fallback',
+   spans:[{speaker_key:'one-window',start_rel_ms:0,end_rel_ms:duration,
+    start_ms:chunkStart,end_ms:chunkEnd,duration_ms:duration}]};
+ return {mode:'no-safe-interval',spans:[]};
 }
 async function processChunk(blob,result,start_ms,end_ms,seq,id){
- if(!$('#voiceAuto')?.checked||id!==debate())return;
- if(profileCount<2){status('Huella acústica pendiente: cargando biblioteca…');refresh().catch(()=>{});return}
- const spans=normalizedSpans(result,start_ms,end_ms);
- if(!spans.length){status('Bloque '+seq+' sin tramo de voz continuo suficiente para identificar (no se inventa el hablante).');return}
- for(const span of spans){
-  if(queue.length>=16){status('Identificador vocal saturado: cola de 16 tramos; se omite una comparación.',true);break;}
-  queue.push({blob,start_ms:span.start_ms,end_ms:span.end_ms,seq,id,span});
+ voiceStats.received++;
+ const skip=reason=>{
+  voiceStats.skipped++;reportVoice('STT #'+seq+': '+reason,'warning',seq);
+  status('CAM++ · STT #'+seq+': '+reason,true);
+ };
+ if(id!==debate())return skip('sesión distinta; audio no atribuido');
+ if(!$('#voiceAuto')?.checked)return skip('comparación vocal desactivada; activa Comparar voz en Herramientas avanzadas');
+ if(!blob?.size)return skip('no se recibió un archivo de audio');
+ if(!String(result?.transcript||'').trim())return skip('transcripción vacía o silencio');
+ if(profileCount<2){
+  await refresh().catch(()=>{});
+  if(profileCount<2)return skip('referencias sin cargar todavía (0/2)');
  }
+ const {spans,mode}=normalizedSpans(result,start_ms,end_ms);
+ if(!spans.length)return skip('Scribe no ha suministrado un tramo suficientemente largo');
+ for(const span of spans){
+  if(queue.length>=24)return skip('cola acústica saturada con 24 intervalos');
+  queue.push({blob,start_ms:span.start_ms,end_ms:span.end_ms,seq,id,span});
+  voiceStats.queued++;
+ }
+ reportVoice('STT #'+seq+': '+spans.length+' ventana(s) CAM++ encolada(s) · '+mode,'queued',seq);
  drain();
 }
 async function drain(){
@@ -220,15 +260,21 @@ async function drain(){
  const item=queue.shift();
  try{
   if(item.id!==debate())return;
+  voiceStats.attempted++;
+  reportVoice('Extrayendo huella CAM++ para STT #'+item.seq,'embedding',item.seq);
   const sample=await embedding(item.blob,item.span);
   if(item.id!==debate())return;
   const match=await api('match-v2',{id:item.id,embedding:sample.embedding,start_ms:item.start_ms,end_ms:item.end_ms,seq:item.seq});
   lastVoiceResult=Date.now();
+  voiceStats.compared++;
+  if(match.matched)voiceStats.matched++;
+  else voiceStats.unknown++;
+  reportVoice('STT #'+item.seq+': '+(match.matched?match.name:match.status||'no concluyente')+' · similitud '+Number(match.score||0).toFixed(3),'compared',item.seq);
   if(match.matched)status('CAM++ · '+match.name+' · similitud '+Number(match.score).toFixed(3)+' · margen '+Number(match.gap).toFixed(3)+' · '+match.changed+' afirmaciones etiquetadas'+(match.promoted_prior?' · tramo anterior confirmado por continuidad':'')+'. Atribución provisional.');
   else if(match.status==='candidate')status('CAM++ · candidato acústico detectado ('+Number(match.score).toFixed(3)+'), esperando siguiente fragmento para confirmar continuidad. Sin atribución todavía.');
   else status('CAM++ · Voz no concluyente · máximo '+Number(match.score||0).toFixed(3)+' · no se etiqueta a ningún candidato.');
   window.dispatchEvent(new CustomEvent('debate-voice-result',{detail:match}));
- }catch(e){status('Comparación acústica: '+e.message,true);console.warn('[VOICE v2]',e)}
+ }catch(e){voiceStats.errors++;reportVoice('STT #'+item.seq+': error CAM++ / API: '+e.message,'error',item.seq);status('Comparación acústica: '+e.message,true);console.warn('[VOICE v2]',e)}
  finally{busy=0;drain()}
 }
 async function remove(){
@@ -254,7 +300,9 @@ $('#voiceRemoveGo').onclick=remove;
 $('#voiceSearch').onclick=findSample;
 $('#voiceRefresh').onclick=refresh;
 $('#voiceAuto').onchange=()=>status($('#voiceAuto').checked?'Comparación acústica con biblioteca de referencias activada':'Comparación acústica en pausa');
-window.debateVoice={processChunk,refresh,embed:embedding,warmup:async()=>{const r=await rpc('warmup');status('Motor acústico CAM++ listo: 192 dimensiones.');return r}};
+window.debateVoice={processChunk,refresh,embed:embedding,
+ diagnostics:()=>({...voiceStats,enabled:!!$('#voiceAuto')?.checked,profiles:profileCount,queue:queue.length,busy}),
+ warmup:async()=>{const r=await rpc('warmup');status('Motor acústico CAM++ listo: 192 dimensiones.');reportVoice('CAM++ precargado; esperando tramos STT','ready');return r}};
 window.addEventListener('debate-voice-result',()=>setTimeout(refresh,800));
 setInterval(()=>{if(debate()!==sessionId||profileCount===0||Date.now()-lastRefresh>30000)refresh()},5000);
 refresh();
