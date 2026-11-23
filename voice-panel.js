@@ -79,7 +79,16 @@ async function refresh(){
    counts.set(p.person_name,(counts.get(p.person_name)||0)+1);
    if(p.quality_status==='operator-reviewed')trained.set(p.person_name,(trained.get(p.person_name)||0)+1);
   }
-  profileCount=(data.profiles||[]).filter(x=>x.source_type==='public-reference'&&['source-labeled','operator-reviewed'].includes(x.quality_status)).length;
+  // /api/voice?action=list intentionally returns public profile metadata without
+  // quality_status. The old strict client filter silently discarded all 80 profiles.
+  // The matching API independently enforces source_type, quality_status and model_id
+  // against Neon, so the client only needs to know that same-model public refs exist.
+  const references=(data.profiles||[]).filter(x=>x.source_type==='public-reference'
+    &&x.model_id==='sherpaw-campplus-zh-en-advanced@5fc23543'
+    &&(x.quality_status==null||['source-labeled','operator-reviewed'].includes(x.quality_status)));
+  profileCount=references.length;
+  if(profileCount===0&&(data.profiles||[]).length)console.warn('[VOICE gallery] API returned profiles, but none qualified; sample keys:',Object.keys(data.profiles[0]||{}));
+  if(profileCount>0)reportVoice(profileCount+' referencias CAM++ disponibles; modelo comprobado','ready');
   sessionId=id;lastRefresh=Date.now();
   $('#voiceProfiles').innerHTML=(data.profiles||[]).length?rosterPeople.map(p=>'<div class="measure"><span>'+escape(p.name)+'</span><strong>'+(counts.get(p.name)||0)+' huellas · '+(trained.get(p.name)||0)+' entrenadas</strong></div>').join('')+
    '<div class="caption">'+profileCount+' referencias de la biblioteca. Identidades acústicas provisionales; similitud coseno, no probabilidad.</div>':
