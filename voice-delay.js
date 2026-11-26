@@ -1,9 +1,11 @@
 // Independent second pass. Keep captured WebM blobs ONLY in volatile browser RAM
 // until five minutes have elapsed, extract additional short CAM++ windows locally,
-// then send embeddings (never raw audio) for clustering and 8-way backend matching.
+// then send embeddings (never raw audio) for roster-scoped backend matching.
 (()=>{
 'use strict';
 const DELAY_MS=300000,KEEP_MS=850000,TICK_MS=20000,MAX_SAMPLES=190;
+const FOUR_WAY_26N='f45fc70e-fcb6-4e01-b40b-81143627e030';
+function sufficientReferences(session,count){return count >= (session===FOUR_WAY_26N?40:60)}
 let current='',queue=[],rawQueue=[],working=false,rawWorking=false,lastResult=null,lastError='',lastRun=0;
 const key=x=>x.seq+':'+x.start_ms+':'+x.end_ms;
 const el=()=>document.getElementById('voiceDelayedStatus');
@@ -31,9 +33,9 @@ function push(x){
  if(current!==live)reset(live);
  if(!Number.isSafeInteger(x.seq)||!Number.isSafeInteger(x.start_ms)||!Number.isSafeInteger(x.end_ms)
    ||!Array.isArray(x.embedding)||x.embedding.length!==192)return;
- // Only eight-or-more-person sessions, so there is no extra traffic for a
- // two-person capture; this feature runs independently of CAM++ v2.
- if(Number(x.referenceCount)<60)return;
+ // Allow the verified four-candidate 26N roster (40 references); preserve
+ // the previous threshold for all other sessions, including two-person QA.
+ if(!sufficientReferences(live,Number(x.referenceCount)))return;
  const entry={seq:x.seq,start_ms:x.start_ms,end_ms:x.end_ms,
   captured_at:Number.isSafeInteger(x.captured_at)?x.captured_at:Date.now(),embedding:x.embedding.slice(),confirmed:false};
  if(queue.some(v=>key(v)===key(entry)))return;
@@ -89,7 +91,7 @@ async function processRaw(){
  if(!ready.length)return;
  const embed=window.debateVoice?.embed;
  const count=window.debateVoice?.diagnostics?.().profiles||0;
- if(typeof embed!=='function'||count<60){
+ if(typeof embed!=='function'||!sufficientReferences(currentSession(),count)){
   lastError='CAM++ no tiene suficientes referencias en el navegador para analizar la segunda pasada';
   render();return;
  }
