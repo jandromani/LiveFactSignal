@@ -124,12 +124,7 @@ window.addEventListener('debate-capture-stop',()=>{activeCapture=false;wakeLock?
 document.addEventListener('visibilitychange',()=>{if(activeCapture)acquireWake()});
 window.addEventListener('beforeunload',e=>{if(activeCapture){e.preventDefault();e.returnValue=''}});
 
-const preset=[
- {date:'19 NOV · 22:00',name:'Sánchez vs. Feijóo',id:'f3c2fd9b-5fa1-4818-a407-453f5cac4a34'},
- {date:'23 NOV · 22:00',name:'Ocho portavoces',id:'21e5098f-0f04-4571-92a4-9b1d52f4d48c'},
- {date:'26 NOV',name:'Debate a cuatro',id:'f45fc70e-fcb6-4e01-b40b-81143627e030'},
- {date:'LABORATORIO',name:'Prueba sin contaminar datos',id:'8ee348bb-acac-4934-8358-e183d0a57712'}
-];
+const preset=[{date:'26 NOV · 22:00',name:'Debate a cuatro',id:'f45fc70e-fcb6-4e01-b40b-81143627e030'}];
 async function authStatus(){
  try{
   const r=await nativeFetch('/api/operator-auth?action=status',{cache:'no-store'}),j=await r.json();
@@ -153,8 +148,8 @@ function init(){
  if($('#concurrency'))$('#concurrency').value='20';
  if($('#autoVerify'))$('#autoVerify').checked=true;
  if($('#voiceAuto')){$('#voiceAuto').checked=false;$('#voiceAutoStats').textContent='Consultando referencias acústicas de los participantes…';}
- preset[0].id=localStorage.getItem('lfs_current_live')||preset[0].id;
- const id=localStorage.getItem('debate_live_id')||preset[0].id;
+ 
+ const id=preset[0].id;
  if(!localStorage.getItem('debate_live_id'))localStorage.setItem('debate_live_id',id);
  if($('#modeLive'))$('#modeLive').click();
  $('#opPresets').innerHTML=preset.map(x=>'<button type="button" class="opPreset '+(x.id===id?'on':'')+'" data-id="'+x.id+'"><small>'+x.date+'</small><strong>'+x.name+'</strong></button>').join('');
