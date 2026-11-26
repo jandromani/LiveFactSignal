@@ -8,7 +8,7 @@
 <section class="ticker" id="ticker"><div class="tickerhead"><div class="state" id="verdict">◉ OBSERVATORIO PREPARADO</div><div class="mini" id="sources"></div></div><div class="tickerquote" id="quote">Las afirmaciones aparecerán aquí durante la emisión.</div><div class="byline"><strong id="speaker">Sin transcripción</strong> <span id="meta"></span></div><div class="bar"><div class="progress" id="progress"></div></div></section>
 <footer class="bottom"><span><b>AVISO:</b> Análisis automatizado y provisional. Ninguna etiqueta constituye verificación editorial.</span><span id="footerTime">Consultando servidor…</span></footer></main>
 <script>
-const $=q=>document.querySelector(q),ROOT='f3c2fd9b-5fa1-4818-a407-453f5cac4a34';let ID=new URLSearchParams(location.search).get('debate')||ROOT;const lockedArchive=new URLSearchParams(location.search).get('archive')==='1';const followCurrent=!lockedArchive&&ID===ROOT;
+const $=q=>document.querySelector(q),ROOT='f45fc70e-fcb6-4e01-b40b-81143627e030';let ID=new URLSearchParams(location.search).get('debate')||ROOT;const lockedArchive=new URLSearchParams(location.search).get('archive')==='1';const followCurrent=!lockedArchive&&ID===ROOT;
 if(new URLSearchParams(location.search).get('transparent')==='1')document.body.classList.add('transparent');
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
 const clock=t=>{const n=Math.max(0,Math.floor(Number(t||0)/1000));return [Math.floor(n/3600),Math.floor(n/60)%60,n%60].map(x=>String(x).padStart(2,'0')).join(':')};
