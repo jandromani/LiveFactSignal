@@ -5,11 +5,7 @@
 const $=s=>document.querySelector(s);
 const ids={demo:'8ee348bb-acac-4934-8358-e183d0a57712',today:'f45fc70e-fcb6-4e01-b40b-81143627e030'};
 let currentView=null;
-function selectedDebate(){
- const id=window.LiveFactSignal?.snapshot?.().id||localStorage.getItem('debate_live_id')||ids.today;
- // The private demo is intentionally excluded from the public data API.
- return id===ids.demo?ids.today:id;
-}
+function selectedDebate(){return ids.today;}
 function pageUrl(view){
  const id=encodeURIComponent(selectedDebate());
  return view==='overlay'?'/overlay.html?debate='+id:'/observatorio.html?debate='+id;
@@ -20,7 +16,7 @@ function updateExternal(){
  if(obs)obs.href=publicUrl;
  const ov=$('#lfOpenOverlay');if(ov)ov.href=overlayUrl;
  // Keep the public spectator data on the official debate when the private demo is selected.
- for(const link of obsButtons)if(!link.closest('#lfMonitorViewer'))link.href=publicUrl;
+ for(const link of obsButtons)if(!link.closest('#lfMonitorViewer')&&link.id!=='lfStreamVisual'&&!new URL(link.href,location.href).searchParams.has('emit'))link.href=publicUrl;
  const other=document.querySelectorAll('a[href^="/overlay.html"]');
  for(const link of other)if(!link.closest('#lfMonitorViewer'))link.href=overlayUrl;
  if(obsView&&currentView)obsView.href=pageUrl(currentView);
