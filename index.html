@@ -16,7 +16,7 @@
 <div class="top"><span>OBSERVATORIO / ESPAÑA / STREAMING INTELLIGENCE</span><span class="badge" id="healthBadge">CONECTANDO INFRAESTRUCTURA</span></div>
 <header class="pagehead"><div><div class="kicker">POLITICAL VERIFICATION ENGINE · V0.3</div><h1>Debate a cuatro.<br><em>26N · en directo.</em></h1><p>Sánchez · Abascal · Colau · Feijóo. Captura la señal, contrasta sus afirmaciones y consulta las fuentes en tiempo real.</p></div><div class="toolbar"><button class="button ghost" id="replayLegacy">Abrir importador SRT</button><button class="button primary" id="newSession">＋ Crear sesión</button></div></header>
 <div class="alert hidden" id="notice"></div><script>localStorage.setItem("debate_live_id","f45fc70e-fcb6-4e01-b40b-81143627e030");localStorage.removeItem("lfs_current_live");</script>
-<div style="margin:17px 0;padding:15px 18px;background:#122e32;border:1px solid #377c70;border-radius:12px;display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap"><div><strong style="color:#8de6c6">◉ NUEVO · OBSERVATORIO PÚBLICO EN DIRECTO</strong><div style="font-size:11px;color:#b3c9cf;margin-top:5px">Vista de espectadores · fichas de candidatos, afirmaciones, temas y fuentes</div></div><a href="/observatorio.html" target="_blank" rel="noopener noreferrer" class="button primary">↗ Observatorio · otra pestaña</a><a href="/overlay.html" target="_blank" rel="noopener noreferrer" class="button ghost">◉ OBS · otra pestaña</a><a href="/prueba.html" target="_blank" rel="noopener noreferrer" class="button ghost">◉ Prueba de 5 minutos</a></div><section id="lfPublishBox" class="lfPublishBox">
+<div style="margin:17px 0;padding:15px 18px;background:#122e32;border:1px solid #377c70;border-radius:12px;display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap"><div><strong style="color:#8de6c6">◉ NUEVO · OBSERVATORIO PÚBLICO EN DIRECTO</strong><div style="font-size:11px;color:#b3c9cf;margin-top:5px">Vista de espectadores · fichas de candidatos, afirmaciones, temas y fuentes</div></div><a href="/observatorio.html" target="_blank" rel="noopener noreferrer" class="button primary">↗ Observatorio · otra pestaña</a><a href="/overlay.html?debate=f45fc70e-fcb6-4e01-b40b-81143627e030" target="_blank" rel="noopener noreferrer" class="button ghost">◉ OBS · otra pestaña</a><a href="/prueba.html" target="_blank" rel="noopener noreferrer" class="button ghost">◉ Prueba de 5 minutos</a></div><section id="lfPublishBox" class="lfPublishBox">
  <div class="lfPublishTitle"><div><div class="lfTiny">GUARDAR · COMPARTIR · RETRANSMITIR</div><strong>Tu debate queda archivado en Neon</strong><p>Descarga una copia en JSON o CSV cuando quieras. Emite nuestros gráficos en YouTube sin publicar vídeo ni audio de RTVE.</p></div><span class="lfArchiveBadge">GUARDADO CONTINUO</span></div>
  <div class="lfPublishActions">
   <button type="button" id="lfExportJson" class="button primary">↓ Guardar sesión completa · JSON</button>
@@ -32,7 +32,7 @@
   <button type="button" id="lfPeekObserver" class="button primary">◫ Ver observatorio aquí</button>
   <button type="button" id="lfPeekOverlay" class="button ghost">◉ Ver gráficos OBS aquí</button>
   <a id="lfOpenObserver" class="button ghost" href="/observatorio.html" target="_blank" rel="noopener noreferrer">↗ Observatorio · ventana aparte</a>
-  <a id="lfOpenOverlay" class="button ghost" href="/overlay.html" target="_blank" rel="noopener noreferrer">↗ OBS · ventana aparte</a>
+  <a id="lfOpenOverlay" class="button ghost" href="/overlay.html?debate=f45fc70e-fcb6-4e01-b40b-81143627e030" target="_blank" rel="noopener noreferrer">↗ OBS · ventana aparte</a>
  </div>
 </section>
 <section id="lfMonitorViewer" class="lfMonitorViewer" aria-label="Visor de observatorio integrado" hidden>
@@ -71,7 +71,7 @@
  <div class="opStep"><div class="opNum">02 · CONECTA OPENROUTER</div><div id="opRouter"></div><div id="opKeyStatus" class="opMicro">Clave OpenRouter pendiente</div><div id="opHelp" class="opMicro">Comprobando autorización privada…</div></div>
  <div class="opStep"><div class="opNum">03 · EMPIEZA A ESCUCHAR</div><div id="opAction"></div><div id="opSource"></div><div id="opBacklog" class="opMicro">Vigilancia en espera</div></div></div>
  <div id="opPreflight" class="opPreflight" aria-live="polite"><div><b>ESTADO DEL SISTEMA</b><span id="opCheckAuth">◌ Acceso de operador</span><span id="opCheckDb">◌ Neon</span><span id="opCheckVoice">◌ Voces</span><span id="opCheckRouter">◌ OpenRouter</span><span id="opCheckModel">◌ Modelo CAM++</span></div><small>El procesamiento de audio requiere Chrome/Edge con la pestaña compartida. Mantén ambas pestañas abiertas durante el debate.</small></div>
- <div class="opFoot"><span>Los resultados públicos se actualizan automáticamente. La emisión original se reproduce en RTVE o YouTube.</span><div><a class="button ghost" href="/observatorio.html" target="_blank" rel="noopener">◈ Ver como espectador</a> <a class="button ghost" href="/overlay.html" target="_blank" rel="noopener">◉ OBS</a> <button class="button ghost" id="opDetails" type="button">Mostrar herramientas avanzadas</button></div></div>
+ <div class="opFoot"><span>Los resultados públicos se actualizan automáticamente. La emisión original se reproduce en RTVE o YouTube.</span><div><a class="button ghost" href="/observatorio.html" target="_blank" rel="noopener">◈ Ver como espectador</a> <a class="button ghost" href="/overlay.html?debate=f45fc70e-fcb6-4e01-b40b-81143627e030" target="_blank" rel="noopener">◉ OBS</a> <button class="button ghost" id="opDetails" type="button">Mostrar herramientas avanzadas</button></div></div>
 </section><section id="lfs26Board" class="lfs26-panel" aria-label="Contraste por candidato"></section><section class="panel agenda-wrap" id="agendaSection">
  <div class="ph"><div><div class="kicker">AGENDA ELECTORAL · NOVIEMBRE 2026</div><h3 style="margin-top:5px">Elige el debate que quieres monitorizar</h3></div><div class="toolbar"><span class="badge green">DIRECTO RTVE</span><button id="refreshAgenda" class="button ghost" style="padding:7px 10px">↻ Actualizar</button></div></div>
  <div id="agendaCards" class="agenda-grid"><div class="agenda-loading">Cargando los debates confirmados desde Neon…</div></div>
@@ -167,7 +167,7 @@
 
 <script src="/multi-view.js" defer></script>
 <script src="/publish.js" defer></script>
-<script>if(!localStorage.getItem('debate_live_id'))localStorage.setItem('debate_live_id','f3c2fd9b-5fa1-4818-a407-453f5cac4a34');</script>
+<script>if(!localStorage.getItem('debate_live_id'))localStorage.setItem('debate_live_id','f45fc70e-fcb6-4e01-b40b-81143627e030');</script>
 <script src="https://www.youtube.com/iframe_api" async></script>
 <script>
 (function(){
@@ -383,7 +383,7 @@ setInterval(async()=>{
 // Two-button console launcher: switch debate sessions without page reload or losing the OpenRouter input.
 // Wait for existing demo STT to finish before changing state.id to prevent cross-session claims.
 const LIVEFACT_DEMO='8ee348bb-acac-4934-8358-e183d0a57712';
-const LIVEFACT_TODAY='f3c2fd9b-5fa1-4818-a407-453f5cac4a34';
+const LIVEFACT_TODAY='f45fc70e-fcb6-4e01-b40b-81143627e030';
 const ACTIVE_LIVE=()=>localStorage.getItem('lfs_current_live')||LIVEFACT_TODAY;
 async function liveFactSelect(id){
  const allowed=new Set([LIVEFACT_DEMO,LIVEFACT_TODAY,ACTIVE_LIVE(),'21e5098f-0f04-4571-92a4-9b1d52f4d48c','f45fc70e-fcb6-4e01-b40b-81143627e030']);
