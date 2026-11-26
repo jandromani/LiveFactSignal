@@ -37,9 +37,10 @@ async function exportData(format){
 }
 function sync(){
  const id=current(),publicId=id===QA?LIVE:id;
- const screen=$('#lfStreamVisual');if(screen)screen.href='/overlay.html?debate='+encodeURIComponent(publicId);
+ const screen=$('#lfStreamVisual');if(screen)screen.href='/observatorio.html?debate='+encodeURIComponent(publicId)+'&emit=1';
 }
 function init(){
+ $('#lfYouTubeStudio')?.addEventListener('click',()=>{const screen=$('#lfStreamVisual');if(screen)window.open(screen.href,'lfs26_public_broadcast','noopener,noreferrer');show('Sala de directos de YouTube abierta por el enlace. Si la segunda pestaña fue bloqueada, pulsa «Abrir pantalla pública de emisión». Comparte únicamente esa pestaña, sin audio de RTVE.');});
  $('#lfExportJson')?.addEventListener('click',()=>exportData('json'));
  $('#lfExportCsv')?.addEventListener('click',()=>exportData('csv'));
  window.addEventListener('livefact-session-changed',sync);
