@@ -3,7 +3,7 @@
 (()=>{
 'use strict';
 const $=s=>document.querySelector(s);
-const ids={demo:'8ee348bb-acac-4934-8358-e183d0a57712',today:'f3c2fd9b-5fa1-4818-a407-453f5cac4a34'};
+const ids={demo:'8ee348bb-acac-4934-8358-e183d0a57712',today:'f45fc70e-fcb6-4e01-b40b-81143627e030'};
 let currentView=null;
 function selectedDebate(){
  const id=window.LiveFactSignal?.snapshot?.().id||localStorage.getItem('debate_live_id')||ids.today;
