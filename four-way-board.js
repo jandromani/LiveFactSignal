@@ -1,0 +1,15 @@
+(()=>{'use strict';
+const id='f45fc70e-fcb6-4e01-b40b-81143627e030', names=[['Pedro Sánchez','PSOE'],['Santiago Abascal','VOX'],['Ada Colau','Frente Amplio'],['Alberto Núñez Feijóo','PP']];
+const host=document.getElementById('lfs26Board');if(!host)return;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const url=s=>{try{let u=new URL(s);return u.protocol==='https:'?u.href:null}catch{return null}};
+let selected='',last=null,busy=false;
+host.innerHTML='<h2>Contradicciones por candidato</h2><div class="lfs26-muted">Contraste automático provisional · solo afirmaciones atribuidas y con fuentes. No demuestra intención de engañar.</div><div id="lfs26Cards" class="lfs26-grid"></div><div><button class="button ghost" type="button" id="lfs26All">Ver los cuatro</button> <span id="lfs26Status" class="lfs26-muted">Conectando…</span></div><div id="lfs26Claims"></div>';
+const $=s=>host.querySelector(s), sources=x=>Array.isArray(x.sources)?x.sources:[], bad=x=>x.state==='provisional'&&x.verdict==='falsa'&&sources(x).length>0;
+function render(){const a=last?.claims||[];$('#lfs26Cards').innerHTML=names.map(([n,p])=>{const c=a.filter(x=>x.speaker===n&&x.state!=='excluded');return '<button class="lfs26-card" data-name="'+esc(n)+'" aria-pressed="'+(selected===n)+'">'+esc(n)+'<small>'+esc(p)+'</small><strong>'+c.filter(bad).length+'</strong><small>Contradicciones con fuentes</small><small>'+c.filter(x=>x.state==='provisional'&&x.verdict==='confirmada').length+' respaldadas · '+c.filter(x=>x.state!=='provisional').length+' pendientes · '+c.length+' atribuidas</small></button>'}).join('');
+const rows=a.filter(x=>bad(x)&&names.some(([n])=>n===x.speaker)&&(!selected||x.speaker===selected)).sort((a,b)=>b.start_ms-a.start_ms);
+$('#lfs26Claims').innerHTML=rows.length?rows.map(x=>'<div class="lfs26-row"><b>'+esc(x.speaker)+'</b> · '+Math.floor((x.start_ms||0)/60000)+' min<p>“'+esc(x.quote)+'”</p><p class="lfs26-muted">'+esc(x.rationale||'')+'</p><a href="/observatorio.html?debate='+id+'#claim='+encodeURIComponent(x.id)+'" target="_blank" rel="noopener">Ver evidencias y contexto</a></div>').join(''):'<p class="lfs26-muted">Todavía no hay contradicciones con fuentes para esta selección. Cero no significa que todas las afirmaciones sean ciertas.</p>';}
+host.addEventListener('click',e=>{const b=e.target.closest('[data-name]');if(b){selected=selected===b.dataset.name?'':b.dataset.name;render()}if(e.target.id==='lfs26All'){selected='';render()}});
+async function load(){if(busy)return;busy=true;try{const r=await fetch('/api/public?debate='+id,{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);const j=await r.json();if(j.debate?.id!==id||!Array.isArray(j.claims))throw Error('Sesión inesperada');last=j;render();$('#lfs26Status').textContent='Actualizado '+new Date().toLocaleTimeString('es-ES')+' · '+j.claims.filter(x=>!names.some(([n])=>n===x.speaker)&&x.state!=='excluded').length+' sin atribución a candidato';}catch(e){$('#lfs26Status').textContent='Sin conexión · '+e.message+' · datos anteriores, si existen';}finally{busy=false}}
+load();setInterval(load,5000);
+})();
